@@ -5,17 +5,18 @@ const auto SOUND_PORT = 8;
 const auto DISABLE_ALL = 0;
 const int ENABLE_LIGHT = 1;
 const int ENABLE_SOUND = 2;
+
+const int BUFFER_LENGTH = 2;
 int sound[2] = {ENABLE_SOUND,SOUND_PORT};
 int light[2] = {ENABLE_LIGHT,BLINK_PORT};
 int map_ports[2] = {sound,light};
 
-char Incoming_value = '0';
+char char_inc[BUFFER_LENGTH] = "0";
 int int_inc = 0;
 
 void enableDisable(int val, int port[]) {
   if((byte(val) & byte(port[0])) == port[0]) {
     digitalWrite(port[1], HIGH);
-    Serial.println(port[1]);
   }
   else {
     digitalWrite(port[1], LOW);
@@ -24,7 +25,6 @@ void enableDisable(int val, int port[]) {
 
 void enableDisableForAll(int val) {
   int i;
-  Serial.println(val);
   for (i = 0; i < sizeof(map_ports); i = i + 1) {
     enableDisable(val, map_ports[i]);
   }
@@ -38,8 +38,10 @@ void setup() {
 
 void loop() {
   if(Serial.available() > 0) {
-    Incoming_value = Serial.read();
-    int_inc = String(Incoming_value).toInt();
+    Serial.readBytes(char_inc,BUFFER_LENGTH);
+    Serial.println(char_inc);
+    int_inc = String(char_inc).toInt();
+    Serial.println(int_inc);
     enableDisableForAll(int_inc);
   }
 }
