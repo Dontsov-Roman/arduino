@@ -22,7 +22,7 @@ public:
 
   void toggle(int val)
   {
-    if ((byte(val) & byte(this->pin)) == this->pin)
+    if ((byte(val) & byte(this->bit)) == this->bit)
     {
       digitalWrite(pin, HIGH);
     }
