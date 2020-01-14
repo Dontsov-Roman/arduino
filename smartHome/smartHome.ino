@@ -15,7 +15,6 @@ int int_inc = 0;
 Relay relayLight(BLINK_PORT, ENABLE_LIGHT);
 Relay relaySound(SOUND_PORT, ENABLE_SOUND);
 const Relay relays[] = {relayLight,relaySound};
-//SimpleList<Relay> *mySimpleList = new SimpleList<Relay>();
 
 void enableDisableForAll(int val)
 {
@@ -28,7 +27,6 @@ void enableDisableForAll(int val)
 void setup()
 {
   Serial.begin(9600);
-//  relayList.add(relayLight);
   pinMode(BLINK_PORT, OUTPUT);
   pinMode(SOUND_PORT, OUTPUT);
 }
