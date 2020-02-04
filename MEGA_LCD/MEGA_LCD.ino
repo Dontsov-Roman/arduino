@@ -1,26 +1,46 @@
+#include <TFT_HX8357.h>
+#include <UTFT.h>
+#include "DHT.h"
 
-#include "UTFT.h"
-// библиотека для работы с дисплеем
-// создаём объект класса UTFT
-// и передаём идентификатор модели дисплея и номера управляющих пинов
+TFT_HX8357 tft = TFT_HX8357();
 UTFT myGLCD(ILI9486, 38, 39, 40, 41);
-// объявления встроенного шрифта
+
 extern uint8_t BigFont[];
+
+const int INPUT_PORT_TEMP = A0;
+DHT dht(INPUT_PORT_TEMP, DHT11);
+const char temperature[] = "Temperature: ";
+const char humidity[] = "Humidity: ";
+char temp[2];
+char hum[2];
+const int PIXEL_PER_CHAR = 14;
+const int tempX = sizeof(temperature)*PIXEL_PER_CHAR;
+const int humX = sizeof(humidity)*PIXEL_PER_CHAR;
 
 void setup()
 {
-  Serial.begin(9600);
-  // инициализируем дисплей
-  myGLCD.InitLCD();
-  // очищаем экран
+  dht.begin();
+  tft.init();
+  tft.setRotation(1);
+  tft.invertDisplay(1);
+  myGLCD.InitLCD(1);
   myGLCD.clrScr();
-  // выбираем тип шрифта
   myGLCD.setFont(BigFont);
-  // печатаем «Hello, world!» в центре верхней строки дисплея
-  myGLCD.print("Hello, world!", CENTER, 0);
+
 }
 void loop()
 {
-  Serial.print("TEST");
-  delay(1000);
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+
+  dtostrf(t, 2, 2, temp);
+  myGLCD.print(temperature, LEFT, 0);
+  myGLCD.print(temp, tempX, 0);
+  dtostrf(h, 2, 2, hum);
+  myGLCD.print(humidity, LEFT, PIXEL_PER_CHAR);
+  myGLCD.print(hum, humX, PIXEL_PER_CHAR);
+  delay(3000);
 }
+
+
+
