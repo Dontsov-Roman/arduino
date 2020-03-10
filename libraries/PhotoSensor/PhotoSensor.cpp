@@ -1,6 +1,7 @@
 #include "PhotoSensor.h"
+#include "Sensor.h"
 
-PhotoSensor::PhotoSensor(int pin, int threshold)
+PhotoSensor::PhotoSensor(int pin, int threshold) : Sensor()
 {
   this->pin = pin;
   this->threshold = threshold;

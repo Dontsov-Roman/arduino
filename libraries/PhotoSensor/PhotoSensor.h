@@ -17,7 +17,6 @@ protected:
   int pin;
   int threshold;
   int resist;
-  bool enabled;
 };
 
 #endif
