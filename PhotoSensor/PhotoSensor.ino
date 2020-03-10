@@ -10,5 +10,6 @@ void setup() {
 
 void loop() {
   PS.read();
+  Serial.println(PS.isOn());
   delay(1000);
 }

@@ -5,12 +5,12 @@
 #else
 #include <WProgram.h>
 #endif
+#include "Sensor.h"
 
-class PhotoSensor
+class PhotoSensor : public Sensor
 {
 public:
   PhotoSensor(int pin, int threshold);
-  bool isOn();
   void read();
 
 protected:

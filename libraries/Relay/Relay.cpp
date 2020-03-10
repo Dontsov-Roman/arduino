@@ -1,23 +1,25 @@
-#ifndef RELAY_H
-#define RELAY_H
-#if ARDUINO >= 100
-#include <Arduino.h>
-#else
-#include <WProgram.h>
-#endif
+#include "Relay.h"
 
-class Relay
+Relay ::Relay(int p, int b)
 {
-protected:
-  int pin;
-  int bit;
-  bool isOn;
-
-public:
-  Relay(int p, int b);
-  void toggle(int val);
-  int getPin();
-};
+  this->pin = p;
+  this->bit = b;
+}
+void Relay ::toggle(int val)
+{
+  if ((byte(val) & byte(this->bit)) == this->bit)
+  {
+    digitalWrite(pin, HIGH);
+  }
+  else
+  {
+    digitalWrite(pin, LOW);
+  }
+}
+int Relay::getPin()
+{
+  return pin;
+}
 
 // class Relay : public RelayAbstract
 // {
@@ -48,4 +50,3 @@ public:
 //     return pin;
 //   }
 // };
-#endif

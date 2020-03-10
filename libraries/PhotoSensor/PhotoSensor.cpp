@@ -12,7 +12,3 @@ void PhotoSensor::read()
   Serial.print(this->resist);
   Serial.print('\n');
 }
-bool PhotoSensor::isOn()
-{
-  return this->enabled;
-}
