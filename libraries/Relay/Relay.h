@@ -5,17 +5,19 @@
 #else
 #include <WProgram.h>
 #endif
+#include "Sensor.h"
 
-class Relay
+class Relay : public Sensor
 {
 protected:
   int pin;
   int bit;
-  bool isOn;
+  bool enabled;
 
 public:
   Relay(int p, int b);
   void toggle(int val);
+  void read();
   int getPin();
 };
 

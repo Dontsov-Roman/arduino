@@ -1,6 +1,7 @@
 #include "Relay.h"
+#include "Sensor.h"
 
-Relay ::Relay(int p, int b)
+Relay ::Relay(int p, int b) : Sensor()
 {
   this->pin = p;
   this->bit = b;
@@ -19,6 +20,10 @@ void Relay ::toggle(int val)
 int Relay::getPin()
 {
   return pin;
+}
+void Relay::read()
+{
+  this->enabled = digitalRead(this->pin);
 }
 
 // class Relay : public RelayAbstract
