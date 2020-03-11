@@ -1,7 +1,9 @@
 #include "PhotoSensor.h"
 #include "Relay.h"
+#include "MoveSensor.h"
+
 const int PHOTO_PIN = A0;
-const int THRESHOLD_PHOTO = 100;
+const int THRESHOLD_PHOTO = 10;
 const int LIGHT_PIN = D7;
 const int LINGHT_BIT = 1;
 PhotoSensor PS(PHOTO_PIN, THRESHOLD_PHOTO);

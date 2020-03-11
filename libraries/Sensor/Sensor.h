@@ -6,9 +6,6 @@ class Sensor
 public:
   bool isOn();
   void read();
-
-protected:
-  bool enabled;
 };
 
 #endif

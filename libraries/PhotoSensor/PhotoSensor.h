@@ -12,11 +12,13 @@ class PhotoSensor : public Sensor
 public:
   PhotoSensor(int pin, int threshold);
   void read();
+  bool isOn();
 
 protected:
   int pin;
   int threshold;
   int resist;
+  bool enabled;
 };
 
 #endif

@@ -10,6 +10,9 @@ void PhotoSensor::read()
 {
   this->resist = analogRead(this->pin);
   this->enabled = this->resist > this->threshold;
-  Serial.print(this->resist);
-  Serial.print('\n');
+}
+
+bool PhotoSensor::isOn()
+{
+  return this->enabled;
 }
