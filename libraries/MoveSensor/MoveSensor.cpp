@@ -15,7 +15,6 @@ void MoveSensor::read()
 {
   this->relay->read();
   this->photoSensor->read();
-  this->enabled = digitalRead(this->pin);
   Serial.print("\nMovement:");
   Serial.print(enabled);
 }
@@ -39,7 +38,7 @@ void MoveSensor::toggle()
     }
     break;
   case PHOTORESISTOR:
-    if (this->relay->isOn() && this->photoSensor->isOn())
+    if (this->relay->isOn() && (this->photoSensor->isOn() || this->isOn()))
     {
       on();
     }
