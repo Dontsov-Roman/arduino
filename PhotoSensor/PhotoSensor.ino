@@ -4,9 +4,9 @@
 
 const int PHOTO_PIN = A0;
 const int THRESHOLD_PHOTO = 10;
-const int LIGHT_PIN = D7;
+const int LIGHT_PIN = LED_BUILTIN;
 const int MOVE_BIT = 1;
-const int MOVE_PIN = D5;
+const int MOVE_PIN = D0;
 PhotoSensor PS(PHOTO_PIN, THRESHOLD_PHOTO);
 Relay Rel(MOVE_PIN, MOVE_BIT);
 MoveSensor MS(&Rel, &PS, PHOTORESISTOR, LIGHT_PIN);

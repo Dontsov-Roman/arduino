@@ -31,6 +31,7 @@ bool MoveSensor::isOn()
 
 void MoveSensor::toggle()
 {
+  Serial.print(this->mode);
   switch (this->mode)
   {
   case MOVEMENT:
