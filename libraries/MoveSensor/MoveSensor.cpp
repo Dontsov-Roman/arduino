@@ -16,6 +16,8 @@ void MoveSensor::read()
   this->relay->read();
   this->photoSensor->read();
   this->enabled = digitalRead(this->pin);
+  Serial.print("\nMovement:");
+  Serial.print(enabled);
 }
 
 bool MoveSensor::isOn()
