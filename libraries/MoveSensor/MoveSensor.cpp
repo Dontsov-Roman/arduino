@@ -24,7 +24,6 @@ bool MoveSensor::isOn()
 {
   return this->enabled;
 }
-
 void MoveSensor::toggle()
 {
   switch (this->mode)
@@ -32,34 +31,45 @@ void MoveSensor::toggle()
   case MOVEMENT:
     if (this->relay->isOn())
     {
-      digitalWrite(this->pin, HIGH);
+      on();
     }
     else
     {
-      digitalWrite(this->pin, LOW);
+      off();
     }
     break;
   case PHOTORESISTOR:
     if (this->relay->isOn() && this->photoSensor->isOn())
     {
-      digitalWrite(this->pin, HIGH);
+      on();
     }
     else
     {
-      digitalWrite(this->pin, LOW);
+      off();
     }
     break;
   case TOGGLE:
   default:
     if (this->isOn())
     {
-      digitalWrite(this->pin, LOW);
+      on();
     }
     else
     {
-      digitalWrite(this->pin, HIGH);
+      off();
     }
     break;
   }
-  this->read();
+}
+
+void MoveSensor::on()
+{
+  this->enabled = true;
+  digitalWrite(pin, HIGH);
+}
+
+void MoveSensor::off()
+{
+  this->enabled = false;
+  digitalWrite(pin, LOW);
 }

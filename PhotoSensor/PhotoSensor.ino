@@ -4,7 +4,7 @@
 
 const int PHOTO_PIN = A0;
 const int THRESHOLD_PHOTO = 10;
-const int LIGHT_PIN = D6;//LED_BUILTIN;
+const int LIGHT_PIN = LED_BUILTIN;
 const int MOVE_BIT = 1;
 const int MOVE_PIN = D5;
 PhotoSensor PS(PHOTO_PIN, THRESHOLD_PHOTO);

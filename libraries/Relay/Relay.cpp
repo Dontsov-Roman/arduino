@@ -6,15 +6,25 @@ Relay ::Relay(int p, int b) : Sensor()
   this->pin = p;
   this->bit = b;
 }
+void Relay::on()
+{
+  digitalWrite(pin, HIGH);
+  this->enabled = true;
+}
+void Relay::off()
+{
+  digitalWrite(pin, LOW);
+  this->enabled = false;
+}
 void Relay ::toggle(int val)
 {
   if ((byte(val) & byte(this->bit)) == this->bit)
   {
-    digitalWrite(pin, HIGH);
+    on();
   }
   else
   {
-    digitalWrite(pin, LOW);
+    off();
   }
 }
 int Relay::getPin()

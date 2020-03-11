@@ -20,6 +20,8 @@ public:
   void setMode(MoveSensorMode mode);
 
 protected:
+  void on();
+  void off();
   PhotoSensor *photoSensor;
   Relay *relay;
   MoveSensorMode mode;

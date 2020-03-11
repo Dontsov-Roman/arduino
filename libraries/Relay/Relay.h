@@ -13,6 +13,8 @@ protected:
   int pin;
   int bit;
   bool enabled;
+  void on();
+  void off();
 
 public:
   Relay(int p, int b);
