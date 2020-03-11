@@ -1,3 +1,5 @@
+#ifndef MOVE_SENSOR_MODE_H
+#define MOVE_SENSOR_MODE_H
 
 enum MoveSensorMode
 {
@@ -5,3 +7,4 @@ enum MoveSensorMode
   PHOTORESISTOR,
   TOGGLE
 };
+#endif
