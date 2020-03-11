@@ -4,10 +4,6 @@
 
 MoveSensor::MoveSensor(Relay *rel, PhotoSensor *photo, MoveSensorMode m, int p) : relay(rel), photoSensor(photo), mode(m), pin(p)
 {
-  // this->relay = rel;
-  // this->photoSensor = photo;
-  // this->mode = m;
-  // this->pin = p;
 }
 
 void MoveSensor::setMode(MoveSensorMode mode)
@@ -20,8 +16,6 @@ void MoveSensor::read()
   this->relay->read();
   this->photoSensor->read();
   this->enabled = digitalRead(this->pin);
-  Serial.print("\nMovement:");
-  Serial.print(enabled);
 }
 
 bool MoveSensor::isOn()
@@ -31,7 +25,6 @@ bool MoveSensor::isOn()
 
 void MoveSensor::toggle()
 {
-  Serial.print(this->mode);
   switch (this->mode)
   {
   case MOVEMENT:
@@ -53,6 +46,7 @@ void MoveSensor::toggle()
     {
       digitalWrite(this->pin, LOW);
     }
+    break;
   case TOGGLE:
   default:
     if (this->isOn())
