@@ -2,7 +2,7 @@
 #include "Relay.h"
 #include "PhotoSensor.h"
 
-MoveSensor::MoveSensor(Relay *rel, PhotoSensor *photo, MoveSensorMode m, int p) : relay(rel), photoSensor(photo), mode(m), pin(p)
+MoveSensor::MoveSensor(Relay *mRel, Relay *lRel, PhotoSensor *photo, MoveSensorMode m) : moveRelay(mRel), lightRelay(lRel), photoSensor(photo), mode(m)
 {
 }
 
@@ -13,10 +13,8 @@ void MoveSensor::setMode(MoveSensorMode mode)
 
 void MoveSensor::read()
 {
-  this->relay->read();
+  this->moveRelay->read();
   this->photoSensor->read();
-  Serial.print("\nMovement:");
-  Serial.print(enabled);
 }
 
 bool MoveSensor::isOn()
@@ -28,7 +26,7 @@ void MoveSensor::toggle()
   switch (this->mode)
   {
   case MOVEMENT:
-    if (this->relay->isOn())
+    if (this->moveRelay->isOn())
     {
       on();
     }
@@ -38,7 +36,7 @@ void MoveSensor::toggle()
     }
     break;
   case PHOTORESISTOR:
-    if (this->relay->isOn() && (this->photoSensor->isOn() || this->isOn()))
+    if (this->moveRelay->isOn() && (this->photoSensor->isOn() || this->isOn()))
     {
       on();
     }
@@ -64,11 +62,11 @@ void MoveSensor::toggle()
 void MoveSensor::on()
 {
   this->enabled = true;
-  digitalWrite(pin, HIGH);
+  lightRelay->on();
 }
 
 void MoveSensor::off()
 {
   this->enabled = false;
-  digitalWrite(pin, LOW);
+  lightRelay->off();
 }

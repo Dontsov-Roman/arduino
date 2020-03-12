@@ -13,8 +13,6 @@ protected:
   int pin;
   int bit;
   bool enabled;
-  void on();
-  void off();
 
 public:
   Relay(int p, int b);
@@ -23,5 +21,7 @@ public:
   int getPin();
   int getBit();
   bool isOn();
+  void on();
+  void off();
 };
 #endif

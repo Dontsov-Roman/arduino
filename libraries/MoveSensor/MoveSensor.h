@@ -13,19 +13,19 @@
 class MoveSensor : public Sensor
 {
 public:
-  MoveSensor(Relay *rel, PhotoSensor *photo, MoveSensorMode mode, int p);
+  MoveSensor(Relay *rel, Relay *lightRel, PhotoSensor *photo, MoveSensorMode mode);
   void read();
   bool isOn();
   void toggle();
   void setMode(MoveSensorMode mode);
-
-protected:
   void on();
   void off();
+
+protected:
   PhotoSensor *photoSensor;
-  Relay *relay;
+  Relay *moveRelay;
+  Relay *lightRelay;
   MoveSensorMode mode;
-  int pin;
   bool enabled;
 };
 
