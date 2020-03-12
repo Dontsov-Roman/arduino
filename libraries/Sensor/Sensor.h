@@ -12,7 +12,6 @@ protected:
   int pin;
 
 public:
-  Sensor(int pin);
   bool isOn();
   void read();
 };

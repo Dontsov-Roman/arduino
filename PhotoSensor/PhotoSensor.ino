@@ -23,6 +23,6 @@ void setup() {
 
 void loop() {
   MS.read();
-  MS.toggle();
+  MS.toggle(1);
   delay(2000);
 }
