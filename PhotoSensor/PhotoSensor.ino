@@ -1,6 +1,8 @@
 #include "PhotoSensor.h"
 #include "Relay.h"
 #include "MoveSensor.h"
+#include "BleSensor.h"
+#include "MoveBleMediator.h"
 
 const int PHOTO_PIN = A0;
 const int LIGHT_PIN = D6;
@@ -8,11 +10,18 @@ const int MOVE_PIN = D5;
 
 const int MOVE_BIT = 1;
 const int THRESHOLD_PHOTO = 10;
+
 PhotoSensor PS(PHOTO_PIN, THRESHOLD_PHOTO);
+
 Relay MoveRel(MOVE_PIN, MOVE_BIT);
+
 Relay LightRel(LIGHT_PIN, MOVE_BIT);
 
 MoveSensor MS(&MoveRel,&LightRel, &PS, PHOTORESISTOR);
+
+BleSensor BS;
+
+MoveBleMediator MBM(&MS, &BS);
 
 void setup() {
   pinMode(PHOTO_PIN, INPUT);
@@ -22,7 +31,6 @@ void setup() {
 }
 
 void loop() {
-  MS.read();
-  MS.toggle(1);
+  MBM.read();
   delay(2000);
 }

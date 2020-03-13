@@ -14,7 +14,6 @@ class MoveSensor : public Sensor
 {
 public:
   MoveSensor(Relay *rel, Relay *lightRel, PhotoSensor *photo, MoveSensorMode mode);
-  MoveSensor(Relay *rel, Relay *lightRel, PhotoSensor *photo, MoveSensorMode mode, int bit);
   void read();
   bool isOn();
   void toggle();

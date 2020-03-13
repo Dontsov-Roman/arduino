@@ -1,5 +1,6 @@
 #include "Relay.h";
 #include "DHT.h"
+#include "BleSensor.h"
 
 const int BLINK_DELAY = 250;
 const int BLINK_PORT = 7;

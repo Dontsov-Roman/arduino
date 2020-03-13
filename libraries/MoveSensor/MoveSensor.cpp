@@ -7,32 +7,33 @@ MoveSensor::MoveSensor(Relay *mRel, Relay *lRel, PhotoSensor *photo, MoveSensorM
   this->bit = 0;
 }
 
-MoveSensor::MoveSensor(Relay *mRel, Relay *lRel, PhotoSensor *photo, MoveSensorMode m, int b) : moveRelay(mRel), lightRelay(lRel), photoSensor(photo), mode(m)
+void MoveSensor::setMode(MoveSensorMode m)
 {
-  this->bit = b;
-}
-
-void MoveSensor::setMode(MoveSensorMode mode)
-{
-  this->mode = mode;
+  mode = m;
+  Serial.print("\nNew mode:");
+  Serial.print(m);
 }
 
 void MoveSensor::read()
 {
-  this->moveRelay->read();
-  this->photoSensor->read();
+  moveRelay->read();
+  photoSensor->read();
+  Serial.print("\nMovement:");
+  Serial.print(moveRelay->isOn());
+  Serial.print("\nLight:");
+  Serial.print(photoSensor->isOn());
 }
 
 bool MoveSensor::isOn()
 {
-  return this->enabled;
+  return enabled;
 }
 void MoveSensor::toggle()
 {
-  switch (this->mode)
+  switch (mode)
   {
   case MOVEMENT:
-    if (this->moveRelay->isOn())
+    if (moveRelay->isOn())
     {
       on();
     }
@@ -42,7 +43,7 @@ void MoveSensor::toggle()
     }
     break;
   case PHOTORESISTOR:
-    if (this->moveRelay->isOn() && (this->photoSensor->isOn() || this->isOn()))
+    if (moveRelay->isOn() && (photoSensor->isOn() || isOn()))
     {
       on();
     }
@@ -53,7 +54,7 @@ void MoveSensor::toggle()
     break;
   case TOGGLE:
   default:
-    if (this->isOn())
+    if (isOn())
     {
       on();
     }
@@ -70,7 +71,7 @@ void MoveSensor::toggle(int val)
   switch (mode)
   {
   case TOGGLE:
-    if ((byte(val) & byte(bit)) == bit)
+    if ((byte(val) & byte(lightRelay->getBit())) == lightRelay->getBit())
     {
       on();
     }
@@ -87,12 +88,12 @@ void MoveSensor::toggle(int val)
 
 void MoveSensor::on()
 {
-  this->enabled = true;
+  enabled = true;
   lightRelay->on();
 }
 
 void MoveSensor::off()
 {
-  this->enabled = false;
+  enabled = false;
   lightRelay->off();
 }
