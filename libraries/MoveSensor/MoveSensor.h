@@ -21,6 +21,7 @@ public:
   void setMode(MoveSensorMode mode);
   void on();
   void off();
+  void setPhotoSensorThreshold(int threshold);
 
 protected:
   PhotoSensor *photoSensor;

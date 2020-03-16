@@ -32,5 +32,5 @@ void setup() {
 
 void loop() {
   MBM.read();
-  delay(2000);
+  delay(5000);
 }

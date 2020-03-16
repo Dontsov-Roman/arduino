@@ -97,3 +97,8 @@ void MoveSensor::off()
   enabled = false;
   lightRelay->off();
 }
+
+void MoveSensor::setPhotoSensorThreshold(int threshold)
+{
+  photoSensor->setThreshold(threshold);
+}

@@ -13,6 +13,7 @@ public:
   PhotoSensor(int pin, int threshold);
   void read();
   bool isOn();
+  void setThreshold(int threshold);
 
 protected:
   int pin;

@@ -32,4 +32,5 @@ void MoveBleMediator::read()
     moveSensor->toggle();
     break;
   }
+  moveSensor->setPhotoSensorThreshold(String(value[2]).toInt());
 }
