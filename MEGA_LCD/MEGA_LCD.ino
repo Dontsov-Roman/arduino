@@ -41,6 +41,3 @@ void loop()
   myGLCD.print(hum, humX, PIXEL_PER_CHAR);
   delay(3000);
 }
-
-
-
