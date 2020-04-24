@@ -6,7 +6,7 @@
 
 const int PHOTO_PIN = A0;
 const int LIGHT_PIN = D6;
-const int MOVE_PIN = D5;
+const int MOVE_PIN = D1;
 
 const int MOVE_BIT = 1;
 const int THRESHOLD_PHOTO = 10;
@@ -32,5 +32,5 @@ void setup() {
 
 void loop() {
   MBM.read();
-  delay(5000);
+  delay(1500);
 }

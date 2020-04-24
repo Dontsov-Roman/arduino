@@ -10,8 +10,8 @@ MoveSensor::MoveSensor(Relay *mRel, Relay *lRel, PhotoSensor *photo, MoveSensorM
 void MoveSensor::setMode(MoveSensorMode m)
 {
   mode = m;
-  Serial.print("\nNew mode:");
-  Serial.print(m);
+  Serial.print("\nNew mode is:");
+  Serial.print(mode);
 }
 
 void MoveSensor::read()
