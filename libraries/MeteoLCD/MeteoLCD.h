@@ -7,8 +7,9 @@
 #endif
 
 #include <UTFT.h>
-// #include "iarduino_RTC"
+// #include  <iarduino_RTC.h>  // Подключаем библиотеку.  
 #include "DHT.h"
+#include <Adafruit_Sensor.h>
 
 extern uint8_t BigFont[];
 class MeteoLCD

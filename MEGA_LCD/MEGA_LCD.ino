@@ -2,7 +2,7 @@
 #include <UTFT.h>
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
-#include <MeteoLCD.h>
+#include <MeteoLCD.h> 
 
 UTFT myGLCD(TFT32MEGA_2, 38, 39, 40, 41);
 
@@ -24,6 +24,7 @@ void loop()
   lcd.printToDisplay();
   delay(3000);
 }
+
 
 
 
