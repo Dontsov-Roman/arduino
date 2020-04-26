@@ -12,6 +12,7 @@
 #include <Adafruit_Sensor.h>
 
 extern uint8_t BigFont[];
+extern uint8_t Grotesk32x64[];
 class MeteoLCD
 {
 public:

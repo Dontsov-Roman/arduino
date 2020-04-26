@@ -26,7 +26,6 @@ void MeteoLCD::init()
   rtc->begin();
   display->InitLCD(1);
   display->clrScr();
-  display->setFont(BigFont);
 }
 float MeteoLCD::getHumidity()
 {
@@ -38,11 +37,14 @@ float MeteoLCD::getTemperature()
 }
 void MeteoLCD::printToDisplay()
 {
+  display->setFont(BigFont);
   String temp = getValue(getTemperature());
   display->print(temperature, LEFT, 0);
   display->print(temp, tempX, 0);
   String hum = getValue(getHumidity());
   display->print(humidity, LEFT, pixelPerChar*2);
   display->print(hum, humX, pixelPerChar*2);
-  display->print(rtc->gettime("d-m-Y, H:i, D"), CENTER, pixelPerChar*4);
+  display->setFont(Grotesk32x64);
+  display->print(rtc->gettime("d.m.Y"), CENTER, pixelPerChar*4);
+  display->print(rtc->gettime("H:i, D"), CENTER, pixelPerChar*8);
 }
