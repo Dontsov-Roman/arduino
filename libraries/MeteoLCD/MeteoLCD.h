@@ -7,7 +7,7 @@
 #endif
 
 #include <UTFT.h>
-// #include  <iarduino_RTC.h>  // Подключаем библиотеку.  
+#include <iarduino_RTC.h>
 #include "DHT.h"
 #include <Adafruit_Sensor.h>
 
@@ -15,7 +15,7 @@ extern uint8_t BigFont[];
 class MeteoLCD
 {
 public:
-  MeteoLCD(DHT *_dht, UTFT *_display, int pixelPerChar);
+  MeteoLCD(DHT *_dht, UTFT *_display, iarduino_RTC *_rtc, int pixelPerChar);
   void init();
   float getHumidity();
   float getTemperature();
@@ -25,7 +25,7 @@ public:
 protected:
   DHT *dht;
   UTFT *display;
-  // iarduino_RTC *time;
+  iarduino_RTC *rtc;
   int pixelPerChar;
   String temp;
   String hum;
