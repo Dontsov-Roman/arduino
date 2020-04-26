@@ -7,25 +7,29 @@
 #endif
 
 #include <UTFT.h>
-#include <TFT_HX8357.h>
+// #include "iarduino_RTC"
 #include "DHT.h"
 
+extern uint8_t BigFont[];
 class MeteoLCD
 {
 public:
-  MeteoLCD(DHT dht, UTFT display, int pixelPerChar);
+  MeteoLCD(DHT *_dht, UTFT *_display, int pixelPerChar);
   void init();
   float getHumidity();
   float getTemperature();
   void printToDisplay();
+  String getValue(float value);
 
 protected:
-  DHT dht;
-  UTFT display;
-  TFT_HX8357 tft;
+  DHT *dht;
+  UTFT *display;
+  // iarduino_RTC *time;
   int pixelPerChar;
-  char temp[2];
-  char hum[2];
+  String temp;
+  String hum;
   int tempX;
   int humX;
-}
+};
+
+#endif
