@@ -1,6 +1,6 @@
 #include <TFT_HX8357.h>
 #include <UTFT.h>
-#include "DHT.h"
+#include <DHT.h>
 
 TFT_HX8357 tft = TFT_HX8357();
 UTFT myGLCD(ILI9486, 38, 39, 40, 41);
