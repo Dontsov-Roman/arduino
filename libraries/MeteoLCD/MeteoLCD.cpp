@@ -1,12 +1,5 @@
 #include "MeteoLCD.h"
 
-const char TEMPERATURE[] = "Temperature: ";
-const char C[] = "C";
-const char HUMIDITY[] = "Humidity: ";
-const char H[] = "%";
-const char AIR[] = "Air is ";
-const char CLEAR[] = "clear";
-const char DIRTY[] = "dirty";
 
 MeteoLCD::MeteoLCD(DHT *_dht, UTFT *_display, iarduino_RTC *_rtc, GasSensor *_gas, int pixelPerChar)
 {
@@ -31,32 +24,38 @@ void MeteoLCD::init()
   display->InitLCD(1);
   display->clrScr();
 }
+
 float MeteoLCD::getHumidity()
 {
   return dht->readHumidity();
 }
+
 float MeteoLCD::getTemperature()
 {
   return dht->readTemperature();
 }
+
 String MeteoLCD::getAir(){
   gas->read();
   String air(AIR);
   if(gas->isDanger()){
+    display->setColor(VGA_RED);
     air += DIRTY;
   } else {
+    display->setColor(VGA_GREEN);
     air += CLEAR;
   }
   return air;
 }
+
 void MeteoLCD::print()
 {
+  display->setColor(VGA_WHITE);
   display->setFont(BigFont);
-  String temp = getValue(getTemperature());
-  display->print(TEMPERATURE+temp+C, LEFT, 0);
-  String hum = getValue(getHumidity());
-  display->print(HUMIDITY+hum+H, LEFT, pixelPerChar*2);
+  display->print(TEMPERATURE+getValue(getTemperature())+C, LEFT, 0);
+  display->print(HUMIDITY+getValue(getHumidity())+H, LEFT, pixelPerChar*2);
   display->print(getAir(), LEFT, pixelPerChar*16);
+  display->setColor(VGA_WHITE);
 
   display->setFont(Grotesk32x64);
   display->print(rtc->gettime("d.m.Y"), CENTER, pixelPerChar*6);
