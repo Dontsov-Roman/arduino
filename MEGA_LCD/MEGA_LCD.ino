@@ -24,6 +24,6 @@ void setup()
 }
 void loop()
 {
-  lcd.print ();
+  lcd.print();
   delay(3000);
 }
