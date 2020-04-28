@@ -5,21 +5,13 @@
 #else
 #include <WProgram.h>
 #endif
-#include "Sensor.h"
+#include "ThresholdSensor.h"
 
-class PhotoSensor : public Sensor
+class PhotoSensor : public ThresholdSensor
 {
-public:
-  PhotoSensor(int pin, int threshold);
-  void read();
-  bool isOn();
-  void setThreshold(int threshold);
-
-protected:
-  int pin;
-  int threshold;
-  int resist;
-  bool enabled;
+  public:
+    PhotoSensor(uint8_t p);
+    PhotoSensor(uint8_t p, int t);
 };
 
 #endif

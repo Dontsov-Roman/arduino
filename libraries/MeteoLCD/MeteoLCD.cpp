@@ -1,16 +1,20 @@
 #include "MeteoLCD.h"
 
-const char temperature[] = "Temperature: ";
-const char humidity[] = "Humidity: ";
+const char TEMPERATURE[] = "Temperature: ";
+const char C[] = "C";
+const char HUMIDITY[] = "Humidity: ";
+const char H[] = "%";
+const char AIR[] = "Air is ";
+const char CLEAR[] = "clear";
+const char DIRTY[] = "dirty";
 
-MeteoLCD::MeteoLCD(DHT *_dht, UTFT *_display, iarduino_RTC *_rtc, int pixelPerChar)
+MeteoLCD::MeteoLCD(DHT *_dht, UTFT *_display, iarduino_RTC *_rtc, GasSensor *_gas, int pixelPerChar)
 {
   this->display = _display;
   this->dht = _dht;
   this->rtc = _rtc;
   this->pixelPerChar = pixelPerChar;
-  this->tempX = sizeof(temperature) * pixelPerChar;
-  this->humX = sizeof(humidity) * pixelPerChar;
+  this->gas = _gas;
 }
 String MeteoLCD::getValue(float val){
   int va = val*100;
@@ -35,16 +39,26 @@ float MeteoLCD::getTemperature()
 {
   return dht->readTemperature();
 }
-void MeteoLCD::printToDisplay()
+String MeteoLCD::getAir(){
+  gas->read();
+  String air(AIR);
+  if(gas->isDanger()){
+    air += DIRTY;
+  } else {
+    air += CLEAR;
+  }
+  return air;
+}
+void MeteoLCD::print()
 {
   display->setFont(BigFont);
   String temp = getValue(getTemperature());
-  display->print(temperature, LEFT, 0);
-  display->print(temp, tempX, 0);
+  display->print(TEMPERATURE+temp+C, LEFT, 0);
   String hum = getValue(getHumidity());
-  display->print(humidity, LEFT, pixelPerChar*2);
-  display->print(hum, humX, pixelPerChar*2);
+  display->print(HUMIDITY+hum+H, LEFT, pixelPerChar*2);
+  display->print(getAir(), LEFT, pixelPerChar*16);
+
   display->setFont(Grotesk32x64);
-  display->print(rtc->gettime("d.m.Y"), CENTER, pixelPerChar*4);
-  display->print(rtc->gettime("H:i, D"), CENTER, pixelPerChar*8);
+  display->print(rtc->gettime("d.m.Y"), CENTER, pixelPerChar*6);
+  display->print(rtc->gettime("H:i, D"), CENTER, pixelPerChar*10);
 }
