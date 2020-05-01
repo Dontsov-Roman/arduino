@@ -4,7 +4,7 @@
 GasSensor::GasSensor(uint8_t p)
 {
     this->pin = p;
-    this->threshold = 400;
+    this->threshold = 100;
 }
 
 GasSensor::GasSensor(uint8_t p, int t)

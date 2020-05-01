@@ -6,7 +6,7 @@ const int INPUT_PORT_TEMP = A0;
 const int PIXEL_PER_CHAR = 14;
 const int GAS_PORT = A1;
 
-UTFT myGLCD(TFT32MEGA_2, 38, 39, 40, 41);
+UTFT display(TFT32MEGA_2, 38, 39, 40, 41);
 
 iarduino_RTC rtc(1, 5, 6, 7);
 
@@ -15,7 +15,7 @@ DHT dht(INPUT_PORT_TEMP, DHT11);
 
 GasSensor gasSensor(GAS_PORT);
 
-MeteoLCD lcd(&dht, &myGLCD, &rtc, &gasSensor, PIXEL_PER_CHAR);
+MeteoLCD lcd(&dht, &display, &rtc, &gasSensor, PIXEL_PER_CHAR);
 
 void setup()
 {
