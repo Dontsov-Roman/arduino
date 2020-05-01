@@ -42,7 +42,7 @@ String MeteoLCD::getAir(){
     display->setColor(VGA_RED);
     air += DIRTY;
   } else {
-    display->setColor(VGA_GREEN);
+    display->setColor(VGA_LIME);
     air += CLEAR;
   }
   return air;
