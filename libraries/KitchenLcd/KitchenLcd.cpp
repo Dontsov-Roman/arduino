@@ -38,9 +38,9 @@ void KitchenLcd::print()
   lcd->clear();
   lcd->setCursor(0, 0);
   lcd->print(rtc->gettime("H:i"));
-  lcd->print(",");
+  lcd->print(", ");
   lcd->print(this->getValue(dht->readTemperature()));
-  lcd->print("*C");
+  lcd->print(" *C");
   lcd->setCursor(0, 1);
   lcd->print(rtc->gettime("d-m-Y, D"));
 }
