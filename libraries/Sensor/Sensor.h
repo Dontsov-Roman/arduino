@@ -9,7 +9,7 @@
 class Sensor
 {
 protected:
-  int pin;
+  uint8_t pin;
 
 public:
   bool isOn();

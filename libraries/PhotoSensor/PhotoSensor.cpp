@@ -1,25 +1,13 @@
 #include "PhotoSensor.h"
-#include "Sensor.h"
 
-PhotoSensor::PhotoSensor(int p, int t) : pin(p), threshold(t)
+PhotoSensor::PhotoSensor(uint8_t p)
 {
-}
-void PhotoSensor::read()
-{
-  resist = analogRead(pin);
-  enabled = resist < threshold;
-  Serial.print("\nResist:");
-  Serial.print(resist);
-  Serial.print("\nThreshold:");
-  Serial.print(threshold);
+  this->pin = p;
+  this->threshold = 7;
 }
 
-bool PhotoSensor::isOn()
+PhotoSensor::PhotoSensor(uint8_t p, int t)
 {
-  return enabled;
-}
-
-void PhotoSensor::setThreshold(int newThreshold)
-{
-  threshold = newThreshold;
+  this->pin = p;
+  this->threshold = t;
 }
