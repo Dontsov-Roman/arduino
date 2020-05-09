@@ -5,7 +5,7 @@
 #else
 #include <WProgram.h>
 #endif
-
+#include <MyLcd.h>
 #include <UTFT.h>
 #include <iarduino_RTC.h>
 #include "DHT.h"
@@ -15,7 +15,6 @@
 extern uint8_t BigFont[];
 extern uint8_t Grotesk32x64[];
 
-
 const char TEMPERATURE[] = "Temperature: ";
 const char C[] = "C";
 const char HUMIDITY[] = "Humidity: ";
@@ -24,15 +23,14 @@ const char AIR[] = "Air is ";
 const char CLEAR[] = "clear";
 const char DIRTY[] = "dirty";
 
-class MeteoLCD
+class MeteoLCD : public MyLcd
 {
 public:
-  MeteoLCD(DHT *_dht, UTFT *_display, iarduino_RTC *_rtc,GasSensor *_gas, int pixelPerChar);
+  MeteoLCD(DHT *_dht, UTFT *_display, iarduino_RTC *_rtc, GasSensor *_gas, int pixelPerChar);
   void init();
   float getHumidity();
   float getTemperature();
   void print();
-  String getValue(float value);
 
 protected:
   String getAir();
