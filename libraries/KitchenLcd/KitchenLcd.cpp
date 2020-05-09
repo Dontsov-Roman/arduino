@@ -30,6 +30,7 @@ void KitchenLcd::init()
 {
   lcd->begin(16, 2);
   rtc->begin();
+  dht->begin();
 }
 
 void KitchenLcd::print()
