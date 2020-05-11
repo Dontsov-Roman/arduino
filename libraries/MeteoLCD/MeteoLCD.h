@@ -29,12 +29,11 @@ const char DIRTY[] = "dirty";
 class MeteoLCD : public MyLcd
 {
 public:
-  MeteoLCD(Adafruit_BMP280 *bmp280, UTFT *_display, iarduino_RTC *_rtc, GasSensor *_gas, int pixelPerChar);
+  MeteoLCD(UTFT *_display, Adafruit_BMP280 *bmp280, iarduino_RTC *_rtc, GasSensor *_gas, int pixelPerChar);
   void init();
   float getPressure();
   float getTemperature();
   float getAltitude();
-  String getValue(float value);
   void print();
 
 protected:
@@ -44,8 +43,6 @@ protected:
   iarduino_RTC *rtc;
   GasSensor *gas;
   int pixelPerChar;
-  String temp;
-  String hum;
 };
 
 #endif

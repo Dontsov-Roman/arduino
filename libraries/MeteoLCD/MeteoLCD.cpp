@@ -1,6 +1,6 @@
 #include "MeteoLCD.h"
 
-MeteoLCD::MeteoLCD(Adafruit_BMP280 *_bmp280, UTFT *_display, iarduino_RTC *_rtc, GasSensor *_gas, int pixelPerChar)
+MeteoLCD::MeteoLCD(UTFT *_display, Adafruit_BMP280 *_bmp280, iarduino_RTC *_rtc, GasSensor *_gas, int pixelPerChar)
 {
   this->display = _display;
   this->bmp280 = _bmp280;
@@ -8,14 +8,7 @@ MeteoLCD::MeteoLCD(Adafruit_BMP280 *_bmp280, UTFT *_display, iarduino_RTC *_rtc,
   this->pixelPerChar = pixelPerChar;
   this->gas = _gas;
 }
-String MeteoLCD::getValue(float val)
-{
-  int va = val * 100;
-  String value = String(va / 100, DEC);
-  value += ".";
-  value += String(va % 100, DEC);
-  return value;
-}
+
 void MeteoLCD::init()
 {
   delay(300);
