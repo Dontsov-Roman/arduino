@@ -27,6 +27,6 @@ void setup() {
 
 void loop() {
   kLcd.print();
-  brs.setTime();
+//  brs.setTime();
   delay(1000);
 }
