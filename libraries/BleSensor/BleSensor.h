@@ -7,18 +7,22 @@
 #endif
 #include "Sensor.h"
 
-const int BUFFER_LENGTH = 3;
+const int BUFFER_LENGTH = 12;
 
 class BleSensor : public Sensor
 {
 public:
   BleSensor();
+  BleSensor(char *_buf, int _bufLength);
   void read();
   bool isOn();
   char *getValue();
 
 protected:
   char buf[BUFFER_LENGTH];
+  char *customBuf;
+  int bufLength;
+  bool isCustomBuf;
 };
 
 #endif
