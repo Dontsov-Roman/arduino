@@ -8,6 +8,7 @@
 #include <BleSensor.h>
 #include <iarduino_RTC.h>
 
+#define BIT_SET '9'
 class BleRtcSetter
 {
 public:

@@ -2,13 +2,13 @@
 
 BleSensor::BleSensor()
 {
-  isCustomBuf = false;
+  this->buf = bleDefaultBuf;
+  this->bufLength = DEFAULT_BUFFER_LENGTH;
 }
 BleSensor::BleSensor(char *_buf, int _bufLength)
 {
-  this->customBuf = _buf;
+  this->buf = _buf;
   this->bufLength = _bufLength;
-  isCustomBuf = true;
 }
 
 bool BleSensor::isOn()
@@ -16,29 +16,16 @@ bool BleSensor::isOn()
   return Serial.available() > 0;
 }
 
-void BleSensor::read()
+char *BleSensor::read()
 {
   if (isOn())
   {
-    if (isCustomBuf)
-    {
-      Serial.readBytes(customBuf, bufLength);
-    }
-    else
-    {
-      Serial.readBytes(buf, BUFFER_LENGTH);
-    }
+    Serial.readBytes(buf, bufLength);
   }
+  return buf;
 }
 
 char *BleSensor::getValue()
 {
-  if (isCustomBuf)
-  {
-    return this->customBuf;
-  }
-  else
-  {
-    return this->buf;
-  }
+  return this->buf;
 }
