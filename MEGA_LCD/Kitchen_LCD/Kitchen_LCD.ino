@@ -21,7 +21,7 @@ BleRtcSetter brs(&BS, &rtc);
 
 void setup() {
   Serial.begin(9600);
-    rtc.settime(0, 48, 13, 11, 5, 20, 1);
+//  rtc.settime(0, 48, 13, 11, 5, 20, 1);
   kLcd.init();
 }
 
