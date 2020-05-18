@@ -8,6 +8,7 @@ BmpLcd::BmpLcd(LiquidCrystal *_display, Adafruit_BMP280 *_bmp280, SensorButton *
 }
 void BmpLcd::init()
 {
+  Serial.println("TEST");
   display->begin(8, 2);
   while (!bmp280->begin(BMP280_ADDRESS - 1))
   {
@@ -38,15 +39,20 @@ String BmpLcd::getPressureUnit()
 
   if (btn->isOn())
   {
-    return MM_HG;
+    return PA;
   }
   else
   {
-    return PA;
+    return MM_HG;
   }
 }
 void BmpLcd::print()
 {
+
+  Serial.println(this->getValue(this->getTemperature()));
+  Serial.println(this->getValue(this->getPressure()));
+  Serial.println(getPressureUnit());
+
   bool previous = btn->isOn();
   btn->read();
   if (previous != btn->isOn())
@@ -55,11 +61,11 @@ void BmpLcd::print()
   }
 
   display->setCursor(0, 0);
-  display->print(this->getValue(this->getTemperature()));
-  display->setCursor(5, 0);
-  display->print(" *C");
+  display->print(getValue(getTemperature()));
+  display->setCursor(6, 0);
+  display->print("*C");
   display->setCursor(0, 1);
-  display->print(this->getValue(this->getPressure()));
-  display->setCursor(5, 1);
+  display->print(getPressure());
+  display->setCursor(6, 1);
   display->print(getPressureUnit());
 }
