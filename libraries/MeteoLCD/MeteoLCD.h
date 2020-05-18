@@ -8,7 +8,6 @@
 #include <MyLcd.h>
 #include <UTFT.h>
 #include <iarduino_RTC.h>
-#include "DHT.h"
 #include <Adafruit_Sensor.h>
 #include <GasSensor.h>
 #include <Adafruit_BMP280.h>

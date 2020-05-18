@@ -12,7 +12,8 @@ MeteoLCD::MeteoLCD(UTFT *_display, Adafruit_BMP280 *_bmp280, iarduino_RTC *_rtc,
 void MeteoLCD::init()
 {
   delay(300);
-  while (!bmp280->begin(BMP280_ADDRESS - 1)) {
+  while (!bmp280->begin(BMP280_ADDRESS - 1))
+  {
     Serial.println(F("Could not find a valid BMP280 sensor, check wiring!"));
     delay(2000);
   }
@@ -23,8 +24,6 @@ void MeteoLCD::init()
 
 float MeteoLCD::getPressure()
 {
-  Serial.println(bmp280->readPressure());
-  Serial.println(bmp280->readPressure() / 133.322);
   return bmp280->readPressure() / 133.322;
 }
 
@@ -33,7 +32,8 @@ float MeteoLCD::getTemperature()
   return bmp280->readTemperature();
 }
 
-float MeteoLCD::getAltitude(){
+float MeteoLCD::getAltitude()
+{
   return bmp280->readAltitude();
 }
 
