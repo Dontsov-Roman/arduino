@@ -11,7 +11,7 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BMP280.h>
 
-const char MM_HG[] = "mmHg";
+const char MM_HG[] = "mH";
 const char PA[] = "Pa";
 
 class BmpLcd : public MyLcd
