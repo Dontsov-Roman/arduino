@@ -20,6 +20,7 @@ MeteoLCD lcd(&display, &bmp280, &rtc, &gasSensor, PIXEL_PER_CHAR);
 void setup()
 {
   Serial.begin(9600);
+//  rtc.settime(0, 48, 19, 20, 5, 20, 3);
   lcd.init();
 }
 void loop()
