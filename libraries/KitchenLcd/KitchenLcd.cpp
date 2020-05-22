@@ -1,20 +1,13 @@
 #include "KitchenLcd.h"
 
-KitchenLcd::KitchenLcd()
-{
-}
-KitchenLcd::KitchenLcd(LiquidCrystal *_lcd, iarduino_RTC *_rtc)
-{
-  this->lcd = _lcd;
-  this->rtc = _rtc;
-}
-
-KitchenLcd::KitchenLcd(LiquidCrystal *_lcd, iarduino_RTC *_rtc, DHT *_dht, SensorButton *_btn)
+KitchenLcd::KitchenLcd(LiquidCrystal *_lcd, iarduino_RTC *_rtc, DHT *_dht, SensorButton *_btn, BleSensor *_bs, BleRtcSetter *_brs)
 {
   this->lcd = _lcd;
   this->rtc = _rtc;
   this->dht = _dht;
   this->btn = _btn;
+  this->bs = _bs;
+  this->brs = _brs;
 }
 
 void KitchenLcd::setDisplay(LiquidCrystal *_lcd)
@@ -37,6 +30,7 @@ void KitchenLcd::init()
 
 void KitchenLcd::print()
 {
+  brs->setTime();
   bool previous = btn->isOn();
   btn->read();
   if (previous != btn->isOn())
@@ -46,14 +40,18 @@ void KitchenLcd::print()
   lcd->setCursor(0, 0);
   lcd->print(rtc->gettime("H:i"));
   lcd->print(", ");
+  String temperature = getValue(dht->readTemperature());
+  String humidity = getValue(dht->readHumidity());
+  String buf = temperature + humidity;
+  bs->write(buf.c_str());
   if (btn->isOn())
   {
-    lcd->print(this->getValue(dht->readTemperature()));
+    lcd->print(temperature);
     lcd->print(" *C");
   }
   else
   {
-    lcd->print(this->getValue(dht->readHumidity()));
+    lcd->print(humidity);
     lcd->print(" %");
   }
   lcd->setCursor(0, 1);

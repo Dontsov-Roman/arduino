@@ -25,6 +25,11 @@ char *BleSensor::read()
   return buf;
 }
 
+void BleSensor::write(char *_buf)
+{
+  Serial.write(_buf);
+}
+
 char *BleSensor::getValue()
 {
   return this->buf;

@@ -16,6 +16,7 @@ public:
   char *read();
   bool isOn();
   char *getValue();
+  void write(char *_buf);
 
 protected:
   char *buf;

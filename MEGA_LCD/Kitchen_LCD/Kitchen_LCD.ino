@@ -10,23 +10,22 @@ iarduino_RTC rtc(RTC_DS1302, 10, 12, 11);
 
 DHT dht(A0, DHT11);
 
-KitchenLcd kLcd(&lcd, &rtc, &dht, &btn);
-
 const int bufLength = 14;
 char buf[bufLength];
 
-BleSensor BS(buf, &bufLength);
+BleSensor bs(buf, &bufLength);
 
-BleRtcSetter brs(&BS, &rtc);
+BleRtcSetter brs(&bs, &rtc);
+
+KitchenLcd kLcd(&lcd, &rtc, &dht, &btn, &bs, &brs);
 
 void setup() {
   Serial.begin(9600);
-//  rtc.settime(0, 48, 13, 11, 5, 20, 1);
+  //  rtc.settime(0, 48, 13, 11, 5, 20, 1);
   kLcd.init();
 }
 
 void loop() {
   kLcd.print();
-  brs.setTime();
   delay(1000);
 }
