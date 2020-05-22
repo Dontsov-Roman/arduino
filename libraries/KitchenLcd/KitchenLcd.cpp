@@ -42,17 +42,19 @@ void KitchenLcd::print()
   lcd->print(", ");
   String temperature = getValue(dht->readTemperature());
   String humidity = getValue(dht->readHumidity());
-  String buf = temperature + humidity;
+  String buf = temperature + "&" + humidity;
   bs->write(buf.c_str());
   if (btn->isOn())
   {
     lcd->print(temperature);
-    lcd->print(" *C");
+    lcd->setCursor(14, 0);
+    lcd->print("*C");
   }
   else
   {
     lcd->print(humidity);
-    lcd->print(" %");
+    lcd->setCursor(14, 0);
+    lcd->print("%");
   }
   lcd->setCursor(0, 1);
   lcd->print(rtc->gettime("d-m-Y, D"));

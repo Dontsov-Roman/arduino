@@ -27,6 +27,7 @@ char *BleSensor::read()
 
 void BleSensor::write(char *_buf)
 {
+  Serial.println(_buf);
   Serial.write(_buf);
 }
 
