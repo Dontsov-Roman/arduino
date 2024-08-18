@@ -11,13 +11,14 @@
 class RoomLightSerial {
     public:
         RoomLightSerial();
-        RoomLightSerial(SoftwareSerial *softSerial, TransferStruct *rStruct, TransferStruct *wStruct);
+        RoomLightSerial(SoftwareSerial *softSerial);
+        // RoomLightSerial(SoftwareSerial *softSerial, TransferStruct *tStruct);
         void read();
-        void write();
+        void write(long code, long value);
     protected:
         SoftwareSerial *serial;
-        TransferStruct *readStruct;
-        TransferStruct *writeStruct;
+        TransferStruct transferStruct;
+        // TransferStruct *transferStruct;
 };
 
 #endif

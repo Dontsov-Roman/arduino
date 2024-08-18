@@ -7,7 +7,7 @@
 #endif
 
 struct TransferStruct {
-    long command;
+    long code;
     long value;
 };
 #endif

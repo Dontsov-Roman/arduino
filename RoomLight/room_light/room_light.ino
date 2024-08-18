@@ -3,28 +3,30 @@
 #include <SimpleDigitalOutput.h>
 #include <SoftwareSerial.h>
 #include <RoomLightSerial.h>
-#include <TransferStruct.h>
+
+#define SERIAL_BEGIN 9600
+#define GLOBAL_DELAY 200
 
 SimpleSensor sensorButton(A0);
 SimpleMovementSensor moveSensor(A1, 3);
 SimpleDigitalOutput led(7);
 SoftwareSerial mySerial(10, 11); // RX, TX
-TransferStruct readStruct;
-TransferStruct writeStruct;
-RoomLightSerial roomSerial(&mySerial, &readStruct, &writeStruct);
+RoomLightSerial roomSerial(&mySerial);
 
 void setup() {
-  Serial.begin(9600);
-  led.begin();
-  led.switchOff();
-  Serial.println(HIGH);
-  Serial.println(LOW);
-  moveSensor.calibrate();
+  Serial.begin(SERIAL_BEGIN);
+  mySerial.begin(SERIAL_BEGIN);
+  // led.begin();
+  // moveSensor.calibrate();
 }
 
 void loop() {
-  sensorButton.read();
-  moveSensor.read();
+  
+  // sensorButton.read();
+  // moveSensor.read();
+  // roomSerial.write(15, 150);
+  roomSerial.read();
+  // Serial.println(transferStruct.code);
   // Serial.println("Move:");
   // moveSensor.statusToSerial();
   // Serial.println("Button:");
@@ -34,5 +36,5 @@ void loop() {
   } else {
     led.switchOff();
   }
-  delay(300);
+  delay(GLOBAL_DELAY);
 }
