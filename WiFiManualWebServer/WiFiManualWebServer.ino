@@ -9,7 +9,6 @@
 const char* ssid = STASSID;
 const char* password = STAPSK;
 const int PIN_LED = D0;
-SoftwareSerial mySerial(10, 11); // RX, TX
 
 // Create an instance of the server
 // specify the port to listen on as an argument
