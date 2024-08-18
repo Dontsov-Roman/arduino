@@ -18,5 +18,9 @@ class RoomLightServerMediator {
     protected:
         RoomLightSerial *serial;
         WiFiServer *server;
+        WiFiClient client;
+        void clientRead();
+        void sendResponse();
+        void sendWiFiLocalIp();
 };
 #endif
