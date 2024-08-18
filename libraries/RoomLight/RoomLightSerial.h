@@ -7,18 +7,18 @@
 #endif
 #include <SoftwareSerial.h>
 #include "./TransferStruct.h"
+#include "./RoomLightCommands.h"
 
 class RoomLightSerial {
     public:
         RoomLightSerial();
         RoomLightSerial(SoftwareSerial *softSerial);
-        // RoomLightSerial(SoftwareSerial *softSerial, TransferStruct *tStruct);
+        TransferStruct* getTransferStruct();
         void read();
-        void write(long code, long value);
+        void write(RoomLightCommands command, long value);
     protected:
         SoftwareSerial *serial;
         TransferStruct transferStruct;
-        // TransferStruct *transferStruct;
 };
 
 #endif

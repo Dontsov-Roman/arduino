@@ -1,5 +1,6 @@
 #include <SoftwareSerial.h>
 #include <RoomLightSerial.h>
+#include <RoomLightCommands.h>
 
 #define SERIAL_BEGIN 9600
 #define GLOBAL_DELAY 200
@@ -15,7 +16,7 @@ void setup() {
 
 void loop() {
   // roomSerial.read();
-  roomSerial.write(15, 150);
+  roomSerial.write(SwitchOn, 150);
   // Serial.println(transferStruct.code);
   delay(GLOBAL_DELAY);
 }

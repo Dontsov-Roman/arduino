@@ -5,9 +5,10 @@
 #else
 #include <WProgram.h>
 #endif
+#include "./RoomLightCommands.h"
 
 struct TransferStruct {
-    long code;
+    RoomLightCommands command;
     long value;
 };
 #endif
