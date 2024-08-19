@@ -10,11 +10,12 @@
 #include <SimpleMovementSensor.h>
 #include <RoomLightSerial.h>
 #include <RoomLightCommands.h>
+#include <LocalIpDisplay.h>
 
 class RoomLightMediator {
     public:
         RoomLightMediator();
-        RoomLightMediator(RoomLightSerial *serial, SimpleSensor *button, SimpleDigitalOutput *led, SimpleMovementSensor *movementSensor);
+        RoomLightMediator(RoomLightSerial *serial, SimpleSensor *button, SimpleDigitalOutput *led, SimpleMovementSensor *movementSensor, LocalIpDisplay *lcd);
         void begin();
         void toggle();
     protected:
@@ -22,7 +23,7 @@ class RoomLightMediator {
         SimpleSensor *button;
         SimpleDigitalOutput *led;
         SimpleMovementSensor *movementSensor;
-        String address;
+        LocalIpDisplay *lcd;
 
 };
 #endif

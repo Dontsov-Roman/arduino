@@ -16,11 +16,13 @@ class RoomLightServerMediator {
         void begin(const char* ssid, const char* password);
         void toggle();
     protected:
+        bool isLastRequestInvalid;
         RoomLightSerial *serial;
         WiFiServer *server;
         WiFiClient client;
         void clientRead();
         void sendResponse();
         void sendWiFiLocalIp();
+        
 };
 #endif

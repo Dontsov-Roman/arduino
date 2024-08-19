@@ -9,7 +9,7 @@
 
 struct TransferStruct {
     RoomLightCommands command;
-    String address;
-    long value;
+    // char value;
+    String value;
 };
 #endif

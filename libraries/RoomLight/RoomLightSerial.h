@@ -16,11 +16,11 @@ class RoomLightSerial {
         TransferStruct* getTransferStruct();
         void read();
         void write(RoomLightCommands command);
-        void write(RoomLightCommands command, long value);
-        void write(RoomLightCommands command, String address);
+        void write(RoomLightCommands command, String value);
     protected:
         SoftwareSerial *serial;
         TransferStruct transferStruct;
+        char stringToChar(String str);
 };
 
 #endif

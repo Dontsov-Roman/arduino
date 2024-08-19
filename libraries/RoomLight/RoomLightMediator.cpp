@@ -9,25 +9,36 @@
 
 RoomLightMediator::RoomLightMediator() {}
 
-RoomLightMediator::RoomLightMediator(RoomLightSerial *serial, SimpleSensor *button, SimpleDigitalOutput *led, SimpleMovementSensor *movementSensor) {
+RoomLightMediator::RoomLightMediator(RoomLightSerial *serial, SimpleSensor *button, SimpleDigitalOutput *led, SimpleMovementSensor *movementSensor, LocalIpDisplay *lcd) {
     this->serial = serial;
     this->button = button;
     this->led = led;
     this->movementSensor = movementSensor;
-    this->address = "";
+    this->lcd = lcd;
 }
 
 void RoomLightMediator::begin() {
     this->led->begin();
+    this->lcd->begin();
     this->movementSensor->calibrate();
 }
 void RoomLightMediator::toggle() {
     this->button->read();
+    this->movementSensor->read();
+    this->serial->read();
+    TransferStruct *ts = this->serial->getTransferStruct();
+    if(ts->command == SetLocalIp) {
+        // Serial.println("Local Ip Adress:");
+        // Serial.println(this->address);
+        // Serial.println(ts->value);
+        Serial.println(ts->command);
+        Serial.println(ts->value);
+        this->lcd->write("No address");
+        this->lcd->write(ts->value);
+    }
     if (!this->button->isOn()) {
         this->led->switchOn();
     } else {
-        this->serial->read();
-        TransferStruct *ts = this->serial->getTransferStruct();
         switch (ts->command)
         {
         case SwitchOn:
@@ -36,11 +47,7 @@ void RoomLightMediator::toggle() {
         case SwitchOff:
             this->led->switchOff();
             break;
-        case SetLocalIp:
-            this->address = ts->address;
-            break;
         case MovementMode:
-            this->movementSensor->read();
             if(this->movementSensor->isOn()) {
                 this->led->switchOn();
                 break;

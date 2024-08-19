@@ -3,30 +3,43 @@
 #include <RoomLightSerial.h>
 #include <RoomLightCommands.h>
 #include <RoomLightServerMediator.h>
+
 #ifndef STASSID
 #define STASSID "56"
 #define STAPSK "dontsovaAlya"
 #define SERIAL_BEGIN 9600
-#define GLOBAL_DELAY 200
+#define GLOBAL_DELAY 1200
 #endif
 
 
 const char* ssid = STASSID;
 const char* password = STAPSK;
 
-SoftwareSerial mySerial(D5, D6); // RX, TX
+SoftwareSerial softwareSerial(D5, D6); // RX, TX
 TransferStruct transferStruct;
-RoomLightSerial roomSerial(&mySerial);
+RoomLightSerial roomSerial(&softwareSerial);
 WiFiServer server(80);
-RoomLightServerMediator serverMediator(&roomSerial, &server);
+RoomLightServerMediator mediator(&roomSerial, &server);
+
+// TransferStruct ts;
+// char ipAddr[] = "192.168.0.113";
 
 void setup() {
   Serial.begin(SERIAL_BEGIN);
-  mySerial.begin(SERIAL_BEGIN);
-  serverMediator.begin(ssid, password);
+  
+  // ts.command = SetLocalIp;
+  // ts.address = "192.168.0.113";
+  softwareSerial.begin(SERIAL_BEGIN);
+  mediator.begin(ssid, password);
 }
 
 void loop() {
-  serverMediator.toggle();
-  delay(GLOBAL_DELAY);
+  mediator.toggle();
+  // Serial.println("TS:");
+  // Serial.println(sizeof(ts));
+  // Serial.println("Address:");
+  // Serial.println(sizeof(ts.address));
+  // Serial.println("Char:");
+  // Serial.println(sizeof(ipAddr));
+  delay(1000);
 }
