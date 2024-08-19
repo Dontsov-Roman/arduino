@@ -14,6 +14,7 @@ RoomLightMediator::RoomLightMediator(RoomLightSerial *serial, SimpleSensor *butt
     this->button = button;
     this->led = led;
     this->movementSensor = movementSensor;
+    this->address = "";
 }
 
 void RoomLightMediator::begin() {
@@ -34,6 +35,9 @@ void RoomLightMediator::toggle() {
             break;
         case SwitchOff:
             this->led->switchOff();
+            break;
+        case SetLocalIp:
+            this->address = ts->address;
             break;
         case MovementMode:
             this->movementSensor->read();

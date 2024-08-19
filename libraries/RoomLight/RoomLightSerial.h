@@ -15,7 +15,9 @@ class RoomLightSerial {
         RoomLightSerial(SoftwareSerial *softSerial);
         TransferStruct* getTransferStruct();
         void read();
+        void write(RoomLightCommands command);
         void write(RoomLightCommands command, long value);
+        void write(RoomLightCommands command, String address);
     protected:
         SoftwareSerial *serial;
         TransferStruct transferStruct;

@@ -10,5 +10,6 @@ enum RoomLightCommands {
     SwitchOff,
     SwitchOn,
     MovementMode,
+    SetLocalIp,
 };
 #endif

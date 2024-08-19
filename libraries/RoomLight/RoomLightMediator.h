@@ -22,7 +22,7 @@ class RoomLightMediator {
         SimpleSensor *button;
         SimpleDigitalOutput *led;
         SimpleMovementSensor *movementSensor;
-        char* localIp;
+        String address;
 
 };
 #endif

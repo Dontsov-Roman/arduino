@@ -27,10 +27,11 @@ void RoomLightServerMediator::begin(const char *ssid, const char *password) {
 
   // Print the IP address
   Serial.println(WiFi.localIP());
+  this->sendWiFiLocalIp();
 }
 
 void RoomLightServerMediator::sendWiFiLocalIp() {
-
+    this->serial->write(SetLocalIp, WiFi.localIP().toString());
 }
 
 void RoomLightServerMediator::clientRead() {
@@ -45,14 +46,14 @@ void RoomLightServerMediator::clientRead() {
     Serial.println(req);
 
     // Match the request
-    long val;
-    if (req.indexOf(F("/gpio/0")) != -1) {
-        val = 0;
-    } else if (req.indexOf(F("/gpio/1")) != -1) {
-        val = 1;
+    if (req.indexOf(F("/led/0")) != -1) {
+        this->serial->write(SwitchOn);
+    } else if (req.indexOf(F("/led/1")) != -1) {
+        this->serial->write(SwitchOff);
+    } else if (req.indexOf(F("/movement")) != -1) {
+        this->serial->write(MovementMode);
     } else {
         Serial.println(F("invalid request"));
-        val = digitalRead(LED_BUILTIN);
     }
 
     // read/ignore the rest of the request
@@ -71,5 +72,17 @@ void RoomLightServerMediator::toggle() {
 
 void RoomLightServerMediator::sendResponse() {
     client.print(F("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<!DOCTYPE HTML>\r\n<html>\r\n"));
+    // Switch on link
+    client.print(F("<br><br><a href='http://"));
+    client.print(WiFi.localIP());
+    client.print(F("/led/1'>Switch On</a>"));
+    // Switch off link
+    client.print(F("<br><br><a href='http://"));
+    client.print(WiFi.localIP());
+    client.print(F("/led/0'>Switch Off</a>"));
+    // Movement Mode
+    client.print(F("<br><br><a href='http://"));
+    client.print(WiFi.localIP());
+    client.print(F("/movement'>Switch Off</a>"));
     client.print(F("</html>"));
 }

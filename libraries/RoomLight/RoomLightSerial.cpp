@@ -14,14 +14,22 @@ TransferStruct* RoomLightSerial::getTransferStruct() {
 
 void RoomLightSerial::read() {
     this->serial->readBytes((byte*)&this->transferStruct, sizeof(transferStruct));
-    Serial.println(sizeof(transferStruct));
-    Serial.println(this->transferStruct.command);
-    Serial.println(this->transferStruct.value);
+
+}
+
+void RoomLightSerial::write(RoomLightCommands command) {
+    this->transferStruct.command = command;
+    this->serial->write((byte*)&this->transferStruct, sizeof(transferStruct));
 }
 
 void RoomLightSerial::write(RoomLightCommands command, long value) {
     this->transferStruct.command = command;
     this->transferStruct.value = value;
-    Serial.println(sizeof(transferStruct));
+    this->serial->write((byte*)&this->transferStruct, sizeof(transferStruct));
+}
+
+void RoomLightSerial::write(RoomLightCommands command, String address) {
+    this->transferStruct.command = command;
+    this->transferStruct.address = address;
     this->serial->write((byte*)&this->transferStruct, sizeof(transferStruct));
 }
