@@ -17,10 +17,16 @@ class RoomLightSerial {
         void read();
         void write(RoomLightCommands command);
         void write(RoomLightCommands command, String value);
+        void clearTransferStruct();
     protected:
         SoftwareSerial *serial;
         TransferStruct transferStruct;
-        char stringToChar(String str);
+        String transferBuf;
+        String receivedChar;
+        String lastControlChar;
+        String startChar;
+        String eolChar;
+        String termChar;
 };
 
 #endif

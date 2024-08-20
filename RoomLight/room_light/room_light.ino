@@ -10,7 +10,8 @@
 #include <LiquidCrystal_I2C.h>   
 
 #define SERIAL_BEGIN 9600
-#define GLOBAL_DELAY 1200
+#define SOFTWARE_SERIAL_BEGIN 300
+#define GLOBAL_DELAY 100
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 LocalIpDisplay display(&lcd);
@@ -21,26 +22,14 @@ SoftwareSerial softwareSerial(10, 11); // RX, TX
 RoomLightSerial roomSerial(&softwareSerial);
 RoomLightMediator mediator(&roomSerial, &sensorButton, &led, &movementSensor, &display);
 
-// TransferStruct ts;
-// char ipAddr[] = "192.168.0.113";
-
 void setup() {
   Serial.begin(SERIAL_BEGIN);
   
-  // ts.command = SetLocalIp;
-  // ts.address = "192.168.0.113";
-  softwareSerial.begin(SERIAL_BEGIN);
+  softwareSerial.begin(SOFTWARE_SERIAL_BEGIN);
   mediator.begin();
-  // delay(3000);
 }
 
 void loop() {
   mediator.toggle();
-  // Serial.println("TS:");
-  // Serial.println(sizeof(ts));
-  // Serial.println("Address:");
-  // Serial.println(sizeof(ts.address));
-  // Serial.println("Char:");
-  // Serial.println(sizeof(ipAddr));
-  delay(1000);
+  delay(GLOBAL_DELAY);
 }
