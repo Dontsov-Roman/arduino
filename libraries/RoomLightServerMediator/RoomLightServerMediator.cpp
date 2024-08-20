@@ -29,7 +29,6 @@ void RoomLightServerMediator::begin(const char *ssid, const char *password) {
 
     // Print the IP address
     Serial.println(WiFi.localIP());
-    this->client = server->accept();
     this->sendWiFiLocalIp();
     // delay(1000);
 }
@@ -39,6 +38,7 @@ void RoomLightServerMediator::sendWiFiLocalIp() {
 }
 
 void RoomLightServerMediator::clientRead() {
+    this->client = server->accept();
     if (!client) { return; }
     // Serial.println(F("new client"));
 
