@@ -23,7 +23,6 @@ TransferStruct* RoomLightSerial::getTransferStruct() {
 
 
 void RoomLightSerial::clearTransferStruct() {
-    this->transferStruct.command = NothingCommand;
     this->transferStruct.value = "";
     this->transferBuf = "";
     this->receivedChar = "";
@@ -37,7 +36,7 @@ void RoomLightSerial::read() {
             this->transferBuf += (char)this->serial->read();
             delay(2);
         }
-        Serial.println(this->transferBuf);
+        // Serial.println(this->transferBuf);
         for(char &c : this->transferBuf) {
             this->receivedChar = String(c);
             if (this->receivedChar == this->startChar || this->receivedChar == this->eolChar || this->receivedChar == this->termChar) {

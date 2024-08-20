@@ -11,7 +11,7 @@
 
 #define SERIAL_BEGIN 9600
 #define SOFTWARE_SERIAL_BEGIN 300
-#define SOFTWARE_SERIAL_TIMEOUT 1000
+#define SOFTWARE_SERIAL_TIMEOUT 500
 #define GLOBAL_DELAY 100
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
@@ -33,5 +33,5 @@ void setup() {
 
 void loop() {
   mediator.toggle();
-  // delay(GLOBAL_DELAY);
+  delay(GLOBAL_DELAY);
 }
