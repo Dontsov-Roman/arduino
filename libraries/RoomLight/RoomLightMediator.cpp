@@ -28,27 +28,30 @@ void RoomLightMediator::toggle() {
     this->movementSensor->read();
     this->serial->read();
     TransferStruct *ts = this->serial->getTransferStruct();
-    if(ts->command == SetLocalIp) {
+    if(ts->command == SetLocalIpCommand) {
         this->lcd->write(ts->value);
+        delay(300);
+        this->serial->clearTransferStruct();
     }
     if (!this->button->isOn()) {
         this->led->switchOn();
     } else {
         switch (ts->command)
         {
-        case SwitchOn:
+        case SwitchOnCommand:
             this->led->switchOn();
             break;
-        case SwitchOff:
+        case SwitchOffCommand:
             this->led->switchOff();
             break;
-        case MovementMode:
+        case MovementModeCommand:
             if(this->movementSensor->isOn()) {
                 this->led->switchOn();
                 break;
             }
+        case NothingCommand:
         default:
-            this->led->switchOff();
+            break;
         }
     }
 }

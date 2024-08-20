@@ -15,12 +15,12 @@ class RoomLightSerial {
         RoomLightSerial(SoftwareSerial *softSerial);
         TransferStruct* getTransferStruct();
         void read();
-        void write(RoomLightCommands command);
-        void write(RoomLightCommands command, String value);
+        void write(int command);
+        void write(int command, String value);
         void clearTransferStruct();
     protected:
-        SoftwareSerial *serial;
         TransferStruct transferStruct;
+        SoftwareSerial *serial;
         String transferBuf;
         String receivedChar;
         String lastControlChar;

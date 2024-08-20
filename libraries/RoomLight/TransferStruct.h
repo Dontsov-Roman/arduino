@@ -8,8 +8,7 @@
 #include "./RoomLightCommands.h"
 
 struct TransferStruct {
-    RoomLightCommands command;
-    // char value;
+    int command;
     String value;
 };
 #endif

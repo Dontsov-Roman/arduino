@@ -9,7 +9,8 @@
 #define STAPSK "dontsovaAlya"
 #define SERIAL_BEGIN 9600
 #define SOFTWARE_SERIAL_BEGIN 300
-#define GLOBAL_DELAY 1200
+#define SOFTWARE_SERIAL_TIMEOUT 1000
+#define GLOBAL_DELAY 1500
 #endif
 
 
@@ -27,6 +28,7 @@ void setup() {
   Serial.begin(SERIAL_BEGIN);
   
   softwareSerial.begin(SOFTWARE_SERIAL_BEGIN);
+  softwareSerial.setTimeout(SOFTWARE_SERIAL_TIMEOUT);
   mediator.begin(ssid, password);
 }
 

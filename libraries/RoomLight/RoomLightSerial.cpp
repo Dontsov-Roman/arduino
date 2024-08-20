@@ -6,13 +6,15 @@ RoomLightSerial::RoomLightSerial() {}
 RoomLightSerial::RoomLightSerial(SoftwareSerial *softSerial) {
     this->serial = softSerial;
     this->transferStruct = TransferStruct{};
-    this->transferStruct.command = SwitchOn;
-    this->transferStruct.value = "";
-    this->receivedChar = "";
-    this->lastControlChar = "";
+    this->transferStruct.command = NothingCommand;
+    
     this->startChar = ":";
     this->eolChar = ",";
     this->termChar = ";";
+
+    this->transferStruct.value = "";
+    this->receivedChar = "";
+    this->lastControlChar = "";
 }
 
 TransferStruct* RoomLightSerial::getTransferStruct() {
@@ -21,8 +23,11 @@ TransferStruct* RoomLightSerial::getTransferStruct() {
 
 
 void RoomLightSerial::clearTransferStruct() {
+    this->transferStruct.command = NothingCommand;
     this->transferStruct.value = "";
     this->transferBuf = "";
+    this->receivedChar = "";
+    this->lastControlChar = "";
 }
 
 void RoomLightSerial::read() {
@@ -32,6 +37,7 @@ void RoomLightSerial::read() {
             this->transferBuf += (char)this->serial->read();
             delay(2);
         }
+        Serial.println(this->transferBuf);
         for(char &c : this->transferBuf) {
             this->receivedChar = String(c);
             if (this->receivedChar == this->startChar || this->receivedChar == this->eolChar || this->receivedChar == this->termChar) {
@@ -39,10 +45,7 @@ void RoomLightSerial::read() {
                 continue;
             }
             if (this->lastControlChar == this->startChar) {
-                this->transferStruct.command = static_cast<RoomLightCommands>(c);
-                Serial.println(this->receivedChar);
-                Serial.println(c);
-                Serial.println(this->transferStruct.command);
+                this->transferStruct.command = c - '0';
             } else if(this->lastControlChar == this->eolChar) {
                 this->transferStruct.value += this->receivedChar;
             } else if(this->lastControlChar == this->termChar) {
@@ -56,11 +59,11 @@ void RoomLightSerial::read() {
     }
 }
 
-void RoomLightSerial::write(RoomLightCommands command) {
+void RoomLightSerial::write(int command) {
     this->transferStruct.command = command;
     this->serial->write((byte*)&transferStruct, sizeof(transferStruct));
 }
 
-void RoomLightSerial::write(RoomLightCommands command, String value) {
-    this->serial->print(this->startChar + static_cast<String>(command) + this->eolChar + String(value) + this->termChar);
+void RoomLightSerial::write(int command, String value) {
+    this->serial->print(this->startChar + String(command) + this->eolChar + value + this->termChar);
 }
