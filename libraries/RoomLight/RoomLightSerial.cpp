@@ -60,7 +60,7 @@ void RoomLightSerial::read() {
 
 void RoomLightSerial::write(int command) {
     this->transferStruct.command = command;
-    this->serial->write((byte*)&transferStruct, sizeof(transferStruct));
+    this->serial->print(this->startChar + String(command) + this->termChar);
 }
 
 void RoomLightSerial::write(int command, String value) {

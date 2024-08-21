@@ -11,7 +11,7 @@ RoomLightServerMediator::RoomLightServerMediator(RoomLightSerial *serial, WiFiSe
     this->serial = serial;
     this->server = server;
     this->isLastRequestInvalid = false;
-    this->simpleTimeout = SimpleTimeout();
+    this->simpleTimeout = SimpleTimeout(15000);
 }
 
 void RoomLightServerMediator::begin(const char *ssid, const char *password) {
