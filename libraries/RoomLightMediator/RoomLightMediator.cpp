@@ -15,12 +15,15 @@ RoomLightMediator::RoomLightMediator(RoomLightSerial *serial, SimpleSensor *butt
     this->led = led;
     this->movementSensor = movementSensor;
     this->lcd = lcd;
+    this->lcdStatusTimeout = 5;
+    this->lastUpdateMillis = 0;
 }
 
 void RoomLightMediator::begin() {
     this->led->begin();
     this->lcd->begin();
     this->movementSensor->calibrate();
+    this->lcd->clear();
     this->lcd->writeAddress("No address");
 }
 void RoomLightMediator::toggle() {
@@ -56,4 +59,18 @@ void RoomLightMediator::toggle() {
                 break;
         }
     }
+    if (this->checkLcdStatus()) {
+        this->lcd->writeStatus(this->getStatus());
+    }
+}
+String RoomLightMediator::getStatus() {
+    return String(String(!this->button->isOn()) + ',' + String(this->movementSensor->isOn()) + ',' + String(this->serial->getTransferStruct()->command) + ',' + String(this->led->isOn()));
+}
+bool RoomLightMediator::checkLcdStatus() {
+    int mil_sec = millis();
+    if (mil_sec - this->lastUpdateMillis > this->lcdStatusTimeout) {
+        this->lastUpdateMillis = mil_sec;
+        return true;
+    }
+    return false;
 }

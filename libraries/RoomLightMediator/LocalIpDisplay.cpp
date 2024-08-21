@@ -21,3 +21,7 @@ void LocalIpDisplay::writeStatus(String value) {
     lcd->setCursor(1, 1);
     lcd->print(value);
 }
+
+void LocalIpDisplay::clear() {
+    lcd->clear();
+}

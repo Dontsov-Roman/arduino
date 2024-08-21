@@ -19,11 +19,15 @@ class RoomLightMediator {
         void begin();
         void toggle();
     protected:
+        // Button, Movement, Last Command, Led
+        String getStatus();
+        bool checkLcdStatus();
         RoomLightSerial *serial;
         SimpleSensor *button;
         SimpleDigitalOutput *led;
         SimpleMovementSensor *movementSensor;
         LocalIpDisplay *lcd;
-
+        int lcdStatusTimeout;
+        int lastUpdateMillis;
 };
 #endif
