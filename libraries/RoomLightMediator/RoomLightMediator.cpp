@@ -68,7 +68,7 @@ String RoomLightMediator::getStatus() {
     return String(
         "B:" +String(!this->button->isOn()) + eol +
         "M:" + String(this->movementSensor->isOn()) + eol +
-        "C:" + String(this->serial->getTransferStruct()->command) + eol +
+        "C:" + String(this->lastCommand) + eol +
         "L:" +String(this->led->isOn())
     );
 }
