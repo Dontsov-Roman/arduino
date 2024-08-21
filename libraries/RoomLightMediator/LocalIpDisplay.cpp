@@ -7,13 +7,17 @@ LocalIpDisplay::LocalIpDisplay(LiquidCrystal_I2C *lcd) {
 void LocalIpDisplay::begin() {
     lcd->init();
     lcd->backlight();
+    lcd->clear();
     lcd->setCursor(0, 0);
     lcd->print("Initializing...");
 }
-void LocalIpDisplay::write(String address) {
-    lcd->clear();
+
+void LocalIpDisplay::writeAddress(String value) {
     lcd->setCursor(0, 0);
-    lcd->print("Local Ip:");
+    lcd->print(value);
+}
+
+void LocalIpDisplay::writeStatus(String value) {
     lcd->setCursor(1, 1);
     lcd->print(address);
 }

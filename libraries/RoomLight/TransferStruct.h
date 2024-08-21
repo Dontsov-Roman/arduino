@@ -5,7 +5,7 @@
 #else
 #include <WProgram.h>
 #endif
-#include "./RoomLightCommands.h"
+#include <RoomLightCommands.h>
 
 struct TransferStruct {
     int command;

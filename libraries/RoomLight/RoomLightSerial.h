@@ -6,8 +6,8 @@
 #include <WProgram.h>
 #endif
 #include <SoftwareSerial.h>
-#include "./TransferStruct.h"
-#include "./RoomLightCommands.h"
+#include <TransferStruct.h>
+#include <RoomLightCommands.h>
 
 class RoomLightSerial {
     public:

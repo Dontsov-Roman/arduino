@@ -11,7 +11,8 @@
 class LocalIpDisplay {
     public:
         LocalIpDisplay(LiquidCrystal_I2C *lcd);
-        void write(String address);
+        void writeAddress(String address);
+        void writeStatus(String address);
         void begin();
     protected:
         LiquidCrystal_I2C *lcd;

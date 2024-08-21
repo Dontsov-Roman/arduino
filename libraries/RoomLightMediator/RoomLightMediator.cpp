@@ -21,7 +21,7 @@ void RoomLightMediator::begin() {
     this->led->begin();
     this->lcd->begin();
     this->movementSensor->calibrate();
-    this->lcd->write("No address");
+    this->lcd->writeAddress("No address");
 }
 void RoomLightMediator::toggle() {
     this->button->read();
@@ -29,7 +29,7 @@ void RoomLightMediator::toggle() {
     this->serial->read();
     TransferStruct *ts = this->serial->getTransferStruct();
     if(ts->command == SetLocalIpCommand) {
-        this->lcd->write(ts->value);
+        this->lcd->writeAddress(ts->value);
         delay(300);
         this->serial->clearTransferStruct();
     }
