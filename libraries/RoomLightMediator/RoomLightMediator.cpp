@@ -35,17 +35,16 @@ void RoomLightMediator::toggle() {
         this->lcd->writeAddress(ts->value);
         delay(300);
         this->serial->clearTransferStruct();
+    } else {
+        this->lastCommand = ts->command;
     }
     if (!this->button->isOn()) {
         this->led->switchOn();
     } else {
-        switch (ts->command)
+        switch (this->lastCommand)
         {
             case SwitchOnCommand:
                 this->led->switchOn();
-                break;
-            case SwitchOffCommand:
-                this->led->switchOff();
                 break;
             case MovementModeCommand:
                 if(this->movementSensor->isOn()) {
@@ -54,8 +53,10 @@ void RoomLightMediator::toggle() {
                     this->led->switchOff();
                 }
                 break;
+            case SwitchOffCommand:
             case NothingCommand:
             default:
+                this->led->switchOff();
                 break;
         }
     }

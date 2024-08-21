@@ -28,6 +28,7 @@ class RoomLightMediator {
         SimpleMovementSensor *movementSensor;
         LocalIpDisplay *lcd;
         SimpleTimeout simpleTimeout;
+        int lastCommand;
         String eol;
 };
 #endif
