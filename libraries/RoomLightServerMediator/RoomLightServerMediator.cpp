@@ -11,6 +11,7 @@ RoomLightServerMediator::RoomLightServerMediator(RoomLightSerial *serial, WiFiSe
     this->serial = serial;
     this->server = server;
     this->isLastRequestInvalid = false;
+    this->simpleTimeout = SimpleTimeout();
 }
 
 void RoomLightServerMediator::begin(const char *ssid, const char *password) {
@@ -29,7 +30,7 @@ void RoomLightServerMediator::begin(const char *ssid, const char *password) {
 
     // Print the IP address
     Serial.println(WiFi.localIP());
-    this->sendWiFiLocalIp();
+    // this->sendWiFiLocalIp();
     // delay(1000);
 }
 
@@ -72,9 +73,11 @@ void RoomLightServerMediator::clientRead() {
 }
 
 void RoomLightServerMediator::toggle() {
-    // this->sendWiFiLocalIp();
     this->clientRead();
     this->sendResponse();
+    if (this->simpleTimeout.checkTimeout()){
+        this->sendWiFiLocalIp();
+    }
 }
 
 void RoomLightServerMediator::sendResponse() {

@@ -8,6 +8,7 @@
 #include <ESP8266WiFi.h>
 #include <RoomLightSerial.h>
 #include <RoomLightCommands.h>
+#include <SimpleTimeout.h>
 
 class RoomLightServerMediator {
     public:
@@ -16,13 +17,14 @@ class RoomLightServerMediator {
         void begin(const char* ssid, const char* password);
         void toggle();
     protected:
-        bool isLastRequestInvalid;
-        RoomLightSerial *serial;
-        WiFiServer *server;
-        WiFiClient client;
         void clientRead();
         void sendResponse();
         void sendWiFiLocalIp();
+        bool isLastRequestInvalid;
+        SimpleTimeout simpleTimeout;
+        RoomLightSerial *serial;
+        WiFiServer *server;
+        WiFiClient client;
         
 };
 #endif

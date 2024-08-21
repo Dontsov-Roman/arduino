@@ -11,6 +11,7 @@
 #include <RoomLightSerial.h>
 #include <RoomLightCommands.h>
 #include <LocalIpDisplay.h>
+#include <SimpleTimeout.h>
 
 class RoomLightMediator {
     public:
@@ -21,13 +22,12 @@ class RoomLightMediator {
     protected:
         // Button, Movement, Last Command, Led
         String getStatus();
-        bool checkLcdStatus();
         RoomLightSerial *serial;
         SimpleSensor *button;
         SimpleDigitalOutput *led;
         SimpleMovementSensor *movementSensor;
         LocalIpDisplay *lcd;
-        int lcdStatusTimeout;
-        int lastUpdateMillis;
+        SimpleTimeout simpleTimeout;
+        String eol;
 };
 #endif
