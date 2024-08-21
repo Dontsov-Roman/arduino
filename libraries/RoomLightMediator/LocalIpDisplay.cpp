@@ -19,5 +19,5 @@ void LocalIpDisplay::writeAddress(String value) {
 
 void LocalIpDisplay::writeStatus(String value) {
     lcd->setCursor(1, 1);
-    lcd->print(address);
+    lcd->print(value);
 }

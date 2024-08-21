@@ -38,20 +38,22 @@ void RoomLightMediator::toggle() {
     } else {
         switch (ts->command)
         {
-        case SwitchOnCommand:
-            this->led->switchOn();
-            break;
-        case SwitchOffCommand:
-            this->led->switchOff();
-            break;
-        case MovementModeCommand:
-            if(this->movementSensor->isOn()) {
+            case SwitchOnCommand:
                 this->led->switchOn();
                 break;
-            }
-        case NothingCommand:
-        default:
-            break;
+            case SwitchOffCommand:
+                this->led->switchOff();
+                break;
+            case MovementModeCommand:
+                if(this->movementSensor->isOn()) {
+                    this->led->switchOn();
+                } else {
+                    this->led->switchOff();
+                }
+                break;
+            case NothingCommand:
+            default:
+                break;
         }
     }
 }
