@@ -31,9 +31,11 @@ void GpsCar::begin() {
         delay(500);
         Serial.print(".");
     }
+    Serial.println(WiFi.localIP());
 }
 void GpsCar::loop() {
     this->readGpsData();
+    Serial.println(WiFi.localIP());
     Serial.println(String(this->getGpsData()));
 }
 
