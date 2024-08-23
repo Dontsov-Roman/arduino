@@ -34,8 +34,7 @@ void GpsCar::begin() {
 }
 void GpsCar::loop() {
     this->readGpsData();
-    this->getGpsDateTime();
-    this->getGpsLatLng();
+    Serial.println(String(this->getGpsData()));
 }
 
 void GpsCar::readGpsData() {
@@ -48,8 +47,8 @@ void GpsCar::readGpsData() {
 }
 
 char* GpsCar::getGpsData() {
-    char gpsAllData[64];
-    return gpsAllData;
+    sprintf(this->allData, "%s,%s", this->getGpsDateTime(), this->getGpsLatLng());
+    return this->allData;
 }
 char* GpsCar::getGpsDateTime() {
     if (this->gps.date.isValid() && this->gps.time.isValid()) {
@@ -64,22 +63,15 @@ char* GpsCar::getGpsDateTime() {
             this->gps.time.second()
         );
     }
-    Serial.println(this->dateTime);
     
     return this->dateTime;
 }
 char* GpsCar::getGpsLatLng() {
     if (this->gps.location.isValid()) {
-        // sprintf(this->latLng, "%f, %f", this->gps.location.lat(), this->gps.location.lng());
-        Serial.println("dtostrf");
-        // Serial.println(dtostrf(this->gps.location.lat(), 4, 6, this->lat));
         dtostrf(this->gps.location.lat(), 4, 10, this->lat);
         dtostrf(this->gps.location.lng(), 4, 10, this->lng);
-        Serial.println(this->lat);
-        Serial.println(this->lng);
         sprintf(this->latLng, "%s,%s", this->lat, this->lng);
-        Serial.println(this->latLng);
     }
     
-    return this->lat;
+    return this->latLng;
 }
