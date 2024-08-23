@@ -36,7 +36,6 @@ void RoomLightSerial::read() {
             this->transferBuf += (char)this->serial->read();
             delay(2);
         }
-        // Serial.println(this->transferBuf);
         for(char &c : this->transferBuf) {
             this->receivedChar = String(c);
             if (this->receivedChar == this->startChar || this->receivedChar == this->eolChar || this->receivedChar == this->termChar) {
@@ -51,10 +50,6 @@ void RoomLightSerial::read() {
                 break;
             }
         }
-        Serial.println("Last command:");
-        Serial.println(this->transferStruct.command);
-        Serial.println("Last string:");
-        Serial.println(this->transferStruct.value);
     }
 }
 
