@@ -35,7 +35,8 @@ void GpsCar::begin() {
 }
 void GpsCar::loop() {
     this->readGpsData();
-    Serial.println(WiFi.localIP());
+    Serial.println(String(this->lat));
+    Serial.println(String(this->lng));
     Serial.println(String(this->getGpsData()));
 }
 
@@ -74,6 +75,8 @@ char* GpsCar::getGpsLatLng() {
         dtostrf(this->gps.location.lng(), 4, 10, this->lng);
         sprintf(this->latLng, "%s,%s", this->lat, this->lng);
     }
+    Serial.println(this->gps.location.isValid());
+    Serial.println(this->lat);
     
     return this->latLng;
 }

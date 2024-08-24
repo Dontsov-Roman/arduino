@@ -41,8 +41,8 @@ class GpsCar {
         char dateTime[32];
         char lng[16];
         char lat[16];
-        char latLng[32];
-        char allData[40];
+        char latLng[40];
+        char allData[72];
     private:
         const char *wifiSsid;
         const char *wifiPassword;
