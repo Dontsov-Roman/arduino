@@ -1,5 +1,7 @@
 #include <GpsCar.h>
 #include <SoftwareSerial.h>
+#include <GpsReader.h>
+#include <WifiHttpClient.h>
 
 #ifndef STASSID
 #define STASSID "56"
@@ -9,14 +11,16 @@
 #define URL "/gps"
 #endif
 
-SoftwareSerial ss(D4, D3);
 const char* wifiSsid = STASSID;
 const char* wifiPassword = STAPSK;
 const char* host = HOST;
 const char* port = PORT;
 const char* url = URL;
 
-GpsCar gpsCar(&ss, wifiSsid, wifiPassword, host, url, port);
+SoftwareSerial ss(D4, D3);
+GpsReader gpsReader(&ss);
+WifiHttpClient wifiHttpClient(wifiSsid, wifiPassword, host, url, port);
+GpsCar gpsCar(&gpsReader, &wifiHttpClient);
 
 void setup() {
   Serial.begin(115200);

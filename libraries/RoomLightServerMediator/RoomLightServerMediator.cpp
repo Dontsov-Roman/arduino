@@ -22,17 +22,12 @@ void RoomLightServerMediator::begin(const char *ssid, const char *password) {
         delay(500);
         Serial.print(F("."));
     }
-    // Serial.println(F("WiFi connected"));
 
     // Start the server
     server->begin();
-    // Serial.println(F("Server started"));
 
     // Print the IP address
     Serial.println(WiFi.localIP());
-    // this->sendWiFiLocalIp();
-    // delay(1000);
-}
 
 void RoomLightServerMediator::sendWiFiLocalIp() {
     this->serial->write(SetLocalIpCommand, WiFi.localIP().toString());
@@ -41,14 +36,10 @@ void RoomLightServerMediator::sendWiFiLocalIp() {
 void RoomLightServerMediator::clientRead() {
     this->client = server->accept();
     if (!client) { return; }
-    // Serial.println(F("new client"));
 
     client.setTimeout(5000);  // default is 1000
 
-    // Read the first line of the request
     String req = client.readStringUntil('\r');
-    // Serial.println(F("request: "));
-    // Serial.println(req);
 
     // Match the request
     this->isLastRequestInvalid = false;
@@ -65,7 +56,6 @@ void RoomLightServerMediator::clientRead() {
     }
 
     // read/ignore the rest of the request
-    // do not client.flush(): it is for output only, see below
     while (client.available()) {
         // byte by byte is not very efficient
         client.read();
