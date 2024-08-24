@@ -10,6 +10,7 @@
 #include <ESP8266WiFiMulti.h>
 #include <WiFiClient.h>
 #include <ESP8266HTTPClient.h>
+#include <ResponseStruct.h>
 
 class WifiHttpClient {
     public:
@@ -21,13 +22,14 @@ class WifiHttpClient {
             const char *port
         );
         void begin();
-        int get();
-        int post();
+        ResponseStruct* get();
+        ResponseStruct* post(char *body);
     protected:
         ESP8266WiFiMulti wifiMulti;
         WiFiClient wifi;
         HTTPClient http;
         bool isWifiConnected();
+        ResponseStruct lastResponse;
     private:
         const char *wifiSsid;
         const char *wifiPassword;

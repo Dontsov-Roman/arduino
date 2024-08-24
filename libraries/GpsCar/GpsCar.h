@@ -6,13 +6,9 @@
 #else
 #include <WProgram.h>
 #endif
-#include <TinyGPSPlus.h>
-#include <ESP8266WiFi.h>
-#include <ESP8266WiFiMulti.h>
-#include <WiFiClient.h>
-#include <ESP8266HTTPClient.h>
 #include <GpsReader.h>
 #include <WifiHttpClient.h>
+#include <SimpleTimeout.h>
 
 class GpsCar {
     public:
@@ -25,5 +21,6 @@ class GpsCar {
     protected:
         GpsReader *gpsReader;
         WifiHttpClient *client;
+        SimpleTimeout timeout;
 };
 #endif

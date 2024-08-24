@@ -3,6 +3,7 @@
 #include <ESP8266WiFiMulti.h>
 #include <WiFiClient.h>
 #include <ESP8266HTTPClient.h>
+#include <ResponseStruct.h>
 
 WifiHttpClient::WifiHttpClient(
     const char *wifiSsid,
@@ -16,8 +17,8 @@ WifiHttpClient::WifiHttpClient(
     this->host = host;
     this->url = url;
     this->port = port;
+    this->lastResponse = ResponseStruct{};
     this->wifiMulti = ESP8266WiFiMulti();
-    // this->fullUrl;
     sprintf(this->fullUrl, "%s:%s%s", this->host, this->port, this->url);
 }
 
@@ -34,15 +35,31 @@ void WifiHttpClient::begin(){
 bool WifiHttpClient::isWifiConnected() {
     return this->wifiMulti.run() == WL_CONNECTED;
 }
-int WifiHttpClient::get() {
+ResponseStruct* WifiHttpClient::get() {
     if(this->isWifiConnected()) {
-        if (http.begin(wifi, String(this->fullUrl))) {
+        if (this->http.begin(wifi, String(this->fullUrl))) {
             int httpCode = http.GET();
-            return httpCode;
+            this->lastResponse.code = httpCode;
+            this->lastResponse.response = this->http.getString();
+            
+            this->http.end();
+            return &this->lastResponse;
         }
     }
-    return 0;
+    this->lastResponse.code = 0;
+    return &this->lastResponse;
 }
-int WifiHttpClient::post() {
-    return 0;
+ResponseStruct* WifiHttpClient::post(char *body) {
+    if(this->isWifiConnected()) {
+        if (http.begin(wifi, String(this->fullUrl))) {
+            int httpCode = http.POST(body);
+            this->lastResponse.code = httpCode;
+            this->lastResponse.response = this->http.getString();
+            this->http.end();
+           
+            return &this->lastResponse;
+        }
+    }
+    this->lastResponse.code = 0;
+    return &this->lastResponse;
 }
