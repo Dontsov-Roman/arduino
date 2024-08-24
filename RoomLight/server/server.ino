@@ -3,6 +3,7 @@
 #include <RoomLightSerial.h>
 #include <RoomLightCommands.h>
 #include <RoomLightServerMediator.h>
+#include <ESP8266WebServer.h>
 
 #ifndef STASSID
 #define STASSID "56"
@@ -20,7 +21,7 @@ const char* password = STAPSK;
 SoftwareSerial softwareSerial(D5, D7); // RX, TX
 TransferStruct transferStruct;
 RoomLightSerial roomSerial(&softwareSerial);
-WiFiServer server(80);
+ESP8266WebServer server(80);
 RoomLightServerMediator mediator(&roomSerial, &server);
 
 

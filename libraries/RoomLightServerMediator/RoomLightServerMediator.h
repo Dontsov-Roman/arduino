@@ -6,25 +6,36 @@
 #include <WProgram.h>
 #endif
 #include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
 #include <RoomLightSerial.h>
 #include <RoomLightCommands.h>
 #include <SimpleTimeout.h>
+#include <ResponseCodes.h>
 
 class RoomLightServerMediator {
     public:
         RoomLightServerMediator();
-        RoomLightServerMediator(RoomLightSerial *serial, WiFiServer *server);
+        RoomLightServerMediator(RoomLightSerial *serial, ESP8266WebServer *server);
         void begin(const char* ssid, const char* password);
         void toggle();
     protected:
-        void clientRead();
+        // void clientRead();
         void sendResponse();
         void sendWiFiLocalIp();
         bool isLastRequestInvalid;
         SimpleTimeout simpleTimeout;
         RoomLightSerial *serial;
-        WiFiServer *server;
+        ESP8266WebServer *server;
         WiFiClient client;
-        
+        String textPlain = "text/plain";
+        int okCode = 200;
+        int notFoundCode = 200;
+    private:
+        void ledOnHandler();
+        void ledOffHandler();
+        void movementModeHandler();
+        void setGpsHandler();
+        void sendWifiLocalIpHandler();
+        void notFoundHandler();
 };
 #endif
