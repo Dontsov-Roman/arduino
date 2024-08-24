@@ -12,6 +12,9 @@ GpsCar::GpsCar(
 
 void GpsCar::begin() {
     this->timeout.checkTimeout();
+    do {
+        delay(1000);
+    } while(!this->timeout.checkTimeout());
     this->client->begin();
 }
 void GpsCar::loop() {
