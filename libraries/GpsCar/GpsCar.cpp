@@ -1,5 +1,6 @@
 #include <GpsCar.h>
 #include <SimpleTimeout.h>
+#include <ResponseStruct.h>
 
 GpsCar::GpsCar(
     GpsReader *gpsReader,
@@ -22,7 +23,8 @@ void GpsCar::loop() {
     if(this->timeout.checkTimeout()) {
         Serial.println(String(this->gpsReader->getGpsData()));
         if(this->client->isWifiConnected()){
-            this->client->post(this->gpsReader->getGpsData());
+            ResponseStruct *rp = this->client->post(this->gpsReader->getGpsData());
+            Serial.println(rp->code);
         }
     }
 }
