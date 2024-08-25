@@ -8,7 +8,7 @@
 #ifndef STASSID
 #define STASSID "56"
 #define STAPSK "dontsovaAlya"
-#define SERIAL_BEGIN 9600
+#define SERIAL_BEGIN 115200
 #define SOFTWARE_SERIAL_BEGIN 300
 #define SOFTWARE_SERIAL_TIMEOUT 1000
 #define GLOBAL_DELAY 1500
@@ -35,5 +35,5 @@ void setup() {
 
 void loop() {
   mediator.toggle();
-  delay(GLOBAL_DELAY);
+  // delay(GLOBAL_DELAY);
 }

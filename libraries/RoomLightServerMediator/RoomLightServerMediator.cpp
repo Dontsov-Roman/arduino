@@ -4,6 +4,7 @@
 #include <RoomLightSerial.h>
 #include <RoomLightCommands.h>
 #include <ResponseCodes.h>
+#include <StreamString.h>
 
 ResponseCodes responseCodes;
 RoomLightServerMediator::RoomLightServerMediator() {
@@ -27,6 +28,7 @@ void RoomLightServerMediator::begin(const char *ssid, const char *password) {
     }
 
     // Start the server
+    this->server->on("/", std::bind(&RoomLightServerMediator::rootHandler, this));
     this->server->on("/led/1", std::bind(&RoomLightServerMediator::ledOnHandler, this));
     this->server->on("/led/0", std::bind(&RoomLightServerMediator::ledOffHandler, this));
     this->server->on("/movement", std::bind(&RoomLightServerMediator::movementModeHandler, this));
@@ -34,105 +36,101 @@ void RoomLightServerMediator::begin(const char *ssid, const char *password) {
     this->server->on("/set-gps", HTTP_POST, std::bind(&RoomLightServerMediator::setGpsHandler, this));
     this->server->onNotFound(std::bind(&RoomLightServerMediator::notFoundHandler, this));
 
+    this->server->begin();
+
     // Print the IP address
+    this->localIp = WiFi.localIP().toString();
     Serial.println(WiFi.localIP());
 }
 
 void RoomLightServerMediator::ledOnHandler() {
+    Serial.println("Led on handler");
     this->server->send(responseCodes.okCode, responseCodes.textPlain, "");
     this->serial->write(SwitchOnCommand);
 }
 
 void RoomLightServerMediator::ledOffHandler() {
+    Serial.println("Led off handler");
     this->server->send(responseCodes.okCode, responseCodes.textPlain, "");
     this->serial->write(SwitchOffCommand);
 }
 
 
 void RoomLightServerMediator::movementModeHandler() {
+    Serial.println("Movement mode handler");
     this->server->send(responseCodes.okCode, responseCodes.textPlain, "");
     this->serial->write(MovementModeCommand);
 }
 
 void RoomLightServerMediator::sendWifiLocalIpHandler() {
+    Serial.println("Send ip handler");
     this->server->send(responseCodes.okCode, responseCodes.textPlain, "");
     this->sendWiFiLocalIp();
 }
 
 void RoomLightServerMediator::setGpsHandler() {
+    Serial.println("Set gps handler");
     this->server->send(responseCodes.okCode, responseCodes.textPlain, "");
     // this->serial->write(SwitchOnCommand);
     // TODO: implement saving date, Time, Lat, Lng;
 }
 
 void RoomLightServerMediator::notFoundHandler() {
+    Serial.println("Not found handler");
     this->server->send(responseCodes.notFoundCode, responseCodes.textPlain, "");
-    // this->serial->write(SwitchOnCommand);
 }
-
+void RoomLightServerMediator::rootHandler() {
+    Serial.println("Root handler");
+    this->server->send(responseCodes.okCode, responseCodes.textHtml, this->getTemplate());
+}
 void RoomLightServerMediator::sendWiFiLocalIp() {
-    this->serial->write(SetLocalIpCommand, WiFi.localIP().toString());
+    this->serial->write(SetLocalIpCommand, this->localIp);
 }
-
-// void RoomLightServerMediator::clientRead() {
-//     this->client = server->accept();
-//     if (!client) { return; }
-
-//     client.setTimeout(5000);  // default is 1000
-
-//     String req = client.readStringUntil('\r');
-
-//     // Match the request
-//     this->isLastRequestInvalid = false;
-//     if (req.indexOf(F("/led/0")) != -1) {
-//         this->serial->write(SwitchOffCommand);
-//     } else if (req.indexOf(F("/led/1")) != -1) {
-//         this->serial->write(SwitchOnCommand);
-//     } else if (req.indexOf(F("/movement")) != -1) {
-//         this->serial->write(MovementModeCommand);
-//     } else if (req.indexOf(F("/sendlocalip")) != -1) {
-//         this->sendWiFiLocalIp();
-//     } else {
-//         this->isLastRequestInvalid = true;
-//     }
-
-//     // read/ignore the rest of the request
-//     while (client.available()) {
-//         // byte by byte is not very efficient
-//         client.read();
-//     }
-// }
 
 void RoomLightServerMediator::toggle() {
     this->server->handleClient();
     this->client = server->client();
-    this->sendResponse();
+    // this->sendResponse();
     if (this->simpleTimeout.checkTimeout()){
         this->sendWiFiLocalIp();
     }
 }
-
-void RoomLightServerMediator::sendResponse() {
-    client.print(F("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<!DOCTYPE HTML>\r\n<html>\r\n"));
-    if(this->isLastRequestInvalid) {
-        client.print(F("<br><br><span style='{color: red}'>Last request was invalid</span>"));
-    }
-    // Switch on link
-    client.print(F("<br><br><a href='http://"));
-    client.print(WiFi.localIP());
-    client.print(F("/led/1'>Switch On</a>"));
-    // Switch off link
-    client.print(F("<br><br><a href='http://"));
-    client.print(WiFi.localIP());
-    client.print(F("/led/0'>Switch Off</a>"));
-    // Movement Mode
-    client.print(F("<br><br><a href='http://"));
-    client.print(WiFi.localIP());
-    client.print(F("/movement'>Movement Mode</a>"));
-    // Movement Mode
-    client.print(F("<br><br><a href='http://"));
-    client.print(WiFi.localIP());
-    client.print(F("/sendlocalip'>Send ip</a>"));
-    // Close html
-    client.print(F("</html>"));
+const char* RoomLightServerMediator::getTemplate() {
+    StreamString streamString;
+    streamString.reserve(500);
+    streamString.printf("\
+        <html>\
+            <head>\
+            <title>Room Light Server</title>\
+            <style>\
+                body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; color: #000088; font-size: 2rem; }\
+                button { font-size: 4rem; }\
+                ul { text-align: center; }\
+                li { margin: 2rem; }\
+            </style>\
+            <script>\
+                function get(url) { fetch(url); };\
+                function post(url, body) { fetch(url, { method: 'POST', body:body }); };\
+            </script>\
+            </head>\
+            <body>\
+            <span>%s</span>\
+            <span>%s</span>\
+            <ul>\
+                <li>\
+                    <button onclick=get('/led/1')>Switch On</button>\
+                </li>\
+                <li>\
+                    <button onclick=get('/led/0')>Switch Off</button>\
+                </li>\
+                <li>\
+                    <button onclick=get('/movement')>Movement mode</button>\
+                </li>\
+                <li>\
+                    <button onclick=get('/sendlocalip')>Send Local Ip</button>\
+                </li>\
+            </ul>\
+            </body>\
+        </html>", this->isLastRequestInvalid ? "Last Request is invalid" : "", this->localIp);
+    return streamString.c_str();
 }

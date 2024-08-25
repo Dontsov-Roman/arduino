@@ -19,10 +19,9 @@ class RoomLightServerMediator {
         void begin(const char* ssid, const char* password);
         void toggle();
     protected:
-        // void clientRead();
-        void sendResponse();
         void sendWiFiLocalIp();
         bool isLastRequestInvalid;
+        const char* getTemplate();
         SimpleTimeout simpleTimeout;
         RoomLightSerial *serial;
         ESP8266WebServer *server;
@@ -30,7 +29,9 @@ class RoomLightServerMediator {
         String textPlain = "text/plain";
         int okCode = 200;
         int notFoundCode = 200;
+        String localIp;
     private:
+        void rootHandler();
         void ledOnHandler();
         void ledOffHandler();
         void movementModeHandler();
