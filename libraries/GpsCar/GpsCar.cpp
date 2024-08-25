@@ -21,6 +21,8 @@ void GpsCar::loop() {
     this->gpsReader->readGpsData();
     if(this->timeout.checkTimeout()) {
         Serial.println(String(this->gpsReader->getGpsData()));
-        this->client->post(this->gpsReader->getGpsData());
+        if(this->client->isWifiConnected()){
+            this->client->post(this->gpsReader->getGpsData());
+        }
     }
 }

@@ -9,22 +9,24 @@
 #endif
 #include <SoftwareSerial.h>
 #include <TinyGPSPlus.h>
+#include <GpsData.h>
 
 class GpsReader {
     public:
         GpsReader(SoftwareSerial *ss);
         void readGpsData();
         char* getGpsData();
-        char* getGpsDateTime();
-        char* getGpsLatLng();
+        // char* getGpsDateTime();
+        // char* getGpsLatLng();
     protected:
         TinyGPSPlus gps;
+        GpsData gpsData;
         SoftwareSerial *ss;
-        unsigned long int gpsReadDelay;
-        char dateTime[32];
-        char lng[16];
-        char lat[16];
-        char latLng[40];
-        char allData[72];
+        unsigned long gpsReadDelay;
+        // char dateTime[32];
+        // char lng[16];
+        // char lat[16];
+        // char latLng[40];
+        // char allData[72];
 };
 #endif

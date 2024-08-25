@@ -24,16 +24,16 @@ class WifiHttpClient {
         void begin();
         ResponseStruct* get();
         ResponseStruct* post(char *body);
+        bool isWifiConnected();
     protected:
         ESP8266WiFiMulti wifiMulti;
         WiFiClient wifi;
         HTTPClient http;
-        bool isWifiConnected();
         ResponseStruct lastResponse;
     private:
         const char *wifiSsid;
         const char *wifiPassword;
-        char *fullUrl;
+        char fullUrl[64];
         const char *host;
         const char *port;
         const char *url;

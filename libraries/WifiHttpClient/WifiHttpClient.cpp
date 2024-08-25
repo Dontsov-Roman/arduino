@@ -19,7 +19,6 @@ WifiHttpClient::WifiHttpClient(
     this->port = port;
     this->lastResponse = ResponseStruct{};
     this->wifiMulti = ESP8266WiFiMulti();
-    sprintf(this->fullUrl, "%s:%s%s", this->host, this->port, this->url);
 }
 
 void WifiHttpClient::begin(){
@@ -31,6 +30,7 @@ void WifiHttpClient::begin(){
         Serial.print(".");
     }
     Serial.println(WiFi.localIP());
+    sprintf(this->fullUrl, "%s:%s%s", this->host, this->port, this->url);
 }
 bool WifiHttpClient::isWifiConnected() {
     return this->wifiMulti.run() == WL_CONNECTED;

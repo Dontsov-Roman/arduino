@@ -115,7 +115,6 @@ const char* RoomLightServerMediator::getTemplate() {
             </head>\
             <body>\
             <span>%s</span>\
-            <span>%s</span>\
             <ul>\
                 <li>\
                     <button onclick=get('/led/1')>Switch On</button>\
@@ -131,6 +130,6 @@ const char* RoomLightServerMediator::getTemplate() {
                 </li>\
             </ul>\
             </body>\
-        </html>", this->isLastRequestInvalid ? "Last Request is invalid" : "", this->localIp);
+        </html>",  this->localIp);
     return streamString.c_str();
 }
