@@ -13,6 +13,8 @@ class GpsData {
         char* getGpsData();
         char* getGpsDateTime();
         char* getGpsLatLng();
+        bool isLocationReady = false;
+        bool isDateTimeReady = false;
         int year;
         int month;
         int day;

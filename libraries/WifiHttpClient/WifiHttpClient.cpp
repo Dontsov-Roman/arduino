@@ -29,7 +29,6 @@ void WifiHttpClient::begin(){
         delay(500);
         Serial.print(".");
     }
-    Serial.println(WiFi.localIP());
     sprintf(this->fullUrl, "%s:%s%s", this->host, this->port, this->url);
 }
 bool WifiHttpClient::isWifiConnected() {
@@ -55,6 +54,8 @@ ResponseStruct* WifiHttpClient::post(char *body) {
             int httpCode = http.POST(body);
             this->lastResponse.code = httpCode;
             this->lastResponse.response = this->http.getString();
+            Serial.println("Last response:");
+            Serial.println(this->lastResponse.response);
             this->http.end();
            
             return &this->lastResponse;
