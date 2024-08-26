@@ -36,7 +36,7 @@ bool WifiHttpClient::isWifiConnected() {
 }
 ResponseStruct* WifiHttpClient::get() {
     if(this->isWifiConnected()) {
-        if (this->http.begin(wifi, String(this->fullUrl))) {
+        if (this->http.begin(client, String(this->fullUrl))) {
             int httpCode = http.GET();
             this->lastResponse.code = httpCode;
             this->lastResponse.response = this->http.getString();
@@ -53,8 +53,10 @@ ResponseStruct* WifiHttpClient::post(char *body) {
     Serial.println(body);
     Serial.println(this->isWifiConnected());
     if(this->isWifiConnected()) {
-        Serial.println(http.begin(wifi, String(this->fullUrl)));
-        if (http.begin(wifi, String(this->fullUrl))) {
+        this->client = WiFiClient();
+        this->http = HTTPClient();
+        Serial.println(http.begin(client, String(this->fullUrl)));
+        if (http.begin(client, String(this->fullUrl))) {
             int httpCode = http.POST(body);
             this->lastResponse.code = httpCode;
             this->lastResponse.response = this->http.getString();

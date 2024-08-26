@@ -27,7 +27,7 @@ class WifiHttpClient {
         bool isWifiConnected();
     protected:
         ESP8266WiFiMulti wifiMulti;
-        WiFiClient wifi;
+        WiFiClient client;
         HTTPClient http;
         ResponseStruct lastResponse;
     private:
