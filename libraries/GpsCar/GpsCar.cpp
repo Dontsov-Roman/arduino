@@ -20,7 +20,8 @@ void GpsCar::begin() {
 }
 void GpsCar::loop() {
     this->gpsReader->readGpsData();
-    if(this->timeout.checkTimeout()) {
-        this->client->post(this->gpsReader->getGpsData());
+    if(this->timeout.checkTimeout() && this->gpsReader->isReady()) {
+        ResponseStruct *rp = this->client->post(this->gpsReader->getGpsData());
+        Serial.println(rp->code);
     }
 }

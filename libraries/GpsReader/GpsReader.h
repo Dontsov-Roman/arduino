@@ -16,6 +16,7 @@ class GpsReader {
         GpsReader(SoftwareSerial *ss);
         void readGpsData();
         char* getGpsData();
+        bool isReady();
     protected:
         TinyGPSPlus gps;
         GpsData gpsData;

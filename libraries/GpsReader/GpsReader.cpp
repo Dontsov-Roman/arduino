@@ -36,3 +36,7 @@ void GpsReader::readGpsData() {
 char* GpsReader::getGpsData() {
     return this->gpsData.getGpsData();
 }
+
+bool GpsReader::isReady() {
+    return this->gpsData.isDateTimeReady && this->gpsData.isDateTimeReady;
+}

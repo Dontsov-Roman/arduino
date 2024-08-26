@@ -9,7 +9,7 @@
 #define STASSID "56"
 #define STAPSK "dontsovaAlya"
 // #define HOST "100.64.37.15"
-#define HOST "192.168.0.113"
+#define HOST "192.168.0.104"
 #define PORT "80"
 #define URL "/gps"
 #endif
