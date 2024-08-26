@@ -2,6 +2,7 @@
 #include <SoftwareSerial.h>
 #include <GpsReader.h>
 #include <WifiHttpClient.h>
+#include <GpsData.h>
 
 #ifndef STASSID
 // #define STASSID "car_wifi"

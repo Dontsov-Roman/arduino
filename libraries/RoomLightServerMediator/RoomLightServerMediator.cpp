@@ -90,7 +90,6 @@ void RoomLightServerMediator::sendWiFiLocalIp() {
 void RoomLightServerMediator::toggle() {
     this->server->handleClient();
     this->client = server->client();
-    // this->sendResponse();
     if (this->simpleTimeout.checkTimeout()){
         this->sendWiFiLocalIp();
     }

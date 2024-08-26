@@ -1,4 +1,5 @@
 #include <GpsData.h>
+#include <SimpleParser.h>
 
 GpsData::GpsData() {}
 
@@ -11,7 +12,7 @@ char* GpsData::getGpsDateTime() {
     if (this->isDateTimeReady) {
         sprintf(
             this->dateTime,
-            "%02d/%02d/%02d %02d:%02d:%02d",
+            "%02d/%02d/%02d,%02d:%02d:%02d",
             this->month,
             this->day,
             this->year,
@@ -29,4 +30,22 @@ char* GpsData::getGpsLatLng() {
         sprintf(this->latLng, "%s,%s", this->lat, this->lng);
     }
     return this->latLng;
+}
+
+void GpsData::parse(String str) {
+    this->commandParser = SimpleParser(',', str);
+    String date = commandParser.getNextValue();
+    String time = commandParser.getNextValue();
+    this->latitude = commandParser.getNextValue().toDouble();
+    this->longitude = commandParser.getNextValue().toDouble();
+    this->dateParser = SimpleParser('/', date);
+    this->month = dateParser.getNextValue().toInt();
+    this->day = dateParser.getNextValue().toInt();
+    this->year = dateParser.getNextValue().toInt();
+    this->timeParser = SimpleParser(':', time);
+    this->hour = timeParser.getNextValue().toInt();
+    this->minute = timeParser.getNextValue().toInt();
+    this->second = timeParser.getNextValue().toInt();
+    this->isDateTimeReady = true;
+    this->isLocationReady = true;
 }
