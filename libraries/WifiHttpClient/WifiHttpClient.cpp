@@ -49,7 +49,11 @@ ResponseStruct* WifiHttpClient::get() {
     return &this->lastResponse;
 }
 ResponseStruct* WifiHttpClient::post(char *body) {
+    Serial.println("body");
+    Serial.println(body);
+    Serial.println(this->isWifiConnected());
     if(this->isWifiConnected()) {
+        Serial.println(http.begin(wifi, String(this->fullUrl)));
         if (http.begin(wifi, String(this->fullUrl))) {
             int httpCode = http.POST(body);
             this->lastResponse.code = httpCode;
