@@ -33,19 +33,25 @@ char* GpsData::getGpsLatLng() {
 }
 
 void GpsData::parse(String str) {
-    this->commandParser = SimpleParser(',', str);
-    String date = commandParser.getNextValue();
-    String time = commandParser.getNextValue();
+    this->commandParser.resetIndexes();
+    this->dateParser.resetIndexes();
+    this->timeParser.resetIndexes();
+    this->commandParser.setParseString(str);
+    
+    this->dateParser.setParseString(commandParser.getNextValue());
+    this->timeParser.setParseString(commandParser.getNextValue());
+
     this->latitude = commandParser.getNextValue().toDouble();
     this->longitude = commandParser.getNextValue().toDouble();
-    this->dateParser = SimpleParser('/', date);
+
     this->month = dateParser.getNextValue().toInt();
     this->day = dateParser.getNextValue().toInt();
     this->year = dateParser.getNextValue().toInt();
-    this->timeParser = SimpleParser(':', time);
+    
     this->hour = timeParser.getNextValue().toInt();
     this->minute = timeParser.getNextValue().toInt();
     this->second = timeParser.getNextValue().toInt();
+    
     this->isDateTimeReady = true;
     this->isLocationReady = true;
 }

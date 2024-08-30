@@ -72,9 +72,7 @@ void RoomLightServerMediator::setGpsHandler() {
     Serial.println("Set gps handler");
     String gpsData = this->server->arg("gps");
     this->lastGpsData.parse(gpsData);
-    this->gpsSaver.addData(gpsData);
-    // this->serial->write(SwitchOnCommand);
-    // TODO: implement saving date, Time, Lat, Lng;
+    // this->gpsSaver.addData(gpsData);
     this->server->send(responseCodes.okCode, responseCodes.textPlain, "");
 }
 

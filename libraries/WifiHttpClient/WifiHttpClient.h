@@ -27,6 +27,7 @@ class WifiHttpClient {
         ResponseStruct* get(char *key, char *value);
         ResponseStruct* post(char *body);
         ResponseStruct* post(char *body, char *key, char *value);
+        ResponseStruct* post(char *body, const char *key, char *value);
         bool isWifiConnected();
         void setHost(const char *host);
     protected:
@@ -36,6 +37,7 @@ class WifiHttpClient {
         ResponseStruct lastResponse;
         ResponseStruct* request(char *url, HTTPMethod method, char *body);
         char* generateQueryUrl(char *url, char *key, char *value);
+        char* generateQueryUrl(char *url, const char *key, char *value);
     private:
         const char *wifiSsid;
         const char *wifiPassword;

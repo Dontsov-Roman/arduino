@@ -19,6 +19,10 @@ SimpleParser::SimpleParser(char delimiter, String parseString) {
     this->endIndex = 0;
 }
 
+void SimpleParser::setParseString(String parseString) {
+    this->parseString = parseString;
+}
+
 String SimpleParser::parse(String str, int startIndex) {
     this->endIndex = str.indexOf(this->delimiter, startIndex);
     this->tempString = str.substring(startIndex + 1, this->endIndex);

@@ -1,6 +1,6 @@
 #ifndef GPS_CAR_H
 #define GPS_CAR_H
-
+#define GPS_QUERY_KEY "gps"
 #if ARDUINO >= 100
 #include <Arduino.h>
 #else
@@ -9,6 +9,7 @@
 #include <GpsReader.h>
 #include <WifiHttpClient.h>
 #include <SimpleTimeout.h>
+
 
 class GpsCar {
     public:
@@ -21,7 +22,8 @@ class GpsCar {
     protected:
         GpsReader *gpsReader;
         WifiHttpClient *client;
-        SimpleTimeout timeout;
-        char* gpsQueryKey;
+        SimpleTimeout timeout = SimpleTimeout(10000);
+        const char* gpsQueryKey = GPS_QUERY_KEY;
+        char* gpsData;
 };
 #endif

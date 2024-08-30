@@ -5,13 +5,14 @@
 #else
 #include <WProgram.h>
 #endif
-// #include <cppQueue.h>
+#include <cppQueue.h>
 
 class GpsSaver {
     public:
         GpsSaver();
-        void addData(String data);
+        void addData(String str);
     protected:
-        // cppQueue data;
+        cppQueue data(128);
+        String last;
 };
 #endif

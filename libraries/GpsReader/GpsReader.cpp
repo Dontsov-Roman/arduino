@@ -4,8 +4,6 @@
 #include <GpsData.h>
 
 GpsReader::GpsReader(SoftwareSerial *ss) {
-    this->gps = TinyGPSPlus();
-    this->gpsData = GpsData();
     this->ss = ss;
     this->gpsReadDelay = DEFAULT_GPS_READ_DELAY;
 }
@@ -14,8 +12,9 @@ void GpsReader::readGpsData() {
   unsigned long start = millis();
   do 
   {
-    while (ss->available())
+    while (ss->available()) {
       gps.encode(ss->read());
+    }
   } while (millis() - start < this->gpsReadDelay);
     if (this->gps.date.isValid() && this->gps.time.isValid()) {
         this->gpsData.month = this->gps.date.month();
@@ -38,5 +37,5 @@ char* GpsReader::getGpsData() {
 }
 
 bool GpsReader::isReady() {
-    return this->gpsData.isDateTimeReady && this->gpsData.isDateTimeReady;
+    return this->gpsData.isDateTimeReady && this->gpsData.isLocationReady;
 }

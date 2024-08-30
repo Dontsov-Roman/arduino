@@ -8,8 +8,6 @@ GpsCar::GpsCar(
 ) {
     this->gpsReader = gpsReader;
     this->client = client;
-    this->timeout = SimpleTimeout(10000);
-    sprintf(this->gpsQueryKey, "%s", "gps");
 }
 
 void GpsCar::begin() {
@@ -20,10 +18,12 @@ void GpsCar::begin() {
     this->client->begin();
 }
 void GpsCar::loop() {
-    this->gpsReader->readGpsData();
-    if(this->timeout.checkTimeout() && this->gpsReader->isReady()) {
-        char* data = this->gpsReader->getGpsData();
-        ResponseStruct *rp = this->client->post(data, this->gpsQueryKey, data);
-        Serial.println(rp->code);
+    if(this->timeout.checkTimeout()) {
+        this->gpsReader->readGpsData();
+        if(this->gpsReader->isReady()){
+            this->gpsData = this->gpsReader->getGpsData();
+            Serial.println(this->gpsData);
+            ResponseStruct *rp = this->client->post(this->gpsData, this->gpsQueryKey, this->gpsData);
+        }
     }
 }

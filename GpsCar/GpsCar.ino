@@ -2,7 +2,6 @@
 #include <SoftwareSerial.h>
 #include <GpsReader.h>
 #include <WifiHttpClient.h>
-#include <GpsData.h>
 
 #ifndef STASSID
 // #define STASSID "car_wifi"
@@ -11,7 +10,7 @@
 // #define HOST "100.64.37.15"
 #define HOST "192.168.0.104"
 #define PORT "80"
-#define URL "/gps"
+#define URL "/set-gps"
 #endif
 
 const char* wifiSsid = STASSID;

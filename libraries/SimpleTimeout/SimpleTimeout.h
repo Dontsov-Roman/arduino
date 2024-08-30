@@ -15,6 +15,7 @@ class SimpleTimeout {
     protected:
         int timeout;
         int lastUpdateMillis;
+        int currentMilSec;
 };
 
 #endif

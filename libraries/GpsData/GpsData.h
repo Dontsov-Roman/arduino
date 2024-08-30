@@ -17,12 +17,12 @@ class GpsData {
         void parse(String str);
         bool isLocationReady = false;
         bool isDateTimeReady = false;
-        int year;
-        int month;
-        int day;
-        int hour;
-        int minute;
-        int second;
+        long year;
+        long month;
+        long day;
+        long hour;
+        long minute;
+        long second;
         double latitude;
         double longitude;
     protected:
@@ -31,9 +31,8 @@ class GpsData {
         char lat[16];
         char latLng[32];
         char allData[64];
-        char eol;
-        SimpleParser commandParser;
-        SimpleParser dateParser;
-        SimpleParser timeParser;
+        SimpleParser commandParser = SimpleParser(',');
+        SimpleParser dateParser = SimpleParser('/');
+        SimpleParser timeParser = SimpleParser(':');
 };
 #endif

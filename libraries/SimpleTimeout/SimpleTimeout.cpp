@@ -11,9 +11,9 @@ SimpleTimeout::SimpleTimeout(int timeout) {
 }
 
 bool SimpleTimeout::checkTimeout() {
-    int mil_sec = millis();
-    if (mil_sec - this->lastUpdateMillis > this->timeout) {
-        this->lastUpdateMillis = mil_sec;
+    this->currentMilSec = millis();
+    if (this->currentMilSec - this->lastUpdateMillis > this->timeout) {
+        this->lastUpdateMillis = this->currentMilSec;
         return true;
     }
     return false;

@@ -16,6 +16,7 @@ class SimpleParser {
         String parse(String str);
         String parse(String str, int startIndex);
         void resetIndexes();
+        void setParseString(String parseString);
     protected:
         String tempString;
         String parseString;

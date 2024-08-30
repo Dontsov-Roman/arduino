@@ -52,6 +52,10 @@ ResponseStruct* WifiHttpClient::post(char *body, char *key, char *value) {
     return this->request(this->generateQueryUrl(this->fullUrl, key, value), HTTP_POST, body);
 }
 
+ResponseStruct* WifiHttpClient::post(char *body, const char *key, char *value) {
+    return this->request(this->generateQueryUrl(this->fullUrl, key, value), HTTP_POST, body);
+}
+
 ResponseStruct* WifiHttpClient::request(char *url, HTTPMethod method, char *body) {
     if(this->isWifiConnected()) {
         if (this->http.begin(client, String(url))) {
@@ -76,6 +80,15 @@ void WifiHttpClient::setHost(const char* host) {
     this->host = host;
 }
 char* WifiHttpClient::generateQueryUrl(char *url, char *key, char *value) {
+    char newUrl[128];
+    strcpy(newUrl, this->fullUrl);
+    strcat(newUrl, "?");
+    strcat(newUrl, key);
+    strcat(newUrl, "=");
+    strcat(newUrl, value);
+    return newUrl;
+}
+char* WifiHttpClient::generateQueryUrl(char *url, const char *key, char *value) {
     char newUrl[128];
     strcpy(newUrl, this->fullUrl);
     strcat(newUrl, "?");
