@@ -22,7 +22,6 @@ void GpsCar::loop() {
         this->gpsReader->readGpsData();
         if(this->gpsReader->isReady()){
             this->gpsData = this->gpsReader->getGpsData();
-            Serial.println(this->gpsData);
             ResponseStruct *rp = this->client->post(this->gpsData, this->gpsQueryKey, this->gpsData);
         }
     }
