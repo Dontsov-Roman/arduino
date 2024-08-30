@@ -70,9 +70,12 @@ void RoomLightServerMediator::sendWifiLocalIpHandler() {
 
 void RoomLightServerMediator::setGpsHandler() {
     Serial.println("Set gps handler");
-    this->server->send(responseCodes.okCode, responseCodes.textPlain, "");
+    String gpsData = this->server->arg("gps");
+    this->lastGpsData.parse(gpsData);
+    this->gpsSaver.addData(gpsData);
     // this->serial->write(SwitchOnCommand);
     // TODO: implement saving date, Time, Lat, Lng;
+    this->server->send(responseCodes.okCode, responseCodes.textPlain, "");
 }
 
 void RoomLightServerMediator::notFoundHandler() {

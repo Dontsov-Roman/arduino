@@ -22,5 +22,6 @@ class GpsCar {
         GpsReader *gpsReader;
         WifiHttpClient *client;
         SimpleTimeout timeout;
+        char* gpsQueryKey;
 };
 #endif

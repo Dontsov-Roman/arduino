@@ -11,6 +11,8 @@
 #include <RoomLightCommands.h>
 #include <SimpleTimeout.h>
 #include <ResponseCodes.h>
+#include <GpsData.h>
+#include <GpsSaver.h>
 
 class RoomLightServerMediator {
     public:
@@ -24,6 +26,8 @@ class RoomLightServerMediator {
         const char* getTemplate();
         SimpleTimeout simpleTimeout;
         RoomLightSerial *serial;
+        GpsData lastGpsData;
+        GpsSaver gpsSaver;
         ESP8266WebServer *server;
         WiFiClient client;
         String textPlain = "text/plain";

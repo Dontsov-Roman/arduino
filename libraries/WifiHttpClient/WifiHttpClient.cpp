@@ -4,6 +4,7 @@
 #include <WiFiClient.h>
 #include <ESP8266HTTPClient.h>
 #include <ResponseStruct.h>
+#include <ESP8266WebServer.h>
 
 WifiHttpClient::WifiHttpClient(
     const char *wifiSsid,
@@ -36,9 +37,30 @@ bool WifiHttpClient::isWifiConnected() {
     return this->wifiMulti.run() == WL_CONNECTED;
 }
 ResponseStruct* WifiHttpClient::get() {
+    char *body;
+    return this->request(this->fullUrl, HTTP_GET, body);
+}
+
+ResponseStruct* WifiHttpClient::get(char *key, char *value) {
+    char *body;
+    return this->request(this->generateQueryUrl(this->fullUrl, key, value), HTTP_GET, body);
+}
+ResponseStruct* WifiHttpClient::post(char *body) {
+    return this->request(this->fullUrl, HTTP_POST, body);
+}
+ResponseStruct* WifiHttpClient::post(char *body, char *key, char *value) {
+    return this->request(this->generateQueryUrl(this->fullUrl, key, value), HTTP_POST, body);
+}
+
+ResponseStruct* WifiHttpClient::request(char *url, HTTPMethod method, char *body) {
     if(this->isWifiConnected()) {
-        if (this->http.begin(client, String(this->fullUrl))) {
-            int httpCode = http.GET();
+        if (this->http.begin(client, String(url))) {
+            int httpCode;
+            if(method == HTTP_POST) {
+                httpCode = http.POST(body);
+            } else {
+                httpCode = http.GET();
+            }
             this->lastResponse.code = httpCode;
             this->lastResponse.response = this->http.getString();
             
@@ -49,19 +71,16 @@ ResponseStruct* WifiHttpClient::get() {
     this->lastResponse.code = 0;
     return &this->lastResponse;
 }
-ResponseStruct* WifiHttpClient::post(char *body) {
-    if(this->isWifiConnected()) {
-        this->client = WiFiClient();
-        this->http = HTTPClient();
-        if (http.begin(client, String(this->fullUrl))) {
-            int httpCode = http.POST(body);
-            this->lastResponse.code = httpCode;
-            this->lastResponse.response = this->http.getString();
-            this->http.end();
-           
-            return &this->lastResponse;
-        }
-    }
-    this->lastResponse.code = 0;
-    return &this->lastResponse;
+
+void WifiHttpClient::setHost(const char* host) {
+    this->host = host;
+}
+char* WifiHttpClient::generateQueryUrl(char *url, char *key, char *value) {
+    char newUrl[128];
+    strcpy(newUrl, this->fullUrl);
+    strcat(newUrl, "?");
+    strcat(newUrl, key);
+    strcat(newUrl, "=");
+    strcat(newUrl, value);
+    return newUrl;
 }
