@@ -30,9 +30,6 @@ class RoomLightServerMediator {
         // GpsSaver gpsSaver;
         ESP8266WebServer *server;
         WiFiClient client;
-        String textPlain = "text/plain";
-        int okCode = 200;
-        int notFoundCode = 200;
         String localIp;
     private:
         void rootHandler();

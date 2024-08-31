@@ -40,7 +40,7 @@ void RoomLightServerMediator::begin(const char *ssid, const char *password) {
 
     // Print the IP address
     this->localIp = WiFi.localIP().toString();
-    Serial.println(WiFi.localIP());
+    Serial.println(this->localIp);
 }
 
 void RoomLightServerMediator::ledOnHandler() {
@@ -78,7 +78,7 @@ void RoomLightServerMediator::setGpsHandler() {
 }
 
 void RoomLightServerMediator::getGpsHandler() {
-    Serial.println("Set gps handler");
+    Serial.println("Get gps handler");
     this->server->send(responseCodes.okCode, responseCodes.textPlain, this->lastGpsData.getGpsData());
 }
 
