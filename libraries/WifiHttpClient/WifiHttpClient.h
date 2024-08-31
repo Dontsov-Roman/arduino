@@ -30,6 +30,7 @@ class WifiHttpClient {
         ResponseStruct* post(char *body, const char *key, char *value);
         bool isWifiConnected();
         void setHost(const char *host);
+        String getLocalIP();
     protected:
         ESP8266WiFiMulti wifiMulti;
         WiFiClient client;

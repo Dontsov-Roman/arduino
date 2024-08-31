@@ -97,3 +97,6 @@ char* WifiHttpClient::generateQueryUrl(char *url, const char *key, char *value) 
     strcat(newUrl, value);
     return newUrl;
 }
+String WifiHttpClient::getLocalIP() {
+    return WiFi.localIP().toString();
+}

@@ -10,6 +10,7 @@ GpsCar::GpsCar(
     this->gpsReader = gpsReader;
     this->client = client;
     this->display = display;
+    this->displaySwitcher = SimpleDisplaySwitcher(this->display);
 }
 
 void GpsCar::begin() {
@@ -26,8 +27,17 @@ void GpsCar::loop() {
         if(this->gpsReader->isReady()){
             this->display->clear();
             this->gpsData = this->gpsReader->getGpsData();
-            this->display->writeFirstRow(this->gpsReader->getGpsDateTime());
-            this->display->writeSecondRow(this->gpsReader->getGpsLatLng());
+            this->displaySwitcher.writeFirstRow(
+                this->gpsReader->getGpsDateTime(),
+                "Local IP:"
+            );
+            this->displaySwitcher.writeSecondRow(
+                this->gpsReader->getGpsLatLng(),
+                this->client->getLocalIP()
+            );
+            this->displaySwitcher.switchDisplay();
+            // this->display->writeFirstRow(this->gpsReader->getGpsDateTime());
+            // this->display->writeSecondRow(this->gpsReader->getGpsLatLng());
             ResponseStruct *rp = this->client->post(this->gpsData, this->gpsQueryKey, this->gpsData);
             Serial.println(this->gpsData);
         }

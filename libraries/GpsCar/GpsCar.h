@@ -10,6 +10,7 @@
 #include <WifiHttpClient.h>
 #include <SimpleTimeout.h>
 #include <ISimpleDisplay.h>
+#include <SimpleDisplaySwitcher.h>
 
 class GpsCar {
     public:
@@ -24,6 +25,7 @@ class GpsCar {
         GpsReader *gpsReader;
         WifiHttpClient *client;
         ISimpleDisplay *display;
+        SimpleDisplaySwitcher displaySwitcher;
         SimpleTimeout timeout = SimpleTimeout(10000);
 
         const char* gpsQueryKey = GPS_QUERY_KEY;
