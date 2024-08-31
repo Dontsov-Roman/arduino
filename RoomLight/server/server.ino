@@ -4,7 +4,6 @@
 #include <RoomLightCommands.h>
 #include <RoomLightServerMediator.h>
 #include <ESP8266WebServer.h>
-#include <Queue.h>
 
 #ifndef STASSID
 #define STASSID "56"

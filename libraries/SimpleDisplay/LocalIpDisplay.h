@@ -7,16 +7,17 @@
 #endif
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
+#include <ISimpleDisplay.h>
 
-class LocalIpDisplay {
+class LocalIpDisplay : public ISimpleDisplay {
     public:
-        LocalIpDisplay(LiquidCrystal_I2C *lcd);
-        void writeAddress(String address);
-        void writeStatus(String address);
+        LocalIpDisplay(LiquidCrystal_I2C *display);
+        void writeFirstRow(String address);
+        void writeSecondRow(String address);
         void begin();
         void clear();
     protected:
-        LiquidCrystal_I2C *lcd;
+        LiquidCrystal_I2C *display;
 };
 
 #endif

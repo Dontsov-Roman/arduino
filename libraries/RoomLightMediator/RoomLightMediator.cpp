@@ -6,25 +6,32 @@
 #include <RoomLightMediator.h>
 #include <RoomLightCommands.h>
 #include <TransferStruct.h>
+#include <ISimpleDisplay.h>
 
 RoomLightMediator::RoomLightMediator() {}
 
-RoomLightMediator::RoomLightMediator(RoomLightSerial *serial, SimpleSensor *button, SimpleDigitalOutput *led, SimpleMovementSensor *movementSensor, LocalIpDisplay *lcd) {
+RoomLightMediator::RoomLightMediator(
+    RoomLightSerial *serial,
+    SimpleSensor *button,
+    SimpleDigitalOutput *led,
+    SimpleMovementSensor *movementSensor,
+    ISimpleDisplay *display
+    ) {
     this->serial = serial;
     this->button = button;
     this->led = led;
     this->movementSensor = movementSensor;
-    this->lcd = lcd;
+    this->display = display;
     this->eol = ",";
     this->simpleTimeout = SimpleTimeout();
 }
 
 void RoomLightMediator::begin() {
     this->led->begin();
-    this->lcd->begin();
+    this->display->begin();
     this->movementSensor->calibrate();
-    this->lcd->clear();
-    this->lcd->writeAddress("No address");
+    this->display->clear();
+    this->display->writeFirstRow("No address");
 }
 void RoomLightMediator::toggle() {
     this->button->read();
@@ -32,7 +39,7 @@ void RoomLightMediator::toggle() {
     this->serial->read();
     TransferStruct *ts = this->serial->getTransferStruct();
     if(ts->command == SetLocalIpCommand) {
-        this->lcd->writeAddress(ts->value);
+        this->display->writeFirstRow(ts->value);
         delay(300);
         this->serial->clearTransferStruct();
     } else {
@@ -61,7 +68,7 @@ void RoomLightMediator::toggle() {
         }
     }
     if (this->simpleTimeout.checkTimeout()) {
-        this->lcd->writeStatus(this->getStatus());
+        this->display->writeSecondRow(this->getStatus());
     }
 }
 String RoomLightMediator::getStatus() {

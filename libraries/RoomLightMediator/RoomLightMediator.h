@@ -12,11 +12,18 @@
 #include <RoomLightCommands.h>
 #include <LocalIpDisplay.h>
 #include <SimpleTimeout.h>
+#include <ISimpleDisplay.h>
 
 class RoomLightMediator {
     public:
         RoomLightMediator();
-        RoomLightMediator(RoomLightSerial *serial, SimpleSensor *button, SimpleDigitalOutput *led, SimpleMovementSensor *movementSensor, LocalIpDisplay *lcd);
+        RoomLightMediator(
+            RoomLightSerial *serial,
+            SimpleSensor *button,
+            SimpleDigitalOutput *led,
+            SimpleMovementSensor *movementSensor,
+            ISimpleDisplay *display
+        );
         void begin();
         void toggle();
     protected:
@@ -26,7 +33,7 @@ class RoomLightMediator {
         SimpleSensor *button;
         SimpleDigitalOutput *led;
         SimpleMovementSensor *movementSensor;
-        LocalIpDisplay *lcd;
+        ISimpleDisplay *display;
         SimpleTimeout simpleTimeout;
         int lastCommand;
         String eol;

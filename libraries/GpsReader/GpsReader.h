@@ -16,11 +16,15 @@ class GpsReader {
         GpsReader(SoftwareSerial *ss);
         void readGpsData();
         char* getGpsData();
+        char* getGpsDateTime();
+        char* getGpsLatLng();
         bool isReady();
     protected:
+        void fixTimeByGmt();
         TinyGPSPlus gps;
         GpsData gpsData;
         SoftwareSerial *ss;
         unsigned long gpsReadDelay;
+        int GMT;
 };
 #endif

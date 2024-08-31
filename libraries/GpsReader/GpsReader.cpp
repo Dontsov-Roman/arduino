@@ -30,12 +30,38 @@ void GpsReader::readGpsData() {
         this->gpsData.longitude = this->gps.location.lng();
         this->gpsData.isLocationReady = true;
     }
+    this->fixTimeByGmt();
 }
 
 char* GpsReader::getGpsData() {
     return this->gpsData.getGpsData();
 }
 
+char* GpsReader::getGpsDateTime() {
+  return this->gpsData.getGpsDateTime();
+}
+
+char* GpsReader::getGpsLatLng() {
+  return this->gpsData.getGpsLatLng();
+}
+
 bool GpsReader::isReady() {
     return this->gpsData.isDateTimeReady && this->gpsData.isLocationReady;
+}
+
+void GpsReader::fixTimeByGmt() {
+  if (this->isReady()) {
+    this->GMT = this->gpsData.latitude / 12;
+    // Winter time
+    if (this->gpsData.month > 10 || this->gpsData.month < 5) {
+      this->GMT = this->GMT - 1;
+    }
+    // Fix next day
+    if (this->gpsData.hour + GMT > 24) {
+      this->gpsData.hour = this->gpsData.hour + this->GMT - 24;
+      this->gpsData.day = this->gpsData.day + 1; 
+    } else {
+      this->gpsData.hour = this->gpsData.hour + this->GMT;
+    }
+  }
 }
