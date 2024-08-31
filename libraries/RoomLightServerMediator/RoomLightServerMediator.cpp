@@ -34,6 +34,7 @@ void RoomLightServerMediator::begin(const char *ssid, const char *password) {
     this->server->on("/movement", std::bind(&RoomLightServerMediator::movementModeHandler, this));
     this->server->on("/sendlocalip", std::bind(&RoomLightServerMediator::sendWifiLocalIpHandler, this));
     this->server->on("/set-gps", HTTP_POST, std::bind(&RoomLightServerMediator::setGpsHandler, this));
+    this->server->on("/get-gps", std::bind(&RoomLightServerMediator::getGpsHandler, this));
     this->server->onNotFound(std::bind(&RoomLightServerMediator::notFoundHandler, this));
 
     this->server->begin();
@@ -74,6 +75,11 @@ void RoomLightServerMediator::setGpsHandler() {
     this->lastGpsData.parse(gpsData);
     // this->gpsSaver.addData(gpsData);
     this->server->send(responseCodes.okCode, responseCodes.textPlain, "");
+}
+
+void RoomLightServerMediator::getGpsHandler() {
+    Serial.println("Set gps handler");
+    this->server->send(responseCodes.okCode, responseCodes.textPlain, this->lastGpsData.getGpsData());
 }
 
 void RoomLightServerMediator::notFoundHandler() {

@@ -39,8 +39,9 @@ class RoomLightServerMediator {
         void ledOnHandler();
         void ledOffHandler();
         void movementModeHandler();
-        void setGpsHandler();
         void sendWifiLocalIpHandler();
         void notFoundHandler();
+        void setGpsHandler();
+        void getGpsHandler();
 };
 #endif

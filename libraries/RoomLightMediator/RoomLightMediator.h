@@ -13,6 +13,7 @@
 #include <LocalIpDisplay.h>
 #include <SimpleTimeout.h>
 #include <ISimpleDisplay.h>
+#include <SimpleDisplaySwitcher.h>
 
 class RoomLightMediator {
     public:
