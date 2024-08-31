@@ -32,6 +32,7 @@ void WifiHttpClient::begin(){
     }
     sprintf(this->fullUrl, "http://%s:%s%s", this->host, this->port, this->url);
     Serial.println(this->fullUrl);
+    this->http.setReuse(true);
 }
 bool WifiHttpClient::isWifiConnected() {
     return this->wifiMulti.run() == WL_CONNECTED;
@@ -42,6 +43,11 @@ ResponseStruct* WifiHttpClient::get() {
 }
 
 ResponseStruct* WifiHttpClient::get(char *key, char *value) {
+    char *body;
+    return this->request(this->generateQueryUrl(this->fullUrl, key, value), HTTP_GET, body);
+}
+
+ResponseStruct* WifiHttpClient::get(const char *key, char *value) {
     char *body;
     return this->request(this->generateQueryUrl(this->fullUrl, key, value), HTTP_GET, body);
 }
@@ -59,13 +65,11 @@ ResponseStruct* WifiHttpClient::post(char *body, const char *key, char *value) {
 ResponseStruct* WifiHttpClient::request(char *url, HTTPMethod method, char *body) {
     if(this->isWifiConnected()) {
         if (this->http.begin(client, String(url))) {
-            int httpCode;
             if(method == HTTP_POST) {
-                httpCode = http.POST(body);
+                this->lastResponse.code = http.POST(body);
             } else {
-                httpCode = http.GET();
+                this->lastResponse.code = http.GET();
             }
-            this->lastResponse.code = httpCode;
             this->lastResponse.response = this->http.getString();
             
             this->http.end();
@@ -86,6 +90,7 @@ char* WifiHttpClient::generateQueryUrl(char *url, char *key, char *value) {
     strcat(newUrl, key);
     strcat(newUrl, "=");
     strcat(newUrl, value);
+    Serial.println(newUrl);
     return newUrl;
 }
 char* WifiHttpClient::generateQueryUrl(char *url, const char *key, char *value) {
@@ -95,6 +100,7 @@ char* WifiHttpClient::generateQueryUrl(char *url, const char *key, char *value) 
     strcat(newUrl, key);
     strcat(newUrl, "=");
     strcat(newUrl, value);
+    Serial.println(newUrl);
     return newUrl;
 }
 String WifiHttpClient::getLocalIP() {

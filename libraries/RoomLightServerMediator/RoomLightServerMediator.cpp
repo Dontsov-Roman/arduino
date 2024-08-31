@@ -32,7 +32,7 @@ void RoomLightServerMediator::begin(const char *ssid, const char *password) {
     this->server->on("/led/0", std::bind(&RoomLightServerMediator::ledOffHandler, this));
     this->server->on("/movement", std::bind(&RoomLightServerMediator::movementModeHandler, this));
     this->server->on("/sendlocalip", std::bind(&RoomLightServerMediator::sendWifiLocalIpHandler, this));
-    this->server->on("/set-gps", HTTP_POST, std::bind(&RoomLightServerMediator::setGpsHandler, this));
+    this->server->on("/set-gps", std::bind(&RoomLightServerMediator::setGpsHandler, this));
     this->server->on("/get-gps", std::bind(&RoomLightServerMediator::getGpsHandler, this));
     this->server->onNotFound(std::bind(&RoomLightServerMediator::notFoundHandler, this));
 
@@ -74,7 +74,7 @@ void RoomLightServerMediator::setGpsHandler() {
     this->lastGpsData.parse(gpsData);
     // TODO: implement gpsSaver, should keep last few records
     // this->gpsSaver.addData(gpsData);
-    this->server->send(responseCodes.okCode, responseCodes.textPlain, "");
+    this->server->send(responseCodes.okCode, responseCodes.textPlain, "Ok");
 }
 
 void RoomLightServerMediator::getGpsHandler() {
@@ -120,7 +120,8 @@ const char* RoomLightServerMediator::getTemplate() {
             </script>\
             </head>\
             <body>\
-            <span>%s</span>\
+            <div>%s</div>\
+            <div>%s</div>\
             <ul>\
                 <li>\
                     <button onclick=get('/led/1')>Switch On</button>\
@@ -136,6 +137,6 @@ const char* RoomLightServerMediator::getTemplate() {
                 </li>\
             </ul>\
             </body>\
-        </html>",  this->localIp);
+        </html>",  this->localIp, this->lastGpsData.getGpsData());
     return streamString.c_str();
 }

@@ -38,8 +38,9 @@ void GpsCar::loop() {
             this->displaySwitcher.switchDisplay();
             // this->display->writeFirstRow(this->gpsReader->getGpsDateTime());
             // this->display->writeSecondRow(this->gpsReader->getGpsLatLng());
-            ResponseStruct *rp = this->client->post(this->gpsData, this->gpsQueryKey, this->gpsData);
-            Serial.println(this->gpsData);
+            ResponseStruct *rp = this->client->get(this->gpsQueryKey, this->gpsData);
+            Serial.println(rp->code);
+            Serial.println(rp->response);
         }
     }
 }

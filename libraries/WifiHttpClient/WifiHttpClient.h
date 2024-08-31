@@ -25,6 +25,7 @@ class WifiHttpClient {
         void begin();
         ResponseStruct* get();
         ResponseStruct* get(char *key, char *value);
+        ResponseStruct* get(const char *key, char *value);
         ResponseStruct* post(char *body);
         ResponseStruct* post(char *body, char *key, char *value);
         ResponseStruct* post(char *body, const char *key, char *value);
