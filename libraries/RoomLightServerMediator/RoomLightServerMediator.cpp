@@ -15,7 +15,6 @@ RoomLightServerMediator::RoomLightServerMediator(RoomLightSerial *serial, ESP826
     this->serial = serial;
     this->server = server;
     this->isLastRequestInvalid = false;
-    this->simpleTimeout = SimpleTimeout(15000);
 }
 
 void RoomLightServerMediator::begin(const char *ssid, const char *password) {
@@ -73,6 +72,7 @@ void RoomLightServerMediator::setGpsHandler() {
     Serial.println("Set gps handler");
     String gpsData = this->server->arg("gps");
     this->lastGpsData.parse(gpsData);
+    // TODO: implement gpsSaver, should keep last few records
     // this->gpsSaver.addData(gpsData);
     this->server->send(responseCodes.okCode, responseCodes.textPlain, "");
 }
