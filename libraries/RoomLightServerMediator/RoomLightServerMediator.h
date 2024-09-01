@@ -12,6 +12,10 @@
 #include <SimpleTimeout.h>
 #include <ResponseCodes.h>
 #include <GpsData.h>
+
+#include <ESP8266mDNS.h>
+#include <ESP8266HTTPUpdateServer.h>
+
 // #include <GpsSaver.h>
 
 class RoomLightServerMediator {
@@ -27,6 +31,7 @@ class RoomLightServerMediator {
         SimpleTimeout simpleTimeout = SimpleTimeout(15000);
         RoomLightSerial *serial;
         GpsData lastGpsData;
+        ESP8266HTTPUpdateServer httpUpdater;
         // GpsSaver gpsSaver;
         ESP8266WebServer *server;
         WiFiClient client;

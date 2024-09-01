@@ -9,7 +9,7 @@
 WifiHttpClient::WifiHttpClient(
     const char *wifiSsid,
     const char *wifiPassword,
-    const char *host,
+    String host,
     const char *url,
     const char *port
 ){
@@ -30,6 +30,7 @@ void WifiHttpClient::begin(){
         delay(500);
         Serial.print(".");
     }
+    
     sprintf(this->fullUrl, "http://%s:%s%s", this->host, this->port, this->url);
     Serial.println(this->fullUrl);
     this->http.setReuse(true);
@@ -42,64 +43,61 @@ ResponseStruct* WifiHttpClient::get() {
     return this->request(this->fullUrl, HTTP_GET, body);
 }
 
-ResponseStruct* WifiHttpClient::get(char *key, char *value) {
+ResponseStruct* WifiHttpClient::get(String key, String value) {
     char *body;
     return this->request(this->generateQueryUrl(this->fullUrl, key, value), HTTP_GET, body);
 }
 
-ResponseStruct* WifiHttpClient::get(const char *key, char *value) {
-    char *body;
-    return this->request(this->generateQueryUrl(this->fullUrl, key, value), HTTP_GET, body);
-}
 ResponseStruct* WifiHttpClient::post(char *body) {
     return this->request(this->fullUrl, HTTP_POST, body);
 }
-ResponseStruct* WifiHttpClient::post(char *body, char *key, char *value) {
+ResponseStruct* WifiHttpClient::post(char *body, String key, String value) {
     return this->request(this->generateQueryUrl(this->fullUrl, key, value), HTTP_POST, body);
 }
 
-ResponseStruct* WifiHttpClient::post(char *body, const char *key, char *value) {
-    return this->request(this->generateQueryUrl(this->fullUrl, key, value), HTTP_POST, body);
-}
 
-ResponseStruct* WifiHttpClient::request(char *url, HTTPMethod method, char *body) {
+ResponseStruct* WifiHttpClient::request(String url, HTTPMethod method, char *body) {
     if(this->isWifiConnected()) {
-        if (this->http.begin(client, String(url))) {
+        if (this->http.begin(client, url)) {
+
+            // Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+            // this->http.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+            // this->http.addHeader("Content-Type", "text/plain");
+            // this->http.addHeader("User-Agent", "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Mobile Safari/537.36");
+            // this->http.addHeader("Connection", "keep-alive");
+            // this->http.addHeader("Accept-Encoding", "gzip, deflate");
+            // this->http.addHeader("Upgrade-Insecure-Requests", "1");
             if(method == HTTP_POST) {
                 this->lastResponse.code = http.POST(body);
             } else {
                 this->lastResponse.code = http.GET();
             }
-            this->lastResponse.response = this->http.getString();
-            
+
+            if(this->lastResponse.code > 0) {
+                this->lastResponse.response = this->http.getString();
+            } else {
+                Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(this->lastResponse.code).c_str());
+            }
             this->http.end();
             return &this->lastResponse;
+        } else {
+            Serial.println("[HTTP] Unable to connect");
         }
     }
     this->lastResponse.code = 0;
+    this->client.flush();
     return &this->lastResponse;
 }
 
-void WifiHttpClient::setHost(const char* host) {
+void WifiHttpClient::setHost(String host) {
     this->host = host;
 }
-char* WifiHttpClient::generateQueryUrl(char *url, char *key, char *value) {
-    char newUrl[128];
-    strcpy(newUrl, this->fullUrl);
-    strcat(newUrl, "?");
-    strcat(newUrl, key);
-    strcat(newUrl, "=");
-    strcat(newUrl, value);
-    Serial.println(newUrl);
-    return newUrl;
-}
-char* WifiHttpClient::generateQueryUrl(char *url, const char *key, char *value) {
-    char newUrl[128];
-    strcpy(newUrl, this->fullUrl);
-    strcat(newUrl, "?");
-    strcat(newUrl, key);
-    strcat(newUrl, "=");
-    strcat(newUrl, value);
+String WifiHttpClient::generateQueryUrl(String url, String key, String value) {
+    String newUrl = String(url);
+    newUrl += "?";
+    newUrl += key;
+    newUrl += "=";
+    newUrl += value;
     Serial.println(newUrl);
     return newUrl;
 }

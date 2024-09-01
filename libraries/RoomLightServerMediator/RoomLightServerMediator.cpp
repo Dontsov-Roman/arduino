@@ -26,6 +26,13 @@ void RoomLightServerMediator::begin(const char *ssid, const char *password) {
         Serial.print(F("."));
     }
 
+    // Print the IP address
+    this->localIp = WiFi.localIP().toString();
+    Serial.println(this->localIp);
+
+    MDNS.begin(this->localIp);
+    
+    this->httpUpdater.setup(this->server);
     // Start the server
     this->server->on("/", std::bind(&RoomLightServerMediator::rootHandler, this));
     this->server->on("/led/1", std::bind(&RoomLightServerMediator::ledOnHandler, this));
@@ -37,10 +44,6 @@ void RoomLightServerMediator::begin(const char *ssid, const char *password) {
     this->server->onNotFound(std::bind(&RoomLightServerMediator::notFoundHandler, this));
 
     this->server->begin();
-
-    // Print the IP address
-    this->localIp = WiFi.localIP().toString();
-    Serial.println(this->localIp);
 }
 
 void RoomLightServerMediator::ledOnHandler() {

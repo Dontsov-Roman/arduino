@@ -18,33 +18,30 @@ class WifiHttpClient {
         WifiHttpClient(
             const char *wifiSsid,
             const char *wifiPassword,
-            const char *host,
+            String host,
             const char *url,
             const char *port
         );
         void begin();
         ResponseStruct* get();
-        ResponseStruct* get(char *key, char *value);
-        ResponseStruct* get(const char *key, char *value);
+        ResponseStruct* get(String key, String value);
         ResponseStruct* post(char *body);
-        ResponseStruct* post(char *body, char *key, char *value);
-        ResponseStruct* post(char *body, const char *key, char *value);
+        ResponseStruct* post(char *body, String key, String value);
         bool isWifiConnected();
-        void setHost(const char *host);
+        void setHost(String host);
         String getLocalIP();
     protected:
         ESP8266WiFiMulti wifiMulti;
         WiFiClient client;
         HTTPClient http;
         ResponseStruct lastResponse;
-        ResponseStruct* request(char *url, HTTPMethod method, char *body);
-        char* generateQueryUrl(char *url, char *key, char *value);
-        char* generateQueryUrl(char *url, const char *key, char *value);
+        ResponseStruct* request(String url, HTTPMethod method, char *body);
+        String generateQueryUrl(String url, String key, String value);
     private:
         const char *wifiSsid;
         const char *wifiPassword;
         char fullUrl[64];
-        const char *host;
+        String host;
         const char *port;
         const char *url;
 
