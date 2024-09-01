@@ -57,7 +57,7 @@ void GpsReader::fixTimeByGmt() {
       this->GMT = this->GMT - 1;
     }
     // Fix next day
-    if (this->gpsData.hour + GMT > 24) {
+    if (this->gpsData.hour + GMT >= 24) {
       this->gpsData.hour = this->gpsData.hour + this->GMT - 24;
       this->gpsData.day = this->gpsData.day + 1; 
     } else {

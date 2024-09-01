@@ -28,6 +28,7 @@ class RoomLightServerMediator {
         void sendWiFiLocalIp();
         bool isLastRequestInvalid;
         const char* getTemplate();
+        String getLastGpsData();
         SimpleTimeout simpleTimeout = SimpleTimeout(15000);
         RoomLightSerial *serial;
         GpsData lastGpsData;
