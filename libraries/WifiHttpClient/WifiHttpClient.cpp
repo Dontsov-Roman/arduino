@@ -9,7 +9,7 @@
 WifiHttpClient::WifiHttpClient(
     const char *wifiSsid,
     const char *wifiPassword,
-    String host,
+    const char *host,
     const char *url,
     const char *port
 ){
@@ -89,11 +89,12 @@ ResponseStruct* WifiHttpClient::request(String url, HTTPMethod method, char *bod
     return &this->lastResponse;
 }
 
-void WifiHttpClient::setHost(String host) {
+void WifiHttpClient::setHost(const char *host) {
     this->host = host;
 }
 String WifiHttpClient::generateQueryUrl(String url, String key, String value) {
-    String newUrl = String(url);
+    String newUrl = "";
+    newUrl += url;
     newUrl += "?";
     newUrl += key;
     newUrl += "=";

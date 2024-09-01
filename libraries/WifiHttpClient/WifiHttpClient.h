@@ -18,7 +18,7 @@ class WifiHttpClient {
         WifiHttpClient(
             const char *wifiSsid,
             const char *wifiPassword,
-            String host,
+            const char *host,
             const char *url,
             const char *port
         );
@@ -28,7 +28,7 @@ class WifiHttpClient {
         ResponseStruct* post(char *body);
         ResponseStruct* post(char *body, String key, String value);
         bool isWifiConnected();
-        void setHost(String host);
+        void setHost(const char *host);
         String getLocalIP();
     protected:
         ESP8266WiFiMulti wifiMulti;
@@ -41,7 +41,7 @@ class WifiHttpClient {
         const char *wifiSsid;
         const char *wifiPassword;
         char fullUrl[64];
-        String host;
+        const char *host;
         const char *port;
         const char *url;
 
