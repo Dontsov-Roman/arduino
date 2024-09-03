@@ -17,8 +17,8 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 SimpleOled simpleOled(&display);
 
 #ifndef STASSID
-// #define STASSID "car_wifi"
-#define STASSID "56"
+#define STASSID "car_wifi"
+// #define STASSID "56"
 #define STAPSK "dontsovaAlya"
 #define HOST "195.78.246.46"
 #define PORT "8080"

@@ -32,5 +32,7 @@ class GpsCar {
         char* gpsData;
         char* gpsDateTime;
         char* gpsLatLng;
+        String localIpString = "Local IP:";
+        String noGpsString = "No Gps Signal";
 };
 #endif

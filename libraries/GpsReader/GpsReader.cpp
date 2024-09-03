@@ -46,6 +46,10 @@ char* GpsReader::getGpsLatLng() {
 }
 
 bool GpsReader::isReady() {
+    // Serial.println("Date time is ready:");
+    // Serial.println(this->gpsData.isDateTimeReady);
+    // Serial.println("Location is ready:");
+    // Serial.println(this->gpsData.isLocationReady);
     return this->gpsData.isDateTimeReady && this->gpsData.isLocationReady;
 }
 
