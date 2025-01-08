@@ -50,6 +50,11 @@ void RoomLightServerMediator::begin(const char *ssid, const char *password) {
     this->server->on("/get-gps", std::bind(&RoomLightServerMediator::getGpsHandler, this));
     this->server->onNotFound(std::bind(&RoomLightServerMediator::notFoundHandler, this));
 
+    //ask server to track these headers
+    const char *headerkeys[] = {AUTHORIZATION_HEADER};
+    size_t headerkeyssize = sizeof(headerkeys)/sizeof(char*);
+    this->server->collectHeaders(headerkeys, headerkeyssize);
+
     this->server->begin();
 }
 
