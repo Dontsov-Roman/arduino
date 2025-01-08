@@ -62,7 +62,6 @@ bool RoomLightServerMediator::isAuthenticated() {
 }
 
 void RoomLightServerMediator::ledOnHandler() {
-    Serial.println("Led on handler");
     if (this->isAuthenticated()) {
         this->server->send(responseCodes.okCode, responseCodes.textPlain, "");
         this->serial->write(SwitchOnCommand);
@@ -70,7 +69,6 @@ void RoomLightServerMediator::ledOnHandler() {
 }
 
 void RoomLightServerMediator::ledOffHandler() {
-    Serial.println("Led off handler");
     if (this->isAuthenticated()) {
         this->server->send(responseCodes.okCode, responseCodes.textPlain, "");
         this->serial->write(SwitchOffCommand);
@@ -79,7 +77,6 @@ void RoomLightServerMediator::ledOffHandler() {
 
 
 void RoomLightServerMediator::movementModeHandler() {
-    Serial.println("Movement mode handler");
     if (this->isAuthenticated()) {
         this->server->send(responseCodes.okCode, responseCodes.textPlain, "");
         this->serial->write(MovementModeCommand);
@@ -87,7 +84,6 @@ void RoomLightServerMediator::movementModeHandler() {
 }
 
 void RoomLightServerMediator::sendWifiLocalIpHandler() {
-    Serial.println("Send ip handler");
     if (this->isAuthenticated()) {
         this->server->send(responseCodes.okCode, responseCodes.textPlain, "");
         this->sendWiFiLocalIp();
@@ -101,7 +97,6 @@ String RoomLightServerMediator::getLastGpsData() {
     return content;
 }
 void RoomLightServerMediator::setGpsHandler() {
-    Serial.println("Set gps handler");
     String gpsData = this->server->arg("gps");
     this->lastGpsData.parse(gpsData);
 
@@ -113,18 +108,15 @@ void RoomLightServerMediator::setGpsHandler() {
 }
 
 void RoomLightServerMediator::getGpsHandler() {
-    Serial.println("Get gps handler");
     if (this->isAuthenticated()) {
         this->server->send(responseCodes.okCode, responseCodes.textPlain, this->lastGpsData.getGpsData());
     }
 }
 
 void RoomLightServerMediator::notFoundHandler() {
-    Serial.println("Not found handler");
     this->server->send(responseCodes.notFoundCode, responseCodes.textPlain, "");
 }
 void RoomLightServerMediator::rootHandler() {
-    Serial.println("Root handler");
     this->server->send(responseCodes.okCode, responseCodes.textHtml, this->getTemplate());
 }
 void RoomLightServerMediator::sendWiFiLocalIp() {
