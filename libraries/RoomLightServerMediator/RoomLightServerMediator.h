@@ -17,11 +17,13 @@
 #include <ESP8266HTTPUpdateServer.h>
 
 // #include <GpsSaver.h>
+#define AUTHORIZATION_HEADER "Authorization"
 
 class RoomLightServerMediator {
     public:
         RoomLightServerMediator();
         RoomLightServerMediator(RoomLightSerial *serial, ESP8266WebServer *server);
+        RoomLightServerMediator(RoomLightSerial *serial, ESP8266WebServer *server, String token);
         void begin(const char* ssid, const char* password);
         void toggle();
     protected:
@@ -37,6 +39,7 @@ class RoomLightServerMediator {
         ESP8266WebServer *server;
         WiFiClient client;
         String localIp;
+        String token;
     private:
         void rootHandler();
         void ledOnHandler();
@@ -46,5 +49,6 @@ class RoomLightServerMediator {
         void notFoundHandler();
         void setGpsHandler();
         void getGpsHandler();
+        bool isAuthenticated();
 };
 #endif

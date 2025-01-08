@@ -17,6 +17,13 @@ RoomLightServerMediator::RoomLightServerMediator(RoomLightSerial *serial, ESP826
     this->isLastRequestInvalid = false;
 }
 
+RoomLightServerMediator::RoomLightServerMediator(RoomLightSerial *serial, ESP8266WebServer *server, String token) {
+    this->serial = serial;
+    this->server = server;
+    this->isLastRequestInvalid = false;
+    this->token = token;
+}
+
 void RoomLightServerMediator::begin(const char *ssid, const char *password) {
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid, password);
@@ -44,6 +51,13 @@ void RoomLightServerMediator::begin(const char *ssid, const char *password) {
     this->server->onNotFound(std::bind(&RoomLightServerMediator::notFoundHandler, this));
 
     this->server->begin();
+}
+
+bool RoomLightServerMediator::isAuthenticated() {
+    if (this->server->hasHeader(AUTHORIZATION_HEADER) && this->server->header(AUTHORIZATION_HEADER) == this->token) {
+        return true;
+    }
+    return false;
 }
 
 void RoomLightServerMediator::ledOnHandler() {
