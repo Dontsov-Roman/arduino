@@ -24,6 +24,7 @@ class RoomLightServerMediator {
         RoomLightServerMediator();
         RoomLightServerMediator(RoomLightSerial *serial, ESP8266WebServer *server);
         RoomLightServerMediator(RoomLightSerial *serial, ESP8266WebServer *server, String token);
+        RoomLightServerMediator(RoomLightSerial *serial, ESP8266WebServer *server, String token, String thingId);
         void begin(const char* ssid, const char* password);
         void toggle();
     protected:
@@ -40,6 +41,7 @@ class RoomLightServerMediator {
         WiFiClient client;
         String localIp;
         String token;
+        String thingId;
     private:
         void rootHandler();
         void ledOnHandler();

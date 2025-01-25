@@ -5,6 +5,8 @@
 #include <RoomLightCommands.h>
 #include <ResponseCodes.h>
 #include <StreamString.h>
+#include <ArduinoIoTCloud.h>
+#include <Arduino_ConnectionHandler.h>
 
 ResponseCodes responseCodes;
 RoomLightServerMediator::RoomLightServerMediator() {
@@ -22,6 +24,14 @@ RoomLightServerMediator::RoomLightServerMediator(RoomLightSerial *serial, ESP826
     this->server = server;
     this->isLastRequestInvalid = false;
     this->token = token;
+}
+
+RoomLightServerMediator::RoomLightServerMediator(RoomLightSerial *serial, ESP8266WebServer *server, String token, String thingId) {
+    this->serial = serial;
+    this->server = server;
+    this->isLastRequestInvalid = false;
+    this->token = token;
+    this->thingId = thingId;
 }
 
 void RoomLightServerMediator::begin(const char *ssid, const char *password) {
@@ -54,6 +64,11 @@ void RoomLightServerMediator::begin(const char *ssid, const char *password) {
     const char *headerkeys[] = {AUTHORIZATION_HEADER};
     size_t headerkeyssize = sizeof(headerkeys)/sizeof(char*);
     this->server->collectHeaders(headerkeys, headerkeyssize);
+
+    // Cloud
+    ArduinoCloud.begin(ArduinoIoTPreferredConnection);
+    ArduinoCloud.setThingId(this->thingId);
+    WiFiConnectionHandler ArduinoIoTPreferredConnection(ssid, password);
 
     this->server->begin();
 }

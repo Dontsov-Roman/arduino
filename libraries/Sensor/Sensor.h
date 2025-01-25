@@ -14,6 +14,7 @@ protected:
 public:
   bool isOn();
   void read();
+  void statusToSerial();
 };
 
 #endif

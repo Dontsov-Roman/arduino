@@ -15,28 +15,29 @@
 #include <ISimpleDisplay.h>
 #include <SimpleDisplaySwitcher.h>
 
-class RoomLightMediator {
-    public:
-        RoomLightMediator();
-        RoomLightMediator(
-            RoomLightSerial *serial,
-            SimpleSensor *button,
-            SimpleDigitalOutput *led,
-            SimpleMovementSensor *movementSensor,
-            ISimpleDisplay *display
-        );
-        void begin();
-        void toggle();
-    protected:
-        // Button, Movement, Last Command, Led
-        String getStatus();
-        RoomLightSerial *serial;
-        SimpleSensor *button;
-        SimpleDigitalOutput *led;
-        SimpleMovementSensor *movementSensor;
-        ISimpleDisplay *display;
-        SimpleTimeout simpleTimeout;
-        int lastCommand;
-        String eol;
+class RoomLightMediator
+{
+public:
+    RoomLightMediator();
+    RoomLightMediator(
+        RoomLightSerial *serial,
+        SimpleSensor *button,
+        SimpleDigitalOutput *led,
+        SimpleMovementSensor *movementSensor,
+        ISimpleDisplay *display);
+    void begin();
+    void toggle();
+
+protected:
+    // Button, Movement, Last Command, Led
+    String getStatus();
+    RoomLightSerial *serial;
+    SimpleSensor *button;
+    SimpleDigitalOutput *led;
+    SimpleMovementSensor *movementSensor;
+    ISimpleDisplay *display;
+    SimpleTimeout simpleTimeout;
+    int lastCommand;
+    String eol;
 };
 #endif

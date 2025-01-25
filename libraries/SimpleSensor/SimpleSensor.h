@@ -9,16 +9,18 @@
 
 class SimpleSensor : public Sensor
 {
-    protected:
-        bool enabled;
-        uint8_t pin;
-    public:
-        SimpleSensor();
-        // pin
-        SimpleSensor(uint8_t p);
-        void read();
-        bool isOn();
-        void statusToSerial();
+protected:
+    bool enabled;
+    uint8_t pin;
+
+public:
+    SimpleSensor();
+    // pin
+    SimpleSensor(uint8_t p);
+    void begin();
+    void read();
+    bool isOn();
+    void statusToSerial();
 };
 
 #endif

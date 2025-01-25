@@ -10,9 +10,11 @@
 class ThresholdSensor : public Sensor
 {
 public:
+  void begin();
   void read();
   bool isOn();
   void setThreshold(int threshold);
+  void statusToSerial();
 
 protected:
   uint8_t pin;
