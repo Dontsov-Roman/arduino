@@ -23,33 +23,11 @@ SimpleDigitalOutput buttonIndicator(buttonIndicatorPin);
 KitchenLightMediator mediator(&lightSensor, &button, &movement, &output, &buttonIndicator, &timeout);
 
 void setup() {
-  // SimpleTimeout timeout(3000);
-  // PhotoSensor lightSensor(A1, 250);
-  // SimpleSensor button = new SimpleSensor(1);
-  // SimpleMovementSensor movement(2, 3);
-  // SimpleDigitalOutput output(4);
-  // KitchenLightMediator mediator(&lightSensor, &button, &movement, &output, &timeout);
   Serial.begin(SERIAL_BEGIN);
   mediator.begin();
-  // pinMode(lightSensorPin, INPUT);
-  // pinMode(buttonPin, INPUT);
-  // pinMode(movementPin, INPUT);
 }
 
 void loop() {
   mediator.toggle();
-  // Serial.println(analogRead(lightSensorPin));
-  // Serial.println(digitalRead(buttonPin));
-  // Serial.println(digitalRead(movementPin));
-  // Serial.println("====================");
-  // Serial.println(digitalRead(movementPin) == HIGH);
-  
-  Serial.println("Button:");
-  button.statusToSerial();
-  Serial.println("Movement:");
-  movement.statusToSerial();
-  Serial.println("Light:");
-  lightSensor.statusToSerial();
-
   delay(500);
 }
