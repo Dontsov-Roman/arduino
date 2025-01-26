@@ -11,6 +11,7 @@ uint8_t buttonPin = 5;
 uint8_t movementPin = 3;
 uint8_t lightSensorPin = A1;
 uint8_t outputPin = 4;
+uint8_t buttonIndicatorPin = 8;
 
 SimpleTimeout timeout(10000);
 SimpleTimeout buttonTimeout(3000);
@@ -18,7 +19,8 @@ PhotoSensor lightSensor(lightSensorPin, 750);
 SimpleToggleSensor button(buttonPin, &buttonTimeout);
 SimpleMovementSensor movement(movementPin, 3);
 SimpleDigitalOutput output(outputPin);
-KitchenLightMediator mediator(&lightSensor, &button, &movement, &output, &timeout);
+SimpleDigitalOutput buttonIndicator(buttonIndicatorPin);
+KitchenLightMediator mediator(&lightSensor, &button, &movement, &output, &buttonIndicator, &timeout);
 
 void setup() {
   // SimpleTimeout timeout(3000);

@@ -19,6 +19,7 @@ public:
         SimpleToggleSensor *button,
         SimpleMovementSensor *movementSensor,
         SimpleDigitalOutput *output,
+        SimpleDigitalOutput *buttonIndicator,
         SimpleTimeout *timeout);
     void toggle();
     void begin();
@@ -29,5 +30,6 @@ private:
     SimpleMovementSensor *movementSensor;
     SimpleDigitalOutput *output;
     SimpleTimeout *timeout;
+    SimpleDigitalOutput *buttonIndicator;
 };
 #endif
