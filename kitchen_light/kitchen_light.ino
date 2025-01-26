@@ -29,5 +29,4 @@ void setup() {
 
 void loop() {
   mediator.toggle();
-  delay(500);
 }
