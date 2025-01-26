@@ -14,7 +14,7 @@ uint8_t outputPin = 4;
 uint8_t buttonIndicatorPin = 8;
 
 SimpleTimeout timeout(10000);
-SimpleTimeout buttonTimeout(3000);
+SimpleTimeout buttonTimeout(5000);
 PhotoSensor lightSensor(lightSensorPin, 750);
 SimpleToggleSensor button(buttonPin, &buttonTimeout);
 SimpleMovementSensor movement(movementPin, 3);
