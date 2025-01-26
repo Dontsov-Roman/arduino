@@ -14,9 +14,10 @@ void SimpleToggleSensor::begin()
 
 void SimpleToggleSensor::read()
 {
-    if (this->timeout->checkTimeout() && digitalRead(this->pin) == HIGH)
+    if (digitalRead(this->pin) == HIGH)
     {
-        this->enabled = !this->enabled;
+        if (this->timeout->checkTimeout())
+            this->enabled = !this->enabled;
     }
 }
 bool SimpleToggleSensor::isOn()

@@ -25,6 +25,7 @@ void KitchenLightMediator::begin()
 
 void KitchenLightMediator::toggle()
 {
+    bool previousButtonState = this->button->isOn();
     this->button->read();
     this->lightSensor->read();
     this->movementSensor->read();
@@ -32,14 +33,26 @@ void KitchenLightMediator::toggle()
     if (this->button->isOn())
     {
         this->output->switchOn();
+        return;
     }
-    else if (this->timeout->checkTimeout())
+    else if (previousButtonState)
     {
-        if (this->lightSensor->isOn() && this->movementSensor->isOn() && !this->output->isOn())
-        {
-            this->output->switchOn();
-            return;
-        }
         this->output->switchOff();
+        this->timeout->checkTimeout();
+        return;
     }
+    if (this->timeout->checkTimeout())
+        if (
+            this->movementSensor->isOn() &&
+            ((!this->output->isOn() && this->lightSensor->isOn()) || this->output->isOn()))
+        {
+            {
+                this->output->switchOn();
+            }
+        }
+        else
+        {
+
+            this->output->switchOff();
+        }
 }
