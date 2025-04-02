@@ -9,6 +9,9 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
+#include <WifiClientEsp8266.h>
+// #include <IWifiClient.h>
+
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 32 // OLED display height, in pixels
 #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
@@ -37,6 +40,7 @@ SoftwareSerial ss(D4, D3);
 GpsReader gpsReader(&ss);
 WifiHttpClient wifiHttpClient(wifiSsid, wifiPassword, host, url, port);
 GpsCar gpsCar(&gpsReader, &wifiHttpClient, &simpleOled);
+WifiClientEsp8266 wifiClient(wifiSsid, wifiPassword);
 
 void setup() {
   Serial.begin(115200);

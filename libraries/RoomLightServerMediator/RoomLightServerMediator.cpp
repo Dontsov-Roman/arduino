@@ -5,28 +5,30 @@
 #include <RoomLightCommands.h>
 #include <ResponseCodes.h>
 #include <StreamString.h>
-#include <ArduinoIoTCloud.h>
-#include <Arduino_ConnectionHandler.h>
 
 ResponseCodes responseCodes;
-RoomLightServerMediator::RoomLightServerMediator() {
+RoomLightServerMediator::RoomLightServerMediator()
+{
     this->isLastRequestInvalid = false;
 }
 
-RoomLightServerMediator::RoomLightServerMediator(RoomLightSerial *serial, ESP8266WebServer *server) {
+RoomLightServerMediator::RoomLightServerMediator(RoomLightSerial *serial, ESP8266WebServer *server)
+{
     this->serial = serial;
     this->server = server;
     this->isLastRequestInvalid = false;
 }
 
-RoomLightServerMediator::RoomLightServerMediator(RoomLightSerial *serial, ESP8266WebServer *server, String token) {
+RoomLightServerMediator::RoomLightServerMediator(RoomLightSerial *serial, ESP8266WebServer *server, String token)
+{
     this->serial = serial;
     this->server = server;
     this->isLastRequestInvalid = false;
     this->token = token;
 }
 
-RoomLightServerMediator::RoomLightServerMediator(RoomLightSerial *serial, ESP8266WebServer *server, String token, String thingId) {
+RoomLightServerMediator::RoomLightServerMediator(RoomLightSerial *serial, ESP8266WebServer *server, String token, String thingId)
+{
     this->serial = serial;
     this->server = server;
     this->isLastRequestInvalid = false;
@@ -34,11 +36,13 @@ RoomLightServerMediator::RoomLightServerMediator(RoomLightSerial *serial, ESP826
     this->thingId = thingId;
 }
 
-void RoomLightServerMediator::begin(const char *ssid, const char *password) {
+void RoomLightServerMediator::begin(const char *ssid, const char *password)
+{
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid, password);
 
-    while (WiFi.status() != WL_CONNECTED) {
+    while (WiFi.status() != WL_CONNECTED)
+    {
         delay(500);
         Serial.print(F("."));
     }
@@ -48,7 +52,7 @@ void RoomLightServerMediator::begin(const char *ssid, const char *password) {
     Serial.println(this->localIp);
 
     MDNS.begin(this->localIp);
-    
+
     this->httpUpdater.setup(this->server);
     // Start the server
     this->server->on("/", std::bind(&RoomLightServerMediator::rootHandler, this));
@@ -60,97 +64,110 @@ void RoomLightServerMediator::begin(const char *ssid, const char *password) {
     this->server->on("/get-gps", std::bind(&RoomLightServerMediator::getGpsHandler, this));
     this->server->onNotFound(std::bind(&RoomLightServerMediator::notFoundHandler, this));
 
-    //ask server to track these headers
+    // ask server to track these headers
     const char *headerkeys[] = {AUTHORIZATION_HEADER};
-    size_t headerkeyssize = sizeof(headerkeys)/sizeof(char*);
+    size_t headerkeyssize = sizeof(headerkeys) / sizeof(char *);
     this->server->collectHeaders(headerkeys, headerkeyssize);
-
-    // Cloud
-    ArduinoCloud.begin(ArduinoIoTPreferredConnection);
-    ArduinoCloud.setThingId(this->thingId);
-    WiFiConnectionHandler ArduinoIoTPreferredConnection(ssid, password);
 
     this->server->begin();
 }
 
-bool RoomLightServerMediator::isAuthenticated() {
-    if (this->server->hasHeader(AUTHORIZATION_HEADER) && this->server->header(AUTHORIZATION_HEADER) == this->token) {
+bool RoomLightServerMediator::isAuthenticated()
+{
+    if (this->server->hasHeader(AUTHORIZATION_HEADER) && this->server->header(AUTHORIZATION_HEADER) == this->token)
+    {
         return true;
     }
     this->server->send(responseCodes.unAuthCode, responseCodes.textPlain, "");
     return false;
 }
 
-void RoomLightServerMediator::ledOnHandler() {
-    if (this->isAuthenticated()) {
+void RoomLightServerMediator::ledOnHandler()
+{
+    if (this->isAuthenticated())
+    {
         this->server->send(responseCodes.okCode, responseCodes.textPlain, "");
         this->serial->write(SwitchOnCommand);
     }
 }
 
-void RoomLightServerMediator::ledOffHandler() {
-    if (this->isAuthenticated()) {
+void RoomLightServerMediator::ledOffHandler()
+{
+    if (this->isAuthenticated())
+    {
         this->server->send(responseCodes.okCode, responseCodes.textPlain, "");
         this->serial->write(SwitchOffCommand);
     }
 }
 
-
-void RoomLightServerMediator::movementModeHandler() {
-    if (this->isAuthenticated()) {
+void RoomLightServerMediator::movementModeHandler()
+{
+    if (this->isAuthenticated())
+    {
         this->server->send(responseCodes.okCode, responseCodes.textPlain, "");
         this->serial->write(MovementModeCommand);
     }
 }
 
-void RoomLightServerMediator::sendWifiLocalIpHandler() {
-    if (this->isAuthenticated()) {
+void RoomLightServerMediator::sendWifiLocalIpHandler()
+{
+    if (this->isAuthenticated())
+    {
         this->server->send(responseCodes.okCode, responseCodes.textPlain, "");
         this->sendWiFiLocalIp();
     }
 }
-String RoomLightServerMediator::getLastGpsData() {
+String RoomLightServerMediator::getLastGpsData()
+{
     String content = "Time: ";
     content += this->lastGpsData.getGpsDateTime();
     content += ", Coordinates: ";
     content += this->lastGpsData.getGpsLatLng();
     return content;
 }
-void RoomLightServerMediator::setGpsHandler() {
+void RoomLightServerMediator::setGpsHandler()
+{
     String gpsData = this->server->arg("gps");
     this->lastGpsData.parse(gpsData);
 
     this->server->send(
         responseCodes.okCode,
         responseCodes.textPlain,
-        "Ok. " + this->getLastGpsData()
-    );
+        "Ok. " + this->getLastGpsData());
 }
 
-void RoomLightServerMediator::getGpsHandler() {
-    if (this->isAuthenticated()) {
+void RoomLightServerMediator::getGpsHandler()
+{
+    if (this->isAuthenticated())
+    {
         this->server->send(responseCodes.okCode, responseCodes.textPlain, this->lastGpsData.getGpsData());
     }
 }
 
-void RoomLightServerMediator::notFoundHandler() {
+void RoomLightServerMediator::notFoundHandler()
+{
     this->server->send(responseCodes.notFoundCode, responseCodes.textPlain, "");
 }
-void RoomLightServerMediator::rootHandler() {
+void RoomLightServerMediator::rootHandler()
+{
     this->server->send(responseCodes.okCode, responseCodes.textHtml, this->getTemplate());
 }
-void RoomLightServerMediator::sendWiFiLocalIp() {
+void RoomLightServerMediator::sendWiFiLocalIp()
+{
     this->serial->write(SetLocalIpCommand, this->localIp);
 }
 
-void RoomLightServerMediator::toggle() {
+void RoomLightServerMediator::toggle()
+{
     this->server->handleClient();
     this->client = server->client();
-    if (this->simpleTimeout.checkTimeout()){
+    if (this->simpleTimeout.checkTimeout())
+    {
         this->sendWiFiLocalIp();
     }
 }
-const char* RoomLightServerMediator::getTemplate() {
+const char *RoomLightServerMediator::getTemplate()
+{
     StreamString streamString;
     streamString.reserve(500);
     streamString.printf("\
@@ -186,6 +203,7 @@ const char* RoomLightServerMediator::getTemplate() {
                 </li>\
             </ul>\
             </body>\
-        </html>",  this->localIp, this->lastGpsData.getGpsData());
+        </html>",
+                        this->localIp, this->lastGpsData.getGpsData());
     return streamString.c_str();
 }

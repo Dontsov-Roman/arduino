@@ -12,27 +12,28 @@
 #include <ISimpleDisplay.h>
 #include <SimpleDisplaySwitcher.h>
 
-class GpsCar {
-    public:
-        GpsCar(
-            GpsReader *gpsReader,
-            WifiHttpClient *client,
-            ISimpleDisplay *display
-        );
-        void begin();
-        void loop();
-    protected:
-        GpsReader *gpsReader;
-        WifiHttpClient *client;
-        ISimpleDisplay *display;
-        SimpleDisplaySwitcher displaySwitcher;
-        SimpleTimeout timeout = SimpleTimeout(10000);
+class GpsCar
+{
+public:
+    GpsCar(
+        GpsReader *gpsReader,
+        WifiHttpClient *client,
+        ISimpleDisplay *display);
+    void begin();
+    void loop();
 
-        const char* gpsQueryKey = GPS_QUERY_KEY;
-        char* gpsData;
-        char* gpsDateTime;
-        char* gpsLatLng;
-        String localIpString = "Local IP:";
-        String noGpsString = "No Gps Signal";
+protected:
+    GpsReader *gpsReader;
+    WifiHttpClient *client;
+    ISimpleDisplay *display;
+    SimpleDisplaySwitcher displaySwitcher;
+    SimpleTimeout timeout = SimpleTimeout(10000);
+
+    const char *gpsQueryKey = GPS_QUERY_KEY;
+    char *gpsData;
+    char *gpsDateTime;
+    char *gpsLatLng;
+    String localIpString = "Local IP:";
+    String noGpsString = "No Gps Signal";
 };
 #endif
