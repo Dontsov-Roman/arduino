@@ -7,24 +7,25 @@
 #include <WProgram.h>
 #endif
 #include <GpsReader.h>
-#include <WifiHttpClient.h>
 #include <SimpleTimeout.h>
 #include <ISimpleDisplay.h>
 #include <SimpleDisplaySwitcher.h>
+// #include <WifiHttpClient.h>
+#include <IHttpClient.h>
 
 class GpsCar
 {
 public:
     GpsCar(
         GpsReader *gpsReader,
-        WifiHttpClient *client,
+        IHttpClient *client,
         ISimpleDisplay *display);
     void begin();
     void loop();
 
 protected:
     GpsReader *gpsReader;
-    WifiHttpClient *client;
+    IHttpClient *client;
     ISimpleDisplay *display;
     SimpleDisplaySwitcher displaySwitcher;
     SimpleTimeout timeout = SimpleTimeout(10000);

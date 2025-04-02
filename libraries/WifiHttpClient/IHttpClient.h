@@ -7,6 +7,7 @@
 #include <WProgram.h>
 #endif
 #include <ResponseStruct.h>
+
 class IHttpClient
 {
 public:
@@ -16,7 +17,7 @@ public:
     virtual ResponseStruct *post(char *body);
     virtual ResponseStruct *post(char *body, String key, String value);
     virtual void setHost(const char *host);
-    virtual ResponseStruct *request(String url, HTTPMethod method, char *body);
     virtual String generateQueryUrl(String url, String key, String value);
+    virtual String getLocalIP();
 };
 #endif

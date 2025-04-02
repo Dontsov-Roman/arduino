@@ -39,9 +39,10 @@ const char* url = URL;
 SoftwareSerial ss(D4, D3);
 GpsReader gpsReader(&ss);
 WifiHttpClient wifiHttpClient(wifiSsid, wifiPassword, host, url, port);
-GpsCar gpsCar(&gpsReader, &wifiHttpClient, &simpleOled);
 WifiClientEsp8266 wifiClient(wifiSsid, wifiPassword);
-HttpClientEsp8266 httpClient(host, url, port);
+HttpClientEsp8266 httpClient(&wifiClient, host, url, port);
+
+GpsCar gpsCar(&gpsReader, &wifiHttpClient, &simpleOled);
 
 void setup() {
   Serial.begin(115200);

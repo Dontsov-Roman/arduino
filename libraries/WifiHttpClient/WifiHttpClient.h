@@ -12,8 +12,9 @@
 #include <ESP8266HTTPClient.h>
 #include <ResponseStruct.h>
 #include <ESP8266WebServer.h>
+#include <IHttpClient.h>
 
-class WifiHttpClient
+class WifiHttpClient : public IHttpClient
 {
 public:
     WifiHttpClient(

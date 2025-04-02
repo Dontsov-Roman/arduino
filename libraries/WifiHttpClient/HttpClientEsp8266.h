@@ -13,12 +13,13 @@
 #include <ResponseStruct.h>
 #include <ESP8266WebServer.h>
 #include <IHttpClient.h>
-#include <WifiClientEsp8266.h>
+#include <IWifiClient.h>
 
 class HttpClientEsp8266 : public IHttpClient
 {
 public:
     HttpClientEsp8266(
+        IWifiClient *wifiClient,
         const char *host,
         const char *url,
         const char *port);
@@ -28,13 +29,16 @@ public:
     ResponseStruct *post(char *body);
     ResponseStruct *post(char *body, String key, String value);
     void setHost(const char *host);
-    ResponseStruct *request(String url, HTTPMethod method, char *body);
-    String generateQueryUrl(String url, String key, String value);
+    String getLocalIP();
 
 protected:
+    IWifiClient *wifiClient;
     HTTPClient http;
     WiFiClient client;
     ResponseStruct lastResponse;
+    ResponseStruct *request(String url, HTTPMethod method, char *body);
+    String generateQueryUrl(String url, String key, String value);
+    bool isWifiConnected();
 
 private:
     char fullUrl[64];

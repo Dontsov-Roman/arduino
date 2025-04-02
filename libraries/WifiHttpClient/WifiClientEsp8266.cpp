@@ -1,9 +1,3 @@
-#include <ESP8266WiFi.h>
-#include <ESP8266WiFiMulti.h>
-#include <WiFiClient.h>
-#include <ESP8266HTTPClient.h>
-#include <ResponseStruct.h>
-#include <ESP8266WebServer.h>
 #include "WifiClientEsp8266.h"
 
 WifiClientEsp8266::WifiClientEsp8266()
