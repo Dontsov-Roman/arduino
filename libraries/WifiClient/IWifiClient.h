@@ -1,5 +1,5 @@
-#ifndef ABSTRACT_WIFI_CLIENT_H
-#define ABSTRACT_WIFI_CLIENT_H
+#ifndef I_WIFI_CLIENT_H
+#define I_WIFI_CLIENT_H
 #if ARDUINO >= 100
 #include <Arduino.h>
 #else

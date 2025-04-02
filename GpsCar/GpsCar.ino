@@ -9,8 +9,8 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
-#include <WifiClientEsp8266.h>
-// #include <IWifiClient.h>
+// #include <WifiClientEsp8266.h>
+// #include <HttpClientEsp8266.h>
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 32 // OLED display height, in pixels
@@ -40,7 +40,8 @@ SoftwareSerial ss(D4, D3);
 GpsReader gpsReader(&ss);
 WifiHttpClient wifiHttpClient(wifiSsid, wifiPassword, host, url, port);
 GpsCar gpsCar(&gpsReader, &wifiHttpClient, &simpleOled);
-WifiClientEsp8266 wifiClient(wifiSsid, wifiPassword);
+// WifiClientEsp8266 wifiClient(wifiSsid, wifiPassword);
+// HttpClientEsp8266 httpClient(host, url, port);
 
 void setup() {
   Serial.begin(115200);
