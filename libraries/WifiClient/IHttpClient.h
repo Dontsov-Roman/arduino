@@ -6,12 +6,7 @@
 #else
 #include <WProgram.h>
 #endif
-#include <ESP8266WiFi.h>
-#include <ESP8266WiFiMulti.h>
-#include <WiFiClient.h>
-#include <ESP8266HTTPClient.h>
 #include <ResponseStruct.h>
-#include <ESP8266WebServer.h>
 class IHttpClient
 {
 public:
