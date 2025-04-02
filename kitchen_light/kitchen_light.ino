@@ -22,11 +22,13 @@ SimpleDigitalOutput output(outputPin);
 SimpleDigitalOutput buttonIndicator(buttonIndicatorPin);
 KitchenLightMediator mediator(&lightSensor, &button, &movement, &output, &buttonIndicator, &timeout);
 
-void setup() {
+void setup()
+{
   Serial.begin(SERIAL_BEGIN);
   mediator.begin();
 }
 
-void loop() {
+void loop()
+{
   mediator.toggle();
 }

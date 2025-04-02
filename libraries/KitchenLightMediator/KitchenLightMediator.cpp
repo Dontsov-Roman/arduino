@@ -47,7 +47,7 @@ void KitchenLightMediator::toggle()
         this->timeout->checkTimeout();
         return;
     }
-    if (!this->movementSensor->isOn())
+    if (this->output->isOn() && !this->movementSensor->isOn())
     {
         if (this->timeout->checkTimeout())
         {
