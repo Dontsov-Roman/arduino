@@ -21,10 +21,10 @@ SimpleOled simpleOled(&display);
 
 #ifndef STASSID
 #define STASSID "UFI-495947"
+#define STAPSK "12345678"
 // #define STASSID "car_wifi"
 // #define STASSID "56"
 // #define STAPSK "dontsovaAlya"
-#define STAPSK "12345678"
 #define HOST "195.78.246.46"
 #define PORT "8080"
 #define URL "/set-gps"
@@ -38,12 +38,12 @@ const char* url = URL;
 
 SoftwareSerial ss(D4, D3);
 GpsReader gpsReader(&ss);
-WifiHttpClient wifiHttpClient(wifiSsid, wifiPassword, host, url, port);
+// WifiHttpClient wifiHttpClient(wifiSsid, wifiPassword, host, url, port);
 WifiClientEsp8266 wifiClient(wifiSsid, wifiPassword);
 HttpClientEsp8266 httpClient(&wifiClient, host, url, port);
 
-GpsCar gpsCar(&gpsReader, &wifiHttpClient, &simpleOled);
-
+GpsCar gpsCar(&gpsReader, &httpClient, &simpleOled);
+HTTPMethod httpMethod;
 void setup() {
   Serial.begin(115200);
   ss.begin(9600);
