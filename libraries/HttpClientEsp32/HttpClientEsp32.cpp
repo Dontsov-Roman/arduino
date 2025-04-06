@@ -21,6 +21,16 @@ ResponseStruct *HttpClientEsp32::get()
     char *body;
     return this->request(this->fullUrl, HTTP_METHOD_GET, body);
 }
+ResponseStruct *HttpClientEsp32::get(String url)
+{
+    char *body;
+    String newUrl = "http://";
+    newUrl += this->host;
+    newUrl += ":";
+    newUrl += this->port;
+    newUrl += url;
+    return this->request(newUrl, HTTP_METHOD_GET, body);
+}
 
 ResponseStruct *HttpClientEsp32::get(String key, String value)
 {

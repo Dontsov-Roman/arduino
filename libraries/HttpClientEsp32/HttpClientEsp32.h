@@ -22,6 +22,7 @@ public:
         const char *port);
     void begin();
     ResponseStruct *get();
+    ResponseStruct *get(String url);
     ResponseStruct *get(String key, String value);
     ResponseStruct *post(char *body);
     ResponseStruct *post(char *body, String key, String value);

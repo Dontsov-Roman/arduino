@@ -21,13 +21,21 @@ ResponseStruct *HttpClientEsp8266::get()
     char *body;
     return this->request(this->fullUrl, HTTP_METHOD_GET, body);
 }
-
+ResponseStruct *HttpClientEsp8266::get(String url)
+{
+    char *body;
+    String newUrl = "http://";
+    newUrl += this->host;
+    newUrl += ":";
+    newUrl += this->port;
+    newUrl += url;
+    return this->request(newUrl, HTTP_METHOD_GET, body);
+}
 ResponseStruct *HttpClientEsp8266::get(String key, String value)
 {
     char *body;
     return this->request(this->generateQueryUrl(this->fullUrl, key, value), HTTP_METHOD_GET, body);
 }
-
 ResponseStruct *HttpClientEsp8266::post(char *body)
 {
     return this->request(this->fullUrl, HTTP_METHOD_POST, body);

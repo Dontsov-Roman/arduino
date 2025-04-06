@@ -25,6 +25,7 @@ class IHttpClient
 public:
     virtual void begin();
     virtual ResponseStruct *get();
+    virtual ResponseStruct *get(String url);
     virtual ResponseStruct *get(String key, String value);
     virtual ResponseStruct *post(char *body);
     virtual ResponseStruct *post(char *body, String key, String value);

@@ -1,16 +1,15 @@
-#include <GpsCar.h>
-#include <SoftwareSerial.h>
-#include <GpsReader.h>
+
 #include <SimpleOled.h>
+#include <GpsHomeDisplay.h>
+#include <SimpleToggleSensor.h>
+#include <SimpleTimeout.h>
 
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-#include <ResponseStruct.h>
 #include <WifiClientEsp32.h>
 #include <HttpClientEsp32.h>
-#include <GpsData.h>
 
 #define SCREEN_WIDTH 128    // OLED display width, in pixels
 #define SCREEN_HEIGHT 32    // OLED display height, in pixels
@@ -27,7 +26,7 @@ SimpleOled simpleOled(&display);
 #define STAPSK "dontsovaAlya"
 #define HOST "195.78.246.46"
 #define PORT "8080"
-#define URL "/set-gps"
+#define URL "/get-gps"
 #endif
 
 const char *wifiSsid = STASSID;
@@ -36,18 +35,16 @@ const char *host = HOST;
 const char *port = PORT;
 const char *url = URL;
 
-SoftwareSerial ss(5, 6);
-GpsReader gpsReader(&ss);
-GpsData gpsData;
 WifiClientEsp32 wifiClient(wifiSsid, wifiPassword);
 HttpClientEsp32 httpClient(host, url, port);
-
-GpsCar gpsCar(&gpsReader, &wifiClient, &httpClient, &simpleOled, 20000);
+SimpleTimeout gpsTimeout(10000);
+SimpleTimeout buttonTimeout(1000);
+SimpleToggleSensor button(5, &buttonTimeout);
+GpsHomeDisplay gpsHomeDisplay(&wifiClient, &httpClient, &simpleOled, &button, &gpsTimeout);
 
 void setup()
 {
   Serial.begin(115200);
-  ss.begin(9600);
   wifiClient.begin();
 
   if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
@@ -55,10 +52,10 @@ void setup()
     Serial.println(F("SSD1306 allocation failed"));
   }
 
-  gpsCar.begin();
+  gpsHomeDisplay.begin();
 }
 
 void loop()
 {
-  gpsCar.loop();
+  gpsHomeDisplay.loop();
 }
