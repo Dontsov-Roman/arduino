@@ -42,53 +42,23 @@ GpsData gpsData;
 WifiClientEsp32 wifiClient(wifiSsid, wifiPassword);
 HttpClientEsp32 httpClient(host, url, port);
 
-GpsCar gpsCar(&gpsReader, &wifiClient, &httpClient, &simpleOled);
+GpsCar gpsCar(&gpsReader, &wifiClient, &httpClient, &simpleOled, 20000);
 
 void setup()
 {
   Serial.begin(115200);
   ss.begin(9600);
   wifiClient.begin();
-  // httpClient.begin();
-  // display.clearDisplay();
-  // display.setTextSize(1); // Draw 2X-scale text
-  // display.setTextColor(SSD1306_WHITE);
-  // display.setCursor(0, 0);
-  // display.println(F("initializing..."));
-  // display.display();
 
   if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
   {
     Serial.println(F("SSD1306 allocation failed"));
   }
-  // simpleOled.begin();
 
   gpsCar.begin();
 }
 
 void loop()
 {
-  // gpsReader.readGpsData();
-  // if (gpsReader.isReady()){
-  //   Serial.println("Date/time:");
-  //   Serial.println(gpsReader.getGpsDateTime());
-  //   Serial.println("Coordinates:");
-  //   Serial.println(gpsReader.getGpsLatLng());
-  // } else {
-  //   Serial.println("No gps connection");
-  // }
-  // if(wifiClient.isConnected()){
-  //   ResponseStruct *r = httpClient.get();
-  //   if (r->code == 200) {
-  //     gpsData.parse(r->response);
-  //     simpleOled.clear();
-  //     simpleOled.writeFirstRow(gpsData.getGpsDateTime());
-  //     simpleOled.writeSecondRow(gpsData.getGpsLatLng());
-  //   }
-  // } else {
-  //   simpleOled.clear();
-  //   simpleOled.writeFirstRow("No Wifi connection");
-  // }
-  delay(2000);
   gpsCar.loop();
 }

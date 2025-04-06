@@ -13,9 +13,7 @@ HttpClientEsp8266::HttpClientEsp8266(
 
 void HttpClientEsp8266::begin()
 {
-    // this->wifiClient->begin();
     sprintf(this->fullUrl, "http://%s:%s%s", this->host, this->port, this->url);
-    Serial.println(this->fullUrl);
     this->http.setReuse(true);
 }
 ResponseStruct *HttpClientEsp8266::get()
@@ -41,9 +39,6 @@ ResponseStruct *HttpClientEsp8266::post(char *body, String key, String value)
 
 ResponseStruct *HttpClientEsp8266::request(String url, const char *method, char *body)
 {
-
-    // if (this->isWifiConnected())
-    // {
     if (this->http.begin(this->client, url))
     {
 
@@ -71,7 +66,6 @@ ResponseStruct *HttpClientEsp8266::request(String url, const char *method, char 
     {
         Serial.println("[HTTP] Unable to connect");
     }
-    // }
     this->lastResponse.code = 0;
     this->client.flush();
     return &this->lastResponse;
@@ -89,6 +83,5 @@ String HttpClientEsp8266::generateQueryUrl(String url, String key, String value)
     newUrl += key;
     newUrl += "=";
     newUrl += value;
-    Serial.println(newUrl);
     return newUrl;
 }

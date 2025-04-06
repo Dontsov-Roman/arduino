@@ -13,6 +13,21 @@ GpsCar::GpsCar(
     this->wifiClient = wifiClient;
     this->display = display;
     this->displaySwitcher = SimpleDisplaySwitcher(this->display);
+    this->timeout = SimpleTimeout(10000);
+}
+GpsCar::GpsCar(
+    GpsReader *gpsReader,
+    IWifiClient *wifiClient,
+    IHttpClient *client,
+    ISimpleDisplay *display,
+    int loopTimeout)
+{
+    this->gpsReader = gpsReader;
+    this->client = client;
+    this->wifiClient = wifiClient;
+    this->display = display;
+    this->displaySwitcher = SimpleDisplaySwitcher(this->display);
+    this->timeout = SimpleTimeout(loopTimeout);
 }
 
 void GpsCar::begin()

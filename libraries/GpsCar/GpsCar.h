@@ -10,7 +10,6 @@
 #include <SimpleTimeout.h>
 #include <ISimpleDisplay.h>
 #include <SimpleDisplaySwitcher.h>
-// #include <WifiHttpClient.h>
 #include <IHttpClient.h>
 #include <IWifiClient.h>
 
@@ -22,6 +21,13 @@ public:
         IWifiClient *wifiClient,
         IHttpClient *client,
         ISimpleDisplay *display);
+
+    GpsCar(
+        GpsReader *gpsReader,
+        IWifiClient *wifiClient,
+        IHttpClient *client,
+        ISimpleDisplay *display,
+        int loopTimeout);
     void begin();
     void loop();
 
@@ -31,7 +37,7 @@ protected:
     IHttpClient *client;
     ISimpleDisplay *display;
     SimpleDisplaySwitcher displaySwitcher;
-    SimpleTimeout timeout = SimpleTimeout(10000);
+    SimpleTimeout timeout;
 
     const char *gpsQueryKey = GPS_QUERY_KEY;
     char *gpsData;

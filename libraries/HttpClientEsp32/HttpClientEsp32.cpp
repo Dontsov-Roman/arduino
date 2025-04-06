@@ -14,7 +14,6 @@ HttpClientEsp32::HttpClientEsp32(
 void HttpClientEsp32::begin()
 {
     sprintf(this->fullUrl, "http://%s:%s%s", this->host, this->port, this->url);
-    Serial.println(this->fullUrl);
     this->http.setReuse(true);
 }
 ResponseStruct *HttpClientEsp32::get()
@@ -40,9 +39,6 @@ ResponseStruct *HttpClientEsp32::post(char *body, String key, String value)
 
 ResponseStruct *HttpClientEsp32::request(String url, const char *method, char *body)
 {
-
-    // if (this->isWifiConnected())
-    // {
     if (this->http.begin(this->client, url))
     {
 
@@ -70,7 +66,6 @@ ResponseStruct *HttpClientEsp32::request(String url, const char *method, char *b
     {
         Serial.println("[HTTP] Unable to connect");
     }
-    // }
     this->lastResponse.code = 0;
     this->client.flush();
     return &this->lastResponse;
@@ -88,6 +83,5 @@ String HttpClientEsp32::generateQueryUrl(String url, String key, String value)
     newUrl += key;
     newUrl += "=";
     newUrl += value;
-    Serial.println(newUrl);
     return newUrl;
 }
