@@ -1,12 +1,10 @@
 #include "HttpClientEsp8266.h"
 
 HttpClientEsp8266::HttpClientEsp8266(
-    IWifiClient *wiFiClient,
     const char *host,
     const char *url,
     const char *port)
 {
-    this->wifiClient = wifiClient;
     this->host = host;
     this->url = url;
     this->port = port;
@@ -41,39 +39,39 @@ ResponseStruct *HttpClientEsp8266::post(char *body, String key, String value)
     return this->request(this->generateQueryUrl(this->fullUrl, key, value), HTTP_METHOD_POST, body);
 }
 
-ResponseStruct *HttpClientEsp8266::request(String url, HTTPMethod method, char *body)
+ResponseStruct *HttpClientEsp8266::request(String url, const char *method, char *body)
 {
 
-    if (this->isWifiConnected())
+    // if (this->isWifiConnected())
+    // {
+    if (this->http.begin(this->client, url))
     {
-        if (this->http.begin(this->client, url))
+
+        if (method == HTTP_METHOD_POST)
         {
-
-            if (method == HTTP_METHOD_POST)
-            {
-                this->lastResponse.code = http.POST(body);
-            }
-            else
-            {
-                this->lastResponse.code = http.GET();
-            }
-
-            if (this->lastResponse.code > 0)
-            {
-                this->lastResponse.response = this->http.getString();
-            }
-            else
-            {
-                Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(this->lastResponse.code).c_str());
-            }
-            this->http.end();
-            return &this->lastResponse;
+            this->lastResponse.code = http.POST(body);
         }
         else
         {
-            Serial.println("[HTTP] Unable to connect");
+            this->lastResponse.code = http.GET();
         }
+
+        if (this->lastResponse.code > 0)
+        {
+            this->lastResponse.response = this->http.getString();
+        }
+        else
+        {
+            Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(this->lastResponse.code).c_str());
+        }
+        this->http.end();
+        return &this->lastResponse;
     }
+    else
+    {
+        Serial.println("[HTTP] Unable to connect");
+    }
+    // }
     this->lastResponse.code = 0;
     this->client.flush();
     return &this->lastResponse;
@@ -93,12 +91,4 @@ String HttpClientEsp8266::generateQueryUrl(String url, String key, String value)
     newUrl += value;
     Serial.println(newUrl);
     return newUrl;
-}
-String HttpClientEsp8266::getLocalIP()
-{
-    return this->wifiClient->getLocalIP();
-}
-bool HttpClientEsp8266::isWifiConnected()
-{
-    return this->wifiClient->isConnected();
 }

@@ -30,7 +30,5 @@ public:
     virtual ResponseStruct *post(char *body, String key, String value);
     virtual void setHost(const char *host);
     virtual String generateQueryUrl(String url, String key, String value);
-    virtual String getLocalIP();
-    virtual bool isWifiConnected();
 };
 #endif

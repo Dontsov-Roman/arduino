@@ -1,12 +1,10 @@
 #include "HttpClientEsp32.h"
 
 HttpClientEsp32::HttpClientEsp32(
-    WifiClientEsp32 *wiFiClient,
     const char *host,
     const char *url,
     const char *port)
 {
-    this->wifiClient = wifiClient;
     this->host = host;
     this->url = url;
     this->port = port;
@@ -15,7 +13,6 @@ HttpClientEsp32::HttpClientEsp32(
 
 void HttpClientEsp32::begin()
 {
-    // this->wifiClient->begin();
     sprintf(this->fullUrl, "http://%s:%s%s", this->host, this->port, this->url);
     Serial.println(this->fullUrl);
     this->http.setReuse(true);
@@ -93,12 +90,4 @@ String HttpClientEsp32::generateQueryUrl(String url, String key, String value)
     newUrl += value;
     Serial.println(newUrl);
     return newUrl;
-}
-String HttpClientEsp32::getLocalIP()
-{
-    return this->wifiClient->getLocalIP();
-}
-bool HttpClientEsp32::isWifiConnected()
-{
-    return this->wifiClient->isConnected();
 }

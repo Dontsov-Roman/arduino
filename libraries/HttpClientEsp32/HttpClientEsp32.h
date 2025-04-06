@@ -11,14 +11,12 @@
 
 #include <HTTPClient.h>
 #include <IHttpClient.h>
-// #include <IWifiClient.h>
 #include <WifiClientEsp32.h>
 
 class HttpClientEsp32 : public IHttpClient
 {
 public:
     HttpClientEsp32(
-        WifiClientEsp32 *wifiClient,
         const char *host,
         const char *url,
         const char *port);
@@ -28,8 +26,6 @@ public:
     ResponseStruct *post(char *body);
     ResponseStruct *post(char *body, String key, String value);
     void setHost(const char *host);
-    String getLocalIP();
-    bool isWifiConnected();
 
 protected:
     WifiClientEsp32 *wifiClient;

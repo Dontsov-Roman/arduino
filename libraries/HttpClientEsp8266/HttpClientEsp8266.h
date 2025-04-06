@@ -11,15 +11,14 @@
 #include <WiFiClient.h>
 #include <ESP8266HTTPClient.h>
 #include <ResponseStruct.h>
-#include <ESP8266WebServer.h>
 #include <IHttpClient.h>
 #include <IWifiClient.h>
+#include <WifiClientEsp8266.h>
 
 class HttpClientEsp8266 : public IHttpClient
 {
 public:
     HttpClientEsp8266(
-        IWifiClient *wifiClient,
         const char *host,
         const char *url,
         const char *port);
@@ -29,15 +28,13 @@ public:
     ResponseStruct *post(char *body);
     ResponseStruct *post(char *body, String key, String value);
     void setHost(const char *host);
-    String getLocalIP();
-    bool isWifiConnected();
 
 protected:
-    IWifiClient *wifiClient;
+    WifiClientEsp8266 *wifiClient;
     HTTPClient http;
     WiFiClient client;
     ResponseStruct lastResponse;
-    ResponseStruct *request(String url, HTTPMethod method, char *body);
+    ResponseStruct *request(String url, const char *method, char *body);
     String generateQueryUrl(String url, String key, String value);
 
 private:

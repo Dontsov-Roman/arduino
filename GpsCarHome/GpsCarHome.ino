@@ -1,7 +1,7 @@
-// #include <GpsCar.h>
+#include <GpsCar.h>
 #include <SoftwareSerial.h>
 #include <GpsReader.h>
-// #include <SimpleOled.h>
+#include <SimpleOled.h>
 
 #include <SPI.h>
 #include <Wire.h>
@@ -10,13 +10,14 @@
 #include <ResponseStruct.h>
 #include <WifiClientEsp32.h>
 #include <HttpClientEsp32.h>
+#include <GpsData.h>
 
 #define SCREEN_WIDTH 128    // OLED display width, in pixels
-#define SCREEN_HEIGHT 64    // OLED display height, in pixels
+#define SCREEN_HEIGHT 32    // OLED display height, in pixels
 #define OLED_RESET -1       // Reset pin # (or -1 if sharing Arduino reset pin)
-#define SCREEN_ADDRESS 0x3D ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
+#define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-// SimpleOled simpleOled(&display);
+SimpleOled simpleOled(&display);
 
 #ifndef STASSID
 // #define STASSID "UFI-495947"
@@ -26,7 +27,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define STAPSK "dontsovaAlya"
 #define HOST "195.78.246.46"
 #define PORT "8080"
-#define URL "/get-gps"
+#define URL "/set-gps"
 #endif
 
 const char *wifiSsid = STASSID;
@@ -37,17 +38,18 @@ const char *url = URL;
 
 SoftwareSerial ss(5, 6);
 GpsReader gpsReader(&ss);
+GpsData gpsData;
 WifiClientEsp32 wifiClient(wifiSsid, wifiPassword);
-HttpClientEsp32 httpClient(&wifiClient, host, url, port);
+HttpClientEsp32 httpClient(host, url, port);
 
-// GpsCar gpsCar(&gpsReader, &httpClient, &simpleOled);
+GpsCar gpsCar(&gpsReader, &wifiClient, &httpClient, &simpleOled);
 
 void setup()
 {
   Serial.begin(115200);
   ss.begin(9600);
   wifiClient.begin();
-  httpClient.begin();
+  // httpClient.begin();
   // display.clearDisplay();
   // display.setTextSize(1); // Draw 2X-scale text
   // display.setTextColor(SSD1306_WHITE);
@@ -55,37 +57,38 @@ void setup()
   // display.println(F("initializing..."));
   // display.display();
 
+  if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
+  {
+    Serial.println(F("SSD1306 allocation failed"));
+  }
   // simpleOled.begin();
-  // if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
-  // {
-  //   Serial.println(F("SSD1306 allocation failed"));
-  // }
 
-  // gpsCar.begin();
+  gpsCar.begin();
 }
 
 void loop()
 {
-  gpsReader.readGpsData();
-  if (gpsReader.isReady()){
-    Serial.println("Date/time:");
-    Serial.println(gpsReader.getGpsDateTime());
-    Serial.println("Coordinates:");
-    Serial.println(gpsReader.getGpsLatLng());
-  } else {
-    Serial.println("No gps connection");
-  }
-  if(wifiClient.isConnected()){
-    ResponseStruct *r = httpClient.get();
-    Serial.println(r->code);
-    Serial.println(r->response);
-  // if(httpClient.isWifiConnected()){
-    Serial.println("Local IP:");
-    Serial.println(wifiClient.getLocalIP());
-    // simpleOled.writeFirstRow(wifiClient.getLocalIP());
-  } else {
-    Serial.println('No connection to wifi');
-  }
-  delay(20000);
-  // gpsCar.loop();
+  // gpsReader.readGpsData();
+  // if (gpsReader.isReady()){
+  //   Serial.println("Date/time:");
+  //   Serial.println(gpsReader.getGpsDateTime());
+  //   Serial.println("Coordinates:");
+  //   Serial.println(gpsReader.getGpsLatLng());
+  // } else {
+  //   Serial.println("No gps connection");
+  // }
+  // if(wifiClient.isConnected()){
+  //   ResponseStruct *r = httpClient.get();
+  //   if (r->code == 200) {
+  //     gpsData.parse(r->response);
+  //     simpleOled.clear();
+  //     simpleOled.writeFirstRow(gpsData.getGpsDateTime());
+  //     simpleOled.writeSecondRow(gpsData.getGpsLatLng());
+  //   }
+  // } else {
+  //   simpleOled.clear();
+  //   simpleOled.writeFirstRow("No Wifi connection");
+  // }
+  delay(2000);
+  gpsCar.loop();
 }

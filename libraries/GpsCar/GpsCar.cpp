@@ -4,17 +4,20 @@
 
 GpsCar::GpsCar(
     GpsReader *gpsReader,
+    IWifiClient *wifiClient,
     IHttpClient *client,
     ISimpleDisplay *display)
 {
     this->gpsReader = gpsReader;
     this->client = client;
+    this->wifiClient = wifiClient;
     this->display = display;
     this->displaySwitcher = SimpleDisplaySwitcher(this->display);
 }
 
 void GpsCar::begin()
 {
+    this->wifiClient->begin();
     this->display->begin();
     this->timeout.checkTimeout();
     do
@@ -24,7 +27,7 @@ void GpsCar::begin()
     this->client->begin();
     this->display->clear();
     this->display->writeFirstRow(this->localIpString);
-    this->display->writeSecondRow(this->client->getLocalIP());
+    this->display->writeSecondRow(this->wifiClient->getLocalIP());
 }
 void GpsCar::loop()
 {
@@ -40,11 +43,9 @@ void GpsCar::loop()
                 this->localIpString);
             this->displaySwitcher.writeSecondRow(
                 this->gpsReader->getGpsLatLng(),
-                this->client->getLocalIP());
+                this->wifiClient->getLocalIP());
             this->displaySwitcher.switchDisplay();
             ResponseStruct *rp = this->client->get(this->gpsQueryKey, this->gpsData);
-            Serial.println(rp->code);
-            Serial.println(rp->response);
         }
         else
         {
@@ -52,8 +53,8 @@ void GpsCar::loop()
                 this->noGpsString,
                 this->localIpString);
             this->displaySwitcher.writeSecondRow(
-                this->client->getLocalIP(),
-                this->client->getLocalIP());
+                this->wifiClient->getLocalIP(),
+                this->wifiClient->getLocalIP());
         }
     }
 }

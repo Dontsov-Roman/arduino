@@ -12,12 +12,14 @@
 #include <SimpleDisplaySwitcher.h>
 // #include <WifiHttpClient.h>
 #include <IHttpClient.h>
+#include <IWifiClient.h>
 
 class GpsCar
 {
 public:
     GpsCar(
         GpsReader *gpsReader,
+        IWifiClient *wifiClient,
         IHttpClient *client,
         ISimpleDisplay *display);
     void begin();
@@ -25,6 +27,7 @@ public:
 
 protected:
     GpsReader *gpsReader;
+    IWifiClient *wifiClient;
     IHttpClient *client;
     ISimpleDisplay *display;
     SimpleDisplaySwitcher displaySwitcher;
