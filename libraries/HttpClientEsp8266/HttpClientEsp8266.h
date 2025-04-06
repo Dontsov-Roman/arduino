@@ -30,6 +30,7 @@ public:
     ResponseStruct *post(char *body, String key, String value);
     void setHost(const char *host);
     String getLocalIP();
+    bool isWifiConnected();
 
 protected:
     IWifiClient *wifiClient;
@@ -38,7 +39,6 @@ protected:
     ResponseStruct lastResponse;
     ResponseStruct *request(String url, HTTPMethod method, char *body);
     String generateQueryUrl(String url, String key, String value);
-    bool isWifiConnected();
 
 private:
     char fullUrl[64];

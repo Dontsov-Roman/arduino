@@ -15,7 +15,7 @@ HttpClientEsp8266::HttpClientEsp8266(
 
 void HttpClientEsp8266::begin()
 {
-    this->wifiClient->begin();
+    // this->wifiClient->begin();
     sprintf(this->fullUrl, "http://%s:%s%s", this->host, this->port, this->url);
     Serial.println(this->fullUrl);
     this->http.setReuse(true);
@@ -23,22 +23,22 @@ void HttpClientEsp8266::begin()
 ResponseStruct *HttpClientEsp8266::get()
 {
     char *body;
-    return this->request(this->fullUrl, HTTP_GET, body);
+    return this->request(this->fullUrl, HTTP_METHOD_GET, body);
 }
 
 ResponseStruct *HttpClientEsp8266::get(String key, String value)
 {
     char *body;
-    return this->request(this->generateQueryUrl(this->fullUrl, key, value), HTTP_GET, body);
+    return this->request(this->generateQueryUrl(this->fullUrl, key, value), HTTP_METHOD_GET, body);
 }
 
 ResponseStruct *HttpClientEsp8266::post(char *body)
 {
-    return this->request(this->fullUrl, HTTP_POST, body);
+    return this->request(this->fullUrl, HTTP_METHOD_POST, body);
 }
 ResponseStruct *HttpClientEsp8266::post(char *body, String key, String value)
 {
-    return this->request(this->generateQueryUrl(this->fullUrl, key, value), HTTP_POST, body);
+    return this->request(this->generateQueryUrl(this->fullUrl, key, value), HTTP_METHOD_POST, body);
 }
 
 ResponseStruct *HttpClientEsp8266::request(String url, HTTPMethod method, char *body)
@@ -49,7 +49,7 @@ ResponseStruct *HttpClientEsp8266::request(String url, HTTPMethod method, char *
         if (this->http.begin(this->client, url))
         {
 
-            if (method == HTTP_POST)
+            if (method == HTTP_METHOD_POST)
             {
                 this->lastResponse.code = http.POST(body);
             }

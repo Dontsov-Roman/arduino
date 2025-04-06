@@ -8,6 +8,18 @@
 #endif
 #include <ResponseStruct.h>
 
+#define HTTP_METHOD_GET "GET"
+#define HTTP_METHOD_POST "POST"
+#define HTTP_METHOD_PUT "PUT"
+#define HTTP_METHOD_PATCH "PATCH"
+#define HTTP_METHOD_DELETE "DELETE"
+#define HTTP_HEADER_CONTENT_LENGTH "Content-Length"
+#define HTTP_HEADER_CONTENT_TYPE "Content-Type"
+#define HTTP_HEADER_CONNECTION "Connection"
+#define HTTP_HEADER_TRANSFER_ENCODING "Transfer-Encoding"
+#define HTTP_HEADER_USER_AGENT "User-Agent"
+#define HTTP_HEADER_VALUE_CHUNKED "chunked"
+
 class IHttpClient
 {
 public:
@@ -19,5 +31,6 @@ public:
     virtual void setHost(const char *host);
     virtual String generateQueryUrl(String url, String key, String value);
     virtual String getLocalIP();
+    virtual bool isWifiConnected();
 };
 #endif

@@ -3,19 +3,19 @@
 #include <GpsReader.h>
 // #include <SimpleOled.h>
 
-// #include <SPI.h>
-// #include <Wire.h>
-// #include <Adafruit_GFX.h>
-// #include <Adafruit_SSD1306.h>
-
+#include <SPI.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include <ResponseStruct.h>
 #include <WifiClientEsp32.h>
 #include <HttpClientEsp32.h>
 
 #define SCREEN_WIDTH 128    // OLED display width, in pixels
-#define SCREEN_HEIGHT 32    // OLED display height, in pixels
+#define SCREEN_HEIGHT 64    // OLED display height, in pixels
 #define OLED_RESET -1       // Reset pin # (or -1 if sharing Arduino reset pin)
-#define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
-// Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+#define SCREEN_ADDRESS 0x3D ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 // SimpleOled simpleOled(&display);
 
 #ifndef STASSID
@@ -26,7 +26,7 @@
 #define STAPSK "dontsovaAlya"
 #define HOST "195.78.246.46"
 #define PORT "8080"
-#define URL "/set-gps"
+#define URL "/get-gps"
 #endif
 
 const char *wifiSsid = STASSID;
@@ -47,8 +47,15 @@ void setup()
   Serial.begin(115200);
   ss.begin(9600);
   wifiClient.begin();
+  httpClient.begin();
+  // display.clearDisplay();
+  // display.setTextSize(1); // Draw 2X-scale text
+  // display.setTextColor(SSD1306_WHITE);
+  // display.setCursor(0, 0);
+  // display.println(F("initializing..."));
+  // display.display();
+
   // simpleOled.begin();
-  // httpClient.begin();
   // if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
   // {
   //   Serial.println(F("SSD1306 allocation failed"));
@@ -59,12 +66,6 @@ void setup()
 
 void loop()
 {
-  // display.clearDisplay();
-  // display.setTextSize(1); // Draw 2X-scale text
-  // display.setTextColor(SSD1306_WHITE);
-  // display.setCursor(0, 0);
-  // display.println(F("initializing..."));
-  // display.display();
   gpsReader.readGpsData();
   if (gpsReader.isReady()){
     Serial.println("Date/time:");
@@ -75,12 +76,16 @@ void loop()
     Serial.println("No gps connection");
   }
   if(wifiClient.isConnected()){
+    ResponseStruct *r = httpClient.get();
+    Serial.println(r->code);
+    Serial.println(r->response);
+  // if(httpClient.isWifiConnected()){
     Serial.println("Local IP:");
     Serial.println(wifiClient.getLocalIP());
     // simpleOled.writeFirstRow(wifiClient.getLocalIP());
   } else {
     Serial.println('No connection to wifi');
   }
-  delay(1000);
+  delay(20000);
   // gpsCar.loop();
 }
