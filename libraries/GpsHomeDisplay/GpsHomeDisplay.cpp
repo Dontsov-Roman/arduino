@@ -34,7 +34,7 @@ void GpsHomeDisplay::loop()
         this->display->clear();
         if (this->wifiClient->isConnected())
         {
-            this->gpsData.parse(this->gpsHttpClient->get());
+            this->gpsData.parse(this->gpsHttpClient->get()->response);
             if (this->gpsData.isDateTimeReady)
             {
                 this->displaySwitcher.writeFirstRow("Last GPS Date Time:", "Local IP:");

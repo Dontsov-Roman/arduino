@@ -6,7 +6,7 @@
 #include <WProgram.h>
 #endif
 // #include "Sensor.h"
-#include "SimpleSensor.h"
+#include <SimpleSensor.h>
 #include <SimpleTimeout.h>
 
 class SimpleToggleSensor : public SimpleSensor

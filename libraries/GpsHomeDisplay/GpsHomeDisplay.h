@@ -26,11 +26,11 @@ public:
     void loop();
 
 private:
-    SimpleTimeout *getGpsTimeout;
     IWifiClient *wifiClient;
     IHttpClient *gpsHttpClient;
     ISimpleDisplay *display;
     SimpleToggleSensor *button;
+    SimpleTimeout *getGpsTimeout;
     SimpleDisplaySwitcher displaySwitcher;
     GpsData gpsData;
     bool previousButtonState = false;
@@ -38,5 +38,5 @@ private:
     void toggleLight();
     String turnOnLightUrl = "/led/1";
     String turnOffLightUrl = "/led/0";
-}
+};
 #endif

@@ -1,7 +1,7 @@
 #include <GpsCar.h>
 #include <SoftwareSerial.h>
 #include <GpsReader.h>
-#include <WifiHttpClient.h>
+// #include <WifiHttpClient.h>
 #include <SimpleOled.h>
 
 #include <SPI.h>

@@ -1,6 +1,7 @@
-
-#include <SimpleOled.h>
+#include <WifiClientEsp32.h>
+#include <HttpClientEsp32.h>
 #include <GpsHomeDisplay.h>
+#include <SimpleOled.h>
 #include <SimpleToggleSensor.h>
 #include <SimpleTimeout.h>
 
@@ -8,8 +9,6 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-#include <WifiClientEsp32.h>
-#include <HttpClientEsp32.h>
 
 #define SCREEN_WIDTH 128    // OLED display width, in pixels
 #define SCREEN_HEIGHT 32    // OLED display height, in pixels
