@@ -5,13 +5,19 @@ GpsHomeDisplay::GpsHomeDisplay(
     IHttpClient *gpsHttpClient,
     ISimpleDisplay *display,
     SimpleToggleSensor *button,
-    SimpleTimeout *getGpsTimeout)
+    SimpleTimeout *getGpsTimeout,
+    SimpleTimeout *initializationTimeout,
+    SimpleTimeout *displaySwitchTimeout,
+    SimpleTimeout *reconnectionTimeout)
 {
     this->wifiClient = wifiClient;
     this->gpsHttpClient = gpsHttpClient;
     this->display = display;
     this->button = button;
     this->getGpsTimeout = getGpsTimeout;
+    this->initializationTimeout = initializationTimeout;
+    this->displaySwitchTimeout = displaySwitchTimeout;
+    this->reconnectionTimeout = reconnectionTimeout;
     this->displaySwitcher = SimpleDisplaySwitcher(this->display);
     this->gpsData = GpsData();
 }
@@ -21,31 +27,38 @@ void GpsHomeDisplay::begin()
     this->gpsHttpClient->begin();
     this->display->begin();
 
-    this->getGpsTimeout->checkTimeout();
+    this->initializationTimeout->checkTimeout();
     do
     {
         delay(1000);
-    } while (!this->getGpsTimeout->checkTimeout());
+    } while (!this->initializationTimeout->checkTimeout());
 }
 void GpsHomeDisplay::loop()
 {
-    if (this->getGpsTimeout->checkTimeout())
+    if (this->wifiClient->isConnected())
     {
-        this->display->clear();
-        if (this->wifiClient->isConnected())
+        if (this->getGpsTimeout->checkTimeout())
         {
             this->gpsData.parse(this->gpsHttpClient->get()->response);
+        }
+        if (this->displaySwitchTimeout->checkTimeout())
+        {
+            this->display->clear();
+            this->displaySwitcher.writeFirstRow("Last GPS Date Time:", "Local IP:");
             if (this->gpsData.isDateTimeReady)
             {
-                this->displaySwitcher.writeFirstRow("Last GPS Date Time:", "Local IP:");
                 this->displaySwitcher.writeSecondRow(this->gpsData.getGpsDateTime(), this->wifiClient->getLocalIP());
             }
+            else
+            {
+                this->displaySwitcher.writeSecondRow("No GPS Data", this->wifiClient->getLocalIP());
+            }
+            this->displaySwitcher.switchDisplay();
         }
-        else
-        {
-            this->reconnect();
-        }
-        this->displaySwitcher.switchDisplay();
+    }
+    else if (this->reconnectionTimeout->checkTimeout())
+    {
+        this->reconnect();
     }
     this->toggleLight();
 }
@@ -61,7 +74,7 @@ void GpsHomeDisplay::toggleLight()
 void GpsHomeDisplay::reconnect()
 {
     this->display->clear();
-    this->displaySwitcher.writeFirstRow("No connection", "No connection");
-    this->displaySwitcher.writeSecondRow("Reconnecting...", "Reconnecting...");
+    this->display->writeFirstRow("No connection");
+    this->display->writeSecondRow("Reconnecting...");
     this->wifiClient->begin();
 }

@@ -21,7 +21,10 @@ public:
         IHttpClient *gpsHttpClient,
         ISimpleDisplay *display,
         SimpleToggleSensor *button,
-        SimpleTimeout *getGpsTimeout);
+        SimpleTimeout *getGpsTimeout,
+        SimpleTimeout *initializationTimeout,
+        SimpleTimeout *displaySwitchTimeout,
+        SimpleTimeout *reconnectionTimeout);
     void begin();
     void loop();
 
@@ -31,6 +34,9 @@ private:
     ISimpleDisplay *display;
     SimpleToggleSensor *button;
     SimpleTimeout *getGpsTimeout;
+    SimpleTimeout *initializationTimeout;
+    SimpleTimeout *displaySwitchTimeout;
+    SimpleTimeout *reconnectionTimeout;
     SimpleDisplaySwitcher displaySwitcher;
     GpsData gpsData;
     bool previousButtonState = false;

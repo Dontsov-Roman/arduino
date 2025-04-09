@@ -36,10 +36,22 @@ const char *url = URL;
 
 WifiClientEsp32 wifiClient(wifiSsid, wifiPassword);
 HttpClientEsp32 httpClient(host, url, port);
-SimpleTimeout gpsTimeout(10000);
 SimpleTimeout buttonTimeout(1000);
-SimpleToggleSensor button(5, &buttonTimeout);
-GpsHomeDisplay gpsHomeDisplay(&wifiClient, &httpClient, &simpleOled, &button, &gpsTimeout);
+SimpleTimeout gpsTimeout(120000);
+SimpleTimeout initializationTimeout(5000);
+SimpleTimeout displaySwitchTimeout(3000);
+SimpleTimeout reconnectionTimeout(30000);
+SimpleToggleSensor button(3, &buttonTimeout);
+GpsHomeDisplay gpsHomeDisplay(
+  &wifiClient,
+  &httpClient,
+  &simpleOled,
+  &button,
+  &gpsTimeout,
+  &initializationTimeout,
+  &displaySwitchTimeout,
+  &reconnectionTimeout
+  );
 
 void setup()
 {
