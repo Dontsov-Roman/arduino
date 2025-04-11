@@ -31,6 +31,6 @@ private:
     char time[9];
     char date[9];
     char day[12];
-    char dayTime[16];
+    char dayTime[18];
 };
 #endif
