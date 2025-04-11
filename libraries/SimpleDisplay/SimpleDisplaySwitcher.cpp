@@ -1,25 +1,48 @@
 #include <SimpleDisplaySwitcher.h>
 
-void SimpleDisplaySwitcher::writeFirstRow(String firstString, String secondString) {
-    if (this->displayCase) {
+void SimpleDisplaySwitcher::writeFirstRow(String firstString, String secondString)
+{
+    if (this->displayCase)
+    {
         this->display->writeFirstRow(secondString);
-    } else {
+    }
+    else
+    {
         this->display->writeFirstRow(firstString);
     }
 }
 
-void SimpleDisplaySwitcher::writeSecondRow(String firstString, String secondString) {
-    if (this->displayCase) {
+void SimpleDisplaySwitcher::writeSecondRow(String firstString, String secondString)
+{
+    if (this->displayCase)
+    {
         this->display->writeSecondRow(secondString);
-    } else {
+    }
+    else
+    {
         this->display->writeSecondRow(firstString);
     }
 }
+void SimpleDisplaySwitcher::writeThirdRow(String firstString, String secondString)
+{
+    if (this->displayCase)
+    {
+        this->display->writeThirdRow(secondString);
+    }
+    else
+    {
+        this->display->writeThirdRow(firstString);
+    }
+}
 
-void SimpleDisplaySwitcher::switchDisplay() {
-    if (this->displayCase) {
+void SimpleDisplaySwitcher::switchDisplay()
+{
+    if (this->displayCase)
+    {
         this->displayCase = 0;
-    } else {
+    }
+    else
+    {
         this->displayCase = 1;
     }
 }

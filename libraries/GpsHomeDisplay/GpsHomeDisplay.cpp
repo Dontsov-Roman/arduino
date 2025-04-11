@@ -5,6 +5,7 @@ GpsHomeDisplay::GpsHomeDisplay(
     IHttpClient *gpsHttpClient,
     ISimpleDisplay *display,
     SimpleToggleSensor *button,
+    NtpTime *ntpTime,
     SimpleTimeout *getGpsTimeout,
     SimpleTimeout *initializationTimeout,
     SimpleTimeout *displaySwitchTimeout,
@@ -14,6 +15,7 @@ GpsHomeDisplay::GpsHomeDisplay(
     this->gpsHttpClient = gpsHttpClient;
     this->display = display;
     this->button = button;
+    this->ntpTime = ntpTime;
     this->getGpsTimeout = getGpsTimeout;
     this->initializationTimeout = initializationTimeout;
     this->displaySwitchTimeout = displaySwitchTimeout;
@@ -32,6 +34,7 @@ void GpsHomeDisplay::begin()
     {
         delay(1000);
     } while (!this->initializationTimeout->checkTimeout());
+    this->ntpTime->begin();
 }
 void GpsHomeDisplay::loop()
 {
@@ -53,6 +56,8 @@ void GpsHomeDisplay::loop()
             {
                 this->displaySwitcher.writeSecondRow("No GPS Data", this->wifiClient->getLocalIP());
             }
+            // this->displaySwitcher.writeThirdRow(this->ntpTime->getDayTime(), this->ntpTime->getDayTime());
+            this->display->writeThirdRow(this->ntpTime->getDayTime());
             this->displaySwitcher.switchDisplay();
         }
     }
@@ -61,6 +66,7 @@ void GpsHomeDisplay::loop()
         this->reconnect();
     }
     this->toggleLight();
+    this->ntpTime->loop();
 }
 void GpsHomeDisplay::toggleLight()
 {

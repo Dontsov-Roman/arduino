@@ -34,3 +34,9 @@ void SimpleOled::writeSecondRow(String string)
   this->display->println(string);
   this->display->display();
 }
+void SimpleOled::writeThirdRow(String string)
+{
+  this->display->setCursor(0, 20);
+  this->display->println(string);
+  this->display->display();
+}

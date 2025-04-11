@@ -12,6 +12,7 @@
 #include <IWifiClient.h>
 #include <GpsData.h>
 #include <SimpleToggleSensor.h>
+#include <NtpTime.h>
 
 class GpsHomeDisplay
 {
@@ -21,6 +22,7 @@ public:
         IHttpClient *gpsHttpClient,
         ISimpleDisplay *display,
         SimpleToggleSensor *button,
+        NtpTime *ntpTime,
         SimpleTimeout *getGpsTimeout,
         SimpleTimeout *initializationTimeout,
         SimpleTimeout *displaySwitchTimeout,
@@ -39,6 +41,7 @@ private:
     SimpleTimeout *reconnectionTimeout;
     SimpleDisplaySwitcher displaySwitcher;
     GpsData gpsData;
+    NtpTime *ntpTime;
     bool previousButtonState = false;
     void reconnect();
     void toggleLight();

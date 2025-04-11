@@ -5,11 +5,13 @@
 #else
 #include <WProgram.h>
 #endif
-class ISimpleDisplay {
-    public:
-        virtual void writeFirstRow(String address);
-        virtual void writeSecondRow(String address);
-        virtual void begin();
-        virtual void clear();
+class ISimpleDisplay
+{
+public:
+    virtual void writeFirstRow(String address);
+    virtual void writeSecondRow(String address);
+    virtual void writeThirdRow(String address);
+    virtual void begin();
+    virtual void clear();
 };
 #endif

@@ -4,6 +4,7 @@
 #include <SimpleOled.h>
 #include <SimpleToggleSensor.h>
 #include <SimpleTimeout.h>
+#include <NtpTime.h>
 
 #include <SPI.h>
 #include <Wire.h>
@@ -14,8 +15,6 @@
 #define SCREEN_HEIGHT 32    // OLED display height, in pixels
 #define OLED_RESET -1       // Reset pin # (or -1 if sharing Arduino reset pin)
 #define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-SimpleOled simpleOled(&display);
 
 #ifndef STASSID
 // #define STASSID "UFI-495947"
@@ -26,6 +25,9 @@ SimpleOled simpleOled(&display);
 #define HOST "195.78.246.46"
 #define PORT "8080"
 #define URL "/get-gps"
+#define NTP_SERVER "pool.ntp.org"
+#define GMT_OFFSET 7200
+#define DAY_LIGHT_OFFSET 3600
 #endif
 
 const char *wifiSsid = STASSID;
@@ -33,20 +35,32 @@ const char *wifiPassword = STAPSK;
 const char *host = HOST;
 const char *port = PORT;
 const char *url = URL;
+const char *ntpServer = NTP_SERVER;
+const long gmtOffset = GMT_OFFSET;
+const int dayLightOffset = DAY_LIGHT_OFFSET;
 
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+SimpleOled simpleOled(&display);
 WifiClientEsp32 wifiClient(wifiSsid, wifiPassword);
 HttpClientEsp32 httpClient(host, url, port);
+
 SimpleTimeout buttonTimeout(1000);
 SimpleTimeout gpsTimeout(120000);
 SimpleTimeout initializationTimeout(5000);
-SimpleTimeout displaySwitchTimeout(3000);
+SimpleTimeout displaySwitchTimeout(5000);
 SimpleTimeout reconnectionTimeout(30000);
+SimpleTimeout ntpTimer(60000);
+
+NtpTime ntpTime(&ntpTimer, ntpServer, gmtOffset, dayLightOffset);
 SimpleToggleSensor button(3, &buttonTimeout);
+
 GpsHomeDisplay gpsHomeDisplay(
   &wifiClient,
   &httpClient,
   &simpleOled,
   &button,
+  &ntpTime,
   &gpsTimeout,
   &initializationTimeout,
   &displaySwitchTimeout,
