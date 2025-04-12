@@ -47,17 +47,17 @@ void GpsHomeDisplay::loop()
         if (this->displaySwitchTimeout->checkTimeout())
         {
             this->display->clear();
-            this->displaySwitcher.writeFirstRow("Last GPS Date Time:", "Local IP:");
+            this->display->writeFirstRow(this->ntpTime->getDayTime());
+
+            this->displaySwitcher.writeSecondRow("Last GPS Date Time:", "IP: " + this->wifiClient->getLocalIP());
             if (this->gpsData.isDateTimeReady)
             {
-                this->displaySwitcher.writeSecondRow(this->gpsData.getGpsDateTime(), this->wifiClient->getLocalIP());
+                this->displaySwitcher.writeThirdRow(this->gpsData.getGpsDateTime(), this->gpsData.getGpsDateTime());
             }
             else
             {
-                this->displaySwitcher.writeSecondRow("No GPS Data", this->wifiClient->getLocalIP());
+                this->display->writeThirdRow("No GPS Data");
             }
-            // this->displaySwitcher.writeThirdRow(this->ntpTime->getDayTime(), this->ntpTime->getDayTime());
-            this->display->writeThirdRow(this->ntpTime->getDayTime());
             this->displaySwitcher.switchDisplay();
         }
     }
