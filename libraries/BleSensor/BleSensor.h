@@ -5,10 +5,10 @@
 #else
 #include <WProgram.h>
 #endif
-#include "Sensor.h"
+#include "ISensor.h"
 
 const int DEFAULT_BUFFER_LENGTH = 3;
-class BleSensor : public Sensor
+class BleSensor : public ISensor
 {
 public:
   BleSensor();

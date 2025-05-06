@@ -5,12 +5,12 @@
 #else
 #include <WProgram.h>
 #endif
-#include "Sensor.h"
+#include "ISensor.h"
 #include "PhotoSensor.h"
 #include "Relay.h"
 #include "./MoveSensorMode.h"
 
-class MoveSensor : public Sensor
+class MoveSensor : public ISensor
 {
 public:
   MoveSensor(Relay *rel, Relay *lightRel, PhotoSensor *photo, MoveSensorMode mode);

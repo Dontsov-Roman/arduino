@@ -5,9 +5,9 @@
 #else
 #include <WProgram.h>
 #endif
-#include "Sensor.h"
+#include "ISensor.h"
 
-class SimpleSensor : public Sensor
+class SimpleSensor : public ISensor
 {
 protected:
     bool enabled;

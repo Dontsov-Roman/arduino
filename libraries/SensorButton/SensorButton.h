@@ -5,9 +5,9 @@
 #else
 #include <WProgram.h>
 #endif
-#include <Sensor.h>
+#include <ISensor.h>
 
-class SensorButton : public Sensor
+class SensorButton : public ISensor
 {
 public:
   SensorButton(uint8_t _pin);

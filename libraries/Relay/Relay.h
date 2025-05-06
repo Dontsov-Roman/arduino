@@ -5,9 +5,9 @@
 #else
 #include <WProgram.h>
 #endif
-#include "Sensor.h"
+#include "ISensor.h"
 
-class Relay : public Sensor
+class Relay : public ISensor
 {
 protected:
   int pin;

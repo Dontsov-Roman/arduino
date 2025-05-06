@@ -1,7 +1,6 @@
 #include "Relay.h"
-#include "Sensor.h"
 
-Relay ::Relay(int p, int b) : Sensor()
+Relay ::Relay(int p, int b)
 {
   this->pin = p;
   this->bit = b;

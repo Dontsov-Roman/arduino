@@ -5,9 +5,9 @@
 #else
 #include <WProgram.h>
 #endif
-#include "Sensor.h"
+#include "ISensor.h"
 
-class ThresholdSensor : public Sensor
+class ThresholdSensor : public ISensor
 {
 public:
   void begin();
