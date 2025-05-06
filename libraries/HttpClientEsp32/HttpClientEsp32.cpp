@@ -13,7 +13,14 @@ HttpClientEsp32::HttpClientEsp32(
 
 void HttpClientEsp32::begin()
 {
-    sprintf(this->fullUrl, "http://%s:%s%s", this->host, this->port, this->url);
+    if (this->isSecure)
+    {
+        sprintf(this->fullUrl, "https://%s:%s%s", this->host, this->port, this->url);
+    }
+    else
+    {
+        sprintf(this->fullUrl, "http://%s:%s%s", this->host, this->port, this->url);
+    }
     this->http.setReuse(true);
 }
 ResponseStruct *HttpClientEsp32::get()
@@ -24,7 +31,15 @@ ResponseStruct *HttpClientEsp32::get()
 ResponseStruct *HttpClientEsp32::get(String url)
 {
     char *body;
-    String newUrl = "http://";
+    String newUrl;
+    if (this->isSecure)
+    {
+        newUrl += "https://";
+    }
+    else
+    {
+        newUrl += "http://";
+    }
     newUrl += this->host;
     newUrl += ":";
     newUrl += this->port;
@@ -94,4 +109,8 @@ String HttpClientEsp32::generateQueryUrl(String url, String key, String value)
     newUrl += "=";
     newUrl += value;
     return newUrl;
+}
+void HttpClientEsp32::setSecure(bool isSecure)
+{
+    this->isSecure = isSecure;
 }

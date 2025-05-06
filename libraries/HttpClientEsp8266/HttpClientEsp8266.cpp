@@ -93,3 +93,8 @@ String HttpClientEsp8266::generateQueryUrl(String url, String key, String value)
     newUrl += value;
     return newUrl;
 }
+
+void HttpClientEsp8266::setSecure(bool isSecure)
+{
+    this->isSecure = isSecure;
+}

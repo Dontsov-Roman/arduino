@@ -27,6 +27,7 @@ public:
     ResponseStruct *post(char *body);
     ResponseStruct *post(char *body, String key, String value);
     void setHost(const char *host);
+    void setSecure(bool isSecure);
 
 protected:
     WifiClientEsp32 *wifiClient;
@@ -35,6 +36,7 @@ protected:
     ResponseStruct lastResponse;
     ResponseStruct *request(String url, const char *method, char *body);
     String generateQueryUrl(String url, String key, String value);
+    bool isSecure = false;
 
 private:
     char fullUrl[64];

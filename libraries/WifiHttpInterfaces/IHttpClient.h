@@ -30,5 +30,6 @@ public:
     virtual ResponseStruct *post(char *body);
     virtual ResponseStruct *post(char *body, String key, String value);
     virtual void setHost(const char *host);
+    virtual void setSecure(bool isSecure);
 };
 #endif
