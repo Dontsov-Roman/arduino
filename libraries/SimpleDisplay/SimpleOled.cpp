@@ -10,7 +10,7 @@ void SimpleOled::begin()
   this->clear();
 
   this->display->setTextSize(1);
-  this->display->setTextColor(WHITE);
+  this->display->setTextColor(SSD1306_WHITE);
   this->display->setCursor(0, 0);
   this->display->println(F("initializing..."));
   this->display->display();
