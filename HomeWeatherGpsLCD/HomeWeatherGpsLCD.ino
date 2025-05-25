@@ -1,101 +1,95 @@
-#include <Arduino_GFX_Library.h>
-#include <Arduino_GFX.h>
+#include <Arduino.h>
+#include <esp_display_panel.hpp>
 
-// Определение пинов подключения
-#define LCD_R0 4
-#define LCD_R1 5
-#define LCD_R2 6 //LCD_G??
-#define LCD_R3 7
-#define LCD_R4 15
+#include <lvgl.h>
+#include "lvgl_v8_port.h"
+#include <demos/lv_demos.h>
 
-#define LCD_G0 16
-#define LCD_G1 17
-#define LCD_G2 18
-#define LCD_G3 8
-#define LCD_G4 3
-#define LCD_G5 46
+using namespace esp_panel::drivers;
+using namespace esp_panel::board;
 
-#define LCD_B0 9
-#define LCD_B1 10
-#define LCD_B2 11
-#define LCD_B3 12
-#define LCD_B4 13
+/**
+ * To use the built-in examples and demos of LVGL uncomment the includes below respectively.
+ */
+ // #include <demos/lv_demos.h>
+ // #include <examples/lv_examples.h>
 
-#define LCD_CLK 14
-#define LCD_DISP 21
-
-#define LCD_HSYNC 47
-#define LCD_VSYNC 48
-#define LCD_DE 40
-#define BL_EN 45
-
-// Тайминги из даташита или отладки
-#define H_RES 480
-#define V_RES 272
-
-// Инициализация панели
-// Arduino_ESP32RGBPanel *rgbPanel = new Arduino_ESP32RGBPanel(
-//     TFT_DE, TFT_VSYNC, TFT_HSYNC, TFT_PCLK,
-//     TFT_R0, TFT_R1, TFT_R2, TFT_R3, TFT_R4,
-//     TFT_G0, TFT_G1, TFT_G2, TFT_G3, TFT_G4, TFT_G5,
-//     TFT_B0, TFT_B1, TFT_B2, TFT_B3, TFT_B4,
-//     1, 40, 48, 40, // HSYNC: polarity, front porch, pulse width, back porch
-//     1, 13, 3, 32,  // VSYNC: polarity, front porch, pulse width, back porch
-//     0, 6000000L, false, 480, 272);
-Arduino_ESP32RGBPanel *rgbPanel = new Arduino_ESP32RGBPanel(
-    LCD_DE,
-    LCD_VSYNC,
-    LCD_HSYNC,
-    LCD_CLK,
-    // RED
-    LCD_R0,
-    LCD_R1,
-    LCD_R2,
-    LCD_R3,
-    LCD_R4,
-    // GREEN
-    LCD_G0,
-    LCD_G1,
-    LCD_G2,
-    LCD_G3,
-    LCD_G4,
-    LCD_G5,
-    // BLUE
-    LCD_B0,
-    LCD_B1,
-    LCD_B2,
-    LCD_B3,
-    LCD_B4,
-
-    1, 40, 48, 40, // HSYNC: polarity, front porch, pulse width, back porch
-    1, 13, 3, 32,  // VSYNC: polarity, front porch, pulse width, back porch
-    1, 6000000L, false, 480, 272);
-// Инициализация дисплея
-Arduino_RGB_Display *gfx = new Arduino_RGB_Display(
-    480, 272,                     // ширина, высота
-    rgbPanel,                     // RGB-интерфейс
-    0,              // uint8_t r
-    false,                        // bool auto_flush,
-    NULL,                         // Arduino_DataBus *bus
-    LCD_DISP,              // int8_t rst
-    st7701_type5_init_operations, // Инициализация ST7701
-    sizeof(st7701_type5_init_operations));
 void setup()
 {
+    String title = "LVGL porting example";
 
-  pinMode(BL_EN, OUTPUT);
-  digitalWrite(BL_EN, HIGH);
-  gfx->begin();
+    Serial.begin(115200);
 
-  gfx->fillScreen(RGB565_RED);
+    Serial.println("Initializing board");
+    Board *board = new Board();
+    board->init();
 
-  gfx->setCursor(10, 10);
-  gfx->setTextColor(RGB565_WHITE);
-  gfx->setTextSize(6);
-  gfx->println("Hello, World!");
+    #if LVGL_PORT_AVOID_TEARING_MODE
+    auto lcd = board->getLCD();
+    // When avoid tearing function is enabled, the frame buffer number should be set in the board driver
+    lcd->configFrameBufferNumber(LVGL_PORT_DISP_BUFFER_NUM);
+#if ESP_PANEL_DRIVERS_BUS_ENABLE_RGB && CONFIG_IDF_TARGET_ESP32S3
+    auto lcd_bus = lcd->getBus();
+    /**
+     * As the anti-tearing feature typically consumes more PSRAM bandwidth, for the ESP32-S3, we need to utilize the
+     * "bounce buffer" functionality to enhance the RGB data bandwidth.
+     * This feature will consume `bounce_buffer_size * bytes_per_pixel * 2` of SRAM memory.
+     */
+    if (lcd_bus->getBasicAttributes().type == ESP_PANEL_BUS_TYPE_RGB) {
+        static_cast<BusRGB *>(lcd_bus)->configRGB_BounceBufferSize(lcd->getFrameWidth() * 10);
+    }
+#endif
+#endif
+    assert(board->begin());
+
+    Serial.println("Initializing LVGL");
+    lvgl_port_init(board->getLCD(), board->getTouch());
+
+    Serial.println("Creating UI");
+    /* Lock the mutex due to the LVGL APIs are not thread-safe */
+    lvgl_port_lock(-1);
+
+    /**
+     * Create the simple labels
+     */
+    lv_obj_t *label_1 = lv_label_create(lv_scr_act());
+    lv_label_set_text(label_1, "Hello World!");
+    lv_obj_set_style_text_font(label_1, &lv_font_montserrat_30, 0);
+    lv_obj_align(label_1, LV_ALIGN_CENTER, 0, -20);
+    lv_obj_t *label_2 = lv_label_create(lv_scr_act());
+    lv_label_set_text_fmt(
+        label_2, "ESP32_Display_Panel (%d.%d.%d)",
+        ESP_PANEL_VERSION_MAJOR, ESP_PANEL_VERSION_MINOR, ESP_PANEL_VERSION_PATCH
+    );
+    lv_obj_set_style_text_font(label_2, &lv_font_montserrat_16, 0);
+    lv_obj_align_to(label_2, label_1, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
+    lv_obj_t *label_3 = lv_label_create(lv_scr_act());
+    lv_label_set_text_fmt(label_3, "LVGL (%d.%d.%d)", LVGL_VERSION_MAJOR, LVGL_VERSION_MINOR, LVGL_VERSION_PATCH);
+    lv_obj_set_style_text_font(label_3, &lv_font_montserrat_16, 0);
+    lv_obj_align_to(label_3, label_2, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
+
+    /**
+     * Try an example. Don't forget to uncomment header.
+     * See all the examples online: https://docs.lvgl.io/master/examples.html
+     * source codes: https://github.com/lvgl/lvgl/tree/e7f88efa5853128bf871dde335c0ca8da9eb7731/examples
+     */
+    //  lv_example_btn_1();
+
+    /**
+     * Or try out a demo.
+     * Don't forget to uncomment header and enable the demos in `lv_conf.h`. E.g. `LV_USE_DEMO_WIDGETS`
+     */
+    lv_demo_widgets();
+    // lv_demo_benchmark();
+    // lv_demo_music();
+    // lv_demo_stress();
+
+    /* Release the mutex */
+    lvgl_port_unlock();
 }
 
 void loop()
 {
-  // Основной цикл
+    Serial.println("IDLE loop");
+    delay(1000);
 }
