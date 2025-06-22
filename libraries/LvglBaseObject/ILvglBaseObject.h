@@ -16,5 +16,7 @@ public:
     virtual void setFlexAlign(lv_flex_align_t main_place, lv_flex_align_t cross_place, lv_flex_align_t track_place);
     virtual void setText(const char *text);
     virtual void setStyle(lv_style_t *style);
+    virtual lv_obj_t *getNativeObject();
+    virtual void setNativeObject(lv_obj_t *obj);
 };
 #endif

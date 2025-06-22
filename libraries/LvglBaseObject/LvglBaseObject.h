@@ -20,6 +20,7 @@ public:
     void setText(const char *text);
     void setStyle(lv_style_t *style);
     lv_obj_t *getNativeObject();
+    void setNativeObject(lv_obj_t *obj);
 
 protected:
     lv_obj_t *parent;
