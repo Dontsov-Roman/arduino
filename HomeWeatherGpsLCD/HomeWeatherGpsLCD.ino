@@ -1,18 +1,18 @@
 #include <Arduino.h>
-#include <esp_display_panel.hpp>
+// #include <esp_display_panel.hpp>
 
 #include <lvgl.h>
 #include "lvgl_v8_port.h"
 #include <demos/lv_demos.h>
+#include <LvglBaseObject.h>
 
 using namespace esp_panel::drivers;
 using namespace esp_panel::board;
-
 /**
  * To use the built-in examples and demos of LVGL uncomment the includes below respectively.
  */
- // #include <demos/lv_demos.h>
- // #include <examples/lv_examples.h>
+// #include <demos/lv_demos.h>
+// #include <examples/lv_examples.h>
 
 void setup()
 {
@@ -24,7 +24,7 @@ void setup()
     Board *board = new Board();
     board->init();
 
-    #if LVGL_PORT_AVOID_TEARING_MODE
+#if LVGL_PORT_AVOID_TEARING_MODE
     auto lcd = board->getLCD();
     // When avoid tearing function is enabled, the frame buffer number should be set in the board driver
     lcd->configFrameBufferNumber(LVGL_PORT_DISP_BUFFER_NUM);
@@ -35,7 +35,8 @@ void setup()
      * "bounce buffer" functionality to enhance the RGB data bandwidth.
      * This feature will consume `bounce_buffer_size * bytes_per_pixel * 2` of SRAM memory.
      */
-    if (lcd_bus->getBasicAttributes().type == ESP_PANEL_BUS_TYPE_RGB) {
+    if (lcd_bus->getBasicAttributes().type == ESP_PANEL_BUS_TYPE_RGB)
+    {
         static_cast<BusRGB *>(lcd_bus)->configRGB_BounceBufferSize(lcd->getFrameWidth() * 10);
     }
 #endif
@@ -59,8 +60,7 @@ void setup()
     lv_obj_t *label_2 = lv_label_create(lv_scr_act());
     lv_label_set_text_fmt(
         label_2, "ESP32_Display_Panel (%d.%d.%d)",
-        ESP_PANEL_VERSION_MAJOR, ESP_PANEL_VERSION_MINOR, ESP_PANEL_VERSION_PATCH
-    );
+        ESP_PANEL_VERSION_MAJOR, ESP_PANEL_VERSION_MINOR, ESP_PANEL_VERSION_PATCH);
     lv_obj_set_style_text_font(label_2, &lv_font_montserrat_16, 0);
     lv_obj_align_to(label_2, label_1, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
     lv_obj_t *label_3 = lv_label_create(lv_scr_act());
@@ -79,6 +79,7 @@ void setup()
      * Or try out a demo.
      * Don't forget to uncomment header and enable the demos in `lv_conf.h`. E.g. `LV_USE_DEMO_WIDGETS`
      */
+    LvglBaseObject baseObj(label_3);
     lv_demo_widgets();
     // lv_demo_benchmark();
     // lv_demo_music();

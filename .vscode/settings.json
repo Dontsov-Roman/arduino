@@ -1,6 +1,7 @@
 {
   "files.associations": {
     "stack": "cpp",
-    "lv_gif.h": "c"
+    "lv_gif.h": "c",
+    "lv_demo_widgets.h": "c"
   }
 }
