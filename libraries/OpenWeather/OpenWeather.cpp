@@ -6,25 +6,34 @@ OpenWeather::OpenWeather(IHttpClient *client, SimpleTimeout *timeout, const char
     this->timeout = timeout;
     this->appId = appId;
 }
+
 void OpenWeather::setCoords(char *lat, char *lng)
 {
     this->lat = lat;
     this->lng = lng;
 }
+
 void OpenWeather::getWeather()
 {
+    String url;
+    url += "?lat=";
+    url += this->lat;
+    url += "&lon=";
+    url += this->lng;
+    url += "&appid=";
+    url += this->appId;
+    deserializeJson(this->doc, this->client->get(url)->response);
+}
+
+void OpenWeather::loop()
+{
+
     if (this->timeout->checkTimeout())
     {
-        String url = "api.openweathermap.org/data/3.0/onecall";
-        url += "?lat=";
-        url += this->lat;
-        url += "&lon=";
-        url += this->lng;
-        url += "&exclude=minutely,hourly&appid=";
-        url += this->appId;
-        deserializeJson(this->doc, this->client->get(url)->response);
+        this->getWeather();
     }
 }
+
 JsonDocument *OpenWeather::getLastJsonDoc()
 {
     return &this->doc;

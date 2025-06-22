@@ -24,7 +24,15 @@ ResponseStruct *HttpClientEsp8266::get()
 ResponseStruct *HttpClientEsp8266::get(String url)
 {
     char *body;
-    String newUrl = "http://";
+    String newUrl;
+    if (this->isSecure)
+    {
+        newUrl += "https://";
+    }
+    else
+    {
+        newUrl += "http://";
+    }
     newUrl += this->host;
     newUrl += ":";
     newUrl += this->port;

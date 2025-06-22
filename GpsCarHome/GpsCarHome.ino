@@ -32,7 +32,9 @@
 #define OPEN_WEATHER_API_KEY "9a77f4e52681be3d74817619d3689c73"
 #define OPEN_WEATHER_HOST "api.openweathermap.org"
 #define OPEN_WEATHER_PORT "80"
-#define OPEN_WEATHER_URL "/data/3.0/onecall"
+#define OPEN_WEATHER_URL "data/2.5/forecast"
+#define OPEN_WEATHER_LAT "46.403395"
+#define OPEN_WEATHER_LNG "30.721698"
 #endif
 
 const char *wifiSsid = STASSID;
@@ -43,14 +45,20 @@ const char *url = URL;
 const char *ntpServer = NTP_SERVER;
 const long gmtOffset = GMT_OFFSET;
 const int dayLightOffset = DAY_LIGHT_OFFSET;
+
+const char *openWeatherHost = OPEN_WEATHER_HOST;
+const char *openWeatherUrl = OPEN_WEATHER_URL;
+const char *openWeatherPort = OPEN_WEATHER_PORT;
 const char *openWeatherApiKey = OPEN_WEATHER_API_KEY;
+char *openWeatherLat = OPEN_WEATHER_LAT;
+char *openWeatherLng = OPEN_WEATHER_LNG;
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 SimpleOled simpleOled(&display);
 WifiClientEsp32 wifiClient(wifiSsid, wifiPassword);
 HttpClientEsp32 httpClient(host, url, port);
-HttpClientEsp32 httpClientOW(host, url, port);
+HttpClientEsp32 httpClientOW(openWeatherHost, openWeatherUrl, openWeatherPort);
 
 SimpleTimeout buttonTimeout(1000);
 SimpleTimeout gpsTimeout(120000);
@@ -65,22 +73,21 @@ NtpTime ntpTime(&ntpTimer, ntpServer, gmtOffset, dayLightOffset);
 SimpleToggleSensor button(3, &buttonTimeout);
 
 GpsHomeDisplay gpsHomeDisplay(
-  &wifiClient,
-  &httpClient,
-  &simpleOled,
-  &button,
-  &ntpTime,
-  &gpsTimeout,
-  &initializationTimeout,
-  &displaySwitchTimeout,
-  &reconnectionTimeout
-  );
-
+    &wifiClient,
+    &httpClient,
+    &simpleOled,
+    &button,
+    &ntpTime,
+    &gpsTimeout,
+    &initializationTimeout,
+    &displaySwitchTimeout,
+    &reconnectionTimeout);
 void setup()
 {
   Serial.begin(115200);
   wifiClient.begin();
   httpClientOW.setSecure(true);
+  openWeather.setCoords(openWeatherLat, openWeatherLng);
 
   if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
   {
@@ -93,4 +100,5 @@ void setup()
 void loop()
 {
   gpsHomeDisplay.loop();
+  openWeather.loop();
 }

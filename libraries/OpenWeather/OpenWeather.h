@@ -23,6 +23,7 @@ public:
     OpenWeather(IHttpClient *client, SimpleTimeout *timeout, const char *appId);
     void setCoords(char *lat, char *lng);
     void getWeather();
+    void loop();
     JsonDocument *getLastJsonDoc();
 };
 #endif
