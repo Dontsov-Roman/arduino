@@ -62,11 +62,12 @@ HttpClientEsp32 httpClientOW(openWeatherHost, openWeatherUrl, openWeatherPort);
 
 SimpleTimeout buttonTimeout(1000);
 SimpleTimeout gpsTimeout(120000);
-SimpleTimeout initializationTimeout(5000);
+SimpleTimeout initializationTimeout(15000);
 SimpleTimeout displaySwitchTimeout(5000);
 SimpleTimeout reconnectionTimeout(30000);
 SimpleTimeout ntpTimer(60000);
-SimpleTimeout openWeatherTimer(3600000);
+SimpleTimeout openWeatherTimer(360000);
+SimpleTimeout serializeTimeout(5000);
 
 OpenWeather openWeather(&httpClientOW, &openWeatherTimer, openWeatherApiKey);
 NtpTime ntpTime(&ntpTimer, ntpServer, gmtOffset, dayLightOffset);
@@ -78,6 +79,7 @@ GpsHomeDisplay gpsHomeDisplay(
     &simpleOled,
     &button,
     &ntpTime,
+    &openWeather,
     &gpsTimeout,
     &initializationTimeout,
     &displaySwitchTimeout,
@@ -87,18 +89,17 @@ void setup()
   Serial.begin(115200);
   wifiClient.begin();
   httpClientOW.setSecure(true);
+  httpClientOW.begin();
   openWeather.setCoords(openWeatherLat, openWeatherLng);
 
   if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
   {
     Serial.println(F("SSD1306 allocation failed"));
   }
-
   gpsHomeDisplay.begin();
 }
 
 void loop()
 {
   gpsHomeDisplay.loop();
-  openWeather.loop();
 }

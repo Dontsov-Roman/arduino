@@ -18,6 +18,10 @@ class HttpClientEsp32 : public IHttpClient
 public:
     HttpClientEsp32(
         const char *host,
+        const char *url);
+
+    HttpClientEsp32(
+        const char *host,
         const char *url,
         const char *port);
     void begin();

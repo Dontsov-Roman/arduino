@@ -21,6 +21,7 @@ void WifiClientEsp32::begin()
         delay(500);
         Serial.print(".");
     }
+    Serial.print("Connected");
 }
 bool WifiClientEsp32::isConnected()
 {

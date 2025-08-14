@@ -6,6 +6,7 @@ GpsHomeDisplay::GpsHomeDisplay(
     ISimpleDisplay *display,
     SimpleToggleSensor *button,
     NtpTime *ntpTime,
+    OpenWeather *openWeather,
     SimpleTimeout *getGpsTimeout,
     SimpleTimeout *initializationTimeout,
     SimpleTimeout *displaySwitchTimeout,
@@ -16,6 +17,7 @@ GpsHomeDisplay::GpsHomeDisplay(
     this->display = display;
     this->button = button;
     this->ntpTime = ntpTime;
+    this->openWeather = openWeather;
     this->getGpsTimeout = getGpsTimeout;
     this->initializationTimeout = initializationTimeout;
     this->displaySwitchTimeout = displaySwitchTimeout;
@@ -49,15 +51,10 @@ void GpsHomeDisplay::loop()
             this->display->clear();
             this->display->writeFirstRow(this->ntpTime->getDayTime());
 
-            this->displaySwitcher.writeSecondRow("Last GPS Date Time:", "IP: " + this->wifiClient->getLocalIP());
-            if (this->gpsData.isDateTimeReady)
-            {
-                this->displaySwitcher.writeThirdRow(this->gpsData.getGpsDateTime(), this->gpsData.getGpsDateTime());
-            }
-            else
-            {
-                this->display->writeThirdRow("No GPS Data");
-            }
+            this->displaySwitcher.writeSecondRow("Last GPS Date Time:", this->openWeather->getLastTemperature());
+            this->displaySwitcher.writeThirdRow(
+                this->gpsData.isDateTimeReady ? this->gpsData.getGpsDateTime() : "No GPS Data",
+                this->openWeather->getLastWeather());
             this->displaySwitcher.switchDisplay();
         }
     }
@@ -67,6 +64,7 @@ void GpsHomeDisplay::loop()
     }
     this->toggleLight();
     this->ntpTime->loop();
+    this->openWeather->loop();
 }
 void GpsHomeDisplay::toggleLight()
 {

@@ -13,6 +13,7 @@
 #include <GpsData.h>
 #include <SimpleToggleSensor.h>
 #include <NtpTime.h>
+#include <OpenWeather.h>
 
 class GpsHomeDisplay
 {
@@ -23,6 +24,7 @@ public:
         ISimpleDisplay *display,
         SimpleToggleSensor *button,
         NtpTime *ntpTime,
+        OpenWeather *openWeather,
         SimpleTimeout *getGpsTimeout,
         SimpleTimeout *initializationTimeout,
         SimpleTimeout *displaySwitchTimeout,
@@ -35,6 +37,7 @@ private:
     IHttpClient *gpsHttpClient;
     ISimpleDisplay *display;
     SimpleToggleSensor *button;
+    OpenWeather *openWeather;
     SimpleTimeout *getGpsTimeout;
     SimpleTimeout *initializationTimeout;
     SimpleTimeout *displaySwitchTimeout;

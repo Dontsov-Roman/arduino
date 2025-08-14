@@ -2,6 +2,14 @@
 
 HttpClientEsp32::HttpClientEsp32(
     const char *host,
+    const char *url)
+{
+    this->host = host;
+    this->url = url;
+    this->lastResponse = ResponseStruct{};
+}
+HttpClientEsp32::HttpClientEsp32(
+    const char *host,
     const char *url,
     const char *port)
 {
@@ -41,8 +49,11 @@ ResponseStruct *HttpClientEsp32::get(String url)
         newUrl += "http://";
     }
     newUrl += this->host;
-    newUrl += ":";
-    newUrl += this->port;
+    if (sizeof(this->port) > 0)
+    {
+        newUrl += ":";
+        newUrl += this->port;
+    }
     newUrl += url;
     return this->request(newUrl, HTTP_METHOD_GET, body);
 }
