@@ -42,5 +42,6 @@ public:
     void serializeToSerial();
     String getLastWeather();
     String getLastTemperature();
+    void begin();
 };
 #endif

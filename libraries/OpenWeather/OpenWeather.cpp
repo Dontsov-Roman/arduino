@@ -16,6 +16,12 @@ OpenWeather::OpenWeather(IHttpClient *client, SimpleTimeout *timeout, const char
     this->cnt = cnt;
 }
 
+void OpenWeather::begin()
+{
+    this->client->setSecure(true);
+    this->client->begin();
+}
+
 void OpenWeather::setCoords(char *lat, char *lng)
 {
     this->lat = lat;
@@ -47,7 +53,7 @@ void OpenWeather::findMinMaxTemp()
     this->temp_min = this->doc["list"][0]["main"]["temp_min"];
     this->temp_max = this->doc["list"][0]["main"]["temp_max"];
     int count = this->doc["count"];
-    for (int i = 0; i < count; i++)
+    for (int i = 1; i < count; i++)
     {
         double t_min = this->doc["list"][i]["main"]["temp_min"];
         double t_max = this->doc["list"][i]["main"]["temp_max"];
@@ -90,7 +96,15 @@ String OpenWeather::getLastTemperature()
 }
 String OpenWeather::getLastWeather()
 {
-    return String(this->doc["list"][0]["weather"][0]["description"]);
+    String weather;
+    int count = this->doc["count"];
+    for (int i = 1; i < count; i++)
+    {
+        String weatherDescription = this->doc["list"][i]["weather"][0]["description"];
+        weather += weatherDescription;
+        weather += ";";
+    }
+    return weather;
 }
 
 JsonDocument *OpenWeather::getLastJsonDoc()

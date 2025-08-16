@@ -84,13 +84,11 @@ GpsHomeDisplay gpsHomeDisplay(
     &initializationTimeout,
     &displaySwitchTimeout,
     &reconnectionTimeout);
-    
+
 void setup()
 {
   Serial.begin(115200);
   wifiClient.begin();
-  httpClientOW.setSecure(true);
-  httpClientOW.begin();
   openWeather.setCoords(openWeatherLat, openWeatherLng);
 
   if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))

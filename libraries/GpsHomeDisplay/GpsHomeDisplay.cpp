@@ -29,6 +29,7 @@ void GpsHomeDisplay::begin()
 {
     this->button->begin();
     this->gpsHttpClient->begin();
+    this->openWeather->begin();
     this->display->begin();
 
     this->initializationTimeout->checkTimeout();
