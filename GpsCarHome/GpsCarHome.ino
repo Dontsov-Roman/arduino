@@ -65,9 +65,9 @@ SimpleTimeout gpsTimeout(120000);
 SimpleTimeout initializationTimeout(15000);
 SimpleTimeout displaySwitchTimeout(5000);
 SimpleTimeout reconnectionTimeout(30000);
-SimpleTimeout ntpTimer(60000);
-SimpleTimeout openWeatherTimer(360000);
-SimpleTimeout serializeTimeout(5000);
+SimpleTimeout ntpTimer(30000);
+SimpleTimeout openWeatherTimer(15 * 60 * 1000);
+// SimpleTimeout serializeTimeout(60000);
 
 OpenWeather openWeather(&httpClientOW, &openWeatherTimer, openWeatherApiKey);
 NtpTime ntpTime(&ntpTimer, ntpServer, gmtOffset, dayLightOffset);
@@ -84,6 +84,7 @@ GpsHomeDisplay gpsHomeDisplay(
     &initializationTimeout,
     &displaySwitchTimeout,
     &reconnectionTimeout);
+    
 void setup()
 {
   Serial.begin(115200);
@@ -102,4 +103,7 @@ void setup()
 void loop()
 {
   gpsHomeDisplay.loop();
+  // if (serializeTimeout.checkTimeout()) {
+  //   openWeather.serializeToSerial();
+  // }
 }

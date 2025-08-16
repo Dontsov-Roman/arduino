@@ -7,12 +7,13 @@ OpenWeather::OpenWeather(IHttpClient *client, SimpleTimeout *timeout, const char
     this->appId = appId;
 }
 
-OpenWeather::OpenWeather(IHttpClient *client, SimpleTimeout *timeout, const char *appId, const char *urlVersion)
+OpenWeather::OpenWeather(IHttpClient *client, SimpleTimeout *timeout, const char *appId, const char *urlVersion, int cnt)
 {
     this->client = client;
     this->timeout = timeout;
     this->appId = appId;
     this->urlVersion = urlVersion;
+    this->cnt = cnt;
 }
 
 void OpenWeather::setCoords(char *lat, char *lng)
@@ -32,13 +33,37 @@ void OpenWeather::getWeather()
     url += "&appid=";
     url += this->appId;
     url += "&units=metric";
-    url += "&cnt=1";
+    if (this->cnt > 0)
+    {
+        url += "&cnt=";
+        url += String(this->cnt);
+    }
     deserializeJson(this->doc, this->client->get(url)->response);
+    this->findMinMaxTemp();
+}
+
+void OpenWeather::findMinMaxTemp()
+{
+    this->temp_min = this->doc["list"][0]["main"]["temp_min"];
+    this->temp_max = this->doc["list"][0]["main"]["temp_max"];
+    int count = this->doc["count"];
+    for (int i = 0; i < count; i++)
+    {
+        double t_min = this->doc["list"][i]["main"]["temp_min"];
+        double t_max = this->doc["list"][i]["main"]["temp_max"];
+        if (this->temp_min > t_min && t_min != 0)
+        {
+            this->temp_min = t_min;
+        }
+        if (this->temp_max < t_max && t_max != 0)
+        {
+            this->temp_max = t_max;
+        }
+    }
 }
 
 void OpenWeather::loop()
 {
-
     if (this->timeout->checkTimeout())
     {
         this->getWeather();
@@ -55,19 +80,11 @@ void OpenWeather::serializeToSerial()
 }
 String OpenWeather::getLastTemperature()
 {
-
-    double temp_min = this->doc["list"][0]["main"]["temp_min"];
-    double temp_max = this->doc["list"][0]["main"]["temp_max"];
-
-    char min[50];
-    char max[50];
-    dtostrf(temp_min, 4, 2, min);
-    dtostrf(temp_max, 4, 2, max);
     String weather;
     weather += "Temp: ";
-    weather += temp_min;
+    weather += this->temp_min;
     weather += "-";
-    weather += max;
+    weather += this->temp_max;
     weather += " C";
     return weather;
 }

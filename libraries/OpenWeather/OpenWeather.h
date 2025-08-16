@@ -8,6 +8,12 @@
 #include <ArduinoJson.h>
 #include <SimpleTimeout.h>
 #include <IHttpClient.h>
+#include <UrlBuilder.h>
+
+#include <stddef.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <string.h>
 
 class OpenWeather
 {
@@ -19,10 +25,16 @@ private:
     const char *urlVersion = "/data/2.5/forecast";
     char *lat;
     char *lng;
+    double temp_min;
+    double temp_max;
+    int cnt = 3;
+
+protected:
+    void findMinMaxTemp();
 
 public:
     OpenWeather(IHttpClient *client, SimpleTimeout *timeout, const char *appId);
-    OpenWeather(IHttpClient *client, SimpleTimeout *timeout, const char *appId, const char *urlVersion);
+    OpenWeather(IHttpClient *client, SimpleTimeout *timeout, const char *appId, const char *urlVersion, int cnt);
     void setCoords(char *lat, char *lng);
     void getWeather();
     void loop();
