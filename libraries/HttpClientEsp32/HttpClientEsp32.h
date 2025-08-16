@@ -11,7 +11,6 @@
 
 #include <HTTPClient.h>
 #include <IHttpClient.h>
-#include <WifiClientEsp32.h>
 
 class HttpClientEsp32 : public IHttpClient
 {
@@ -34,7 +33,6 @@ public:
     void setSecure(bool isSecure);
 
 protected:
-    WifiClientEsp32 *wifiClient;
     HTTPClient http;
     WiFiClient client;
     ResponseStruct lastResponse;

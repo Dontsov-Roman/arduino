@@ -48,26 +48,6 @@ void OpenWeather::getWeather()
     this->findMinMaxTemp();
 }
 
-void OpenWeather::findMinMaxTemp()
-{
-    this->temp_min = this->doc["list"][0]["main"]["temp_min"];
-    this->temp_max = this->doc["list"][0]["main"]["temp_max"];
-    int count = this->doc["count"];
-    for (int i = 1; i < count; i++)
-    {
-        double t_min = this->doc["list"][i]["main"]["temp_min"];
-        double t_max = this->doc["list"][i]["main"]["temp_max"];
-        if (this->temp_min > t_min && t_min != 0)
-        {
-            this->temp_min = t_min;
-        }
-        if (this->temp_max < t_max && t_max != 0)
-        {
-            this->temp_max = t_max;
-        }
-    }
-}
-
 void OpenWeather::loop()
 {
     if (this->timeout->checkTimeout())
@@ -94,11 +74,34 @@ String OpenWeather::getLastTemperature()
     weather += " C";
     return weather;
 }
+void OpenWeather::findMinMaxTemp()
+{
+    this->temp_min = this->doc["list"][0]["main"]["temp_min"];
+    this->temp_max = this->doc["list"][0]["main"]["temp_max"];
+    int count = this->doc["cnt"];
+    Serial.println("count:");
+    Serial.println(count);
+    for (int i = 1; i < count; ++i)
+    {
+        double t_min = this->doc["list"][i]["main"]["temp_min"];
+        double t_max = this->doc["list"][i]["main"]["temp_max"];
+        Serial.println("Temp min:");
+        Serial.println(t_min);
+        if (this->temp_min > t_min && t_min != 0)
+        {
+            this->temp_min = t_min;
+        }
+        if (this->temp_max < t_max && t_max != 0)
+        {
+            this->temp_max = t_max;
+        }
+    }
+}
 String OpenWeather::getLastWeather()
 {
-    String weather;
-    int count = this->doc["count"];
-    for (int i = 1; i < count; i++)
+    String weather = this->doc["list"][0]["weather"][0]["description"];
+    int count = this->doc["cnt"];
+    for (int i = 1; i < count; ++i)
     {
         String weatherDescription = this->doc["list"][i]["weather"][0]["description"];
         weather += weatherDescription;

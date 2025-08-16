@@ -67,7 +67,7 @@ SimpleTimeout displaySwitchTimeout(5000);
 SimpleTimeout reconnectionTimeout(30000);
 SimpleTimeout ntpTimer(30000);
 SimpleTimeout openWeatherTimer(15 * 60 * 1000);
-// SimpleTimeout serializeTimeout(60000);
+// SimpleTimeout serializeTimeout(15000);
 
 OpenWeather openWeather(&httpClientOW, &openWeatherTimer, openWeatherApiKey);
 NtpTime ntpTime(&ntpTimer, ntpServer, gmtOffset, dayLightOffset);
