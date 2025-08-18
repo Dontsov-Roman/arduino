@@ -22,6 +22,7 @@ void HomeLvgl::begin()
     this->gpsHttpClient->begin();
     this->ntpTime->begin();
     this->openWeather->begin();
+    this->openWeather->getWeather();
     // Create tabs
     this->tabs = lv_tabview_create(lv_scr_act(), LV_DIR_TOP, 70);
     this->homeTab = lv_tabview_add_tab(this->tabs, "Home");
@@ -38,7 +39,13 @@ void HomeLvgl::begin()
 
     lv_obj_align_to(this->gpsContent, this->homeContent, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
 
-    this->openWeather->getWeather();
+    this->weatherTile[0].begin(this->weatherTab);
+    lv_obj_align_to(this->weatherTile[0].getContainer(), this->weatherContent, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
+    for (int i = 1; i < 3; ++i)
+    {
+        this->weatherTile[i].begin(this->weatherTab);
+        lv_obj_align_to(this->weatherTile[i].getContainer(), this->weatherTile[i - 1].getContainer(), LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
+    }
 }
 
 lv_obj_t *HomeLvgl::createTabContent(lv_obj_t *parent)
@@ -124,7 +131,32 @@ void HomeLvgl::turnOffLight(lv_event_t *e)
         this->gpsHttpClient->get(this->turnOffLightUrl);
     }
 }
-
+void HomeLvgl::render()
+{
+    lv_label_set_text(this->homeTimeLabel, this->ntpTime->getDayTime());
+    lv_label_set_text(this->gpsTimeLabel, this->gpsData.getGpsDateTime());
+    lv_label_set_text(this->gpsCoordsLabel, this->gpsData.getGpsLatLng());
+    lv_label_set_text(this->temperatureLabel, this->openWeather->getLastTemperature());
+    lv_label_set_text(this->weatherDescriptionLabel, this->openWeather->getLastWeather());
+    // render by hours
+    this->renderWeatherTiles();
+}
+void HomeLvgl::renderWeatherTiles()
+{
+    JsonDocument *doc = this->openWeather->getLastJsonDoc();
+    int count = (*doc)["cnt"];
+    for (int i = 0; i < count; ++i)
+    {
+        double temp_min = (*doc)["list"][i]["main"]["temp_min"];
+        double temp_max = (*doc)["list"][i]["main"]["temp_max"];
+        const char *date = (*doc)["list"][i]["dt_txt"].as<const char *>();
+        const char *desc = (*doc)["list"][i]["weather"][0]["description"].as<const char *>();
+        this->weatherTile[i].setDate(date);
+        this->weatherTile[i].setMinTemp(temp_min);
+        this->weatherTile[i].setMaxTemp(temp_max);
+        this->weatherTile[i].setWeatherDesc(desc);
+    }
+}
 void HomeLvgl::loop()
 {
     if (this->wifiClient->isConnected())
@@ -143,10 +175,6 @@ void HomeLvgl::loop()
 
     if (this->renderTimeout.checkTimeout())
     {
-        lv_label_set_text(this->homeTimeLabel, this->ntpTime->getDayTime());
-        lv_label_set_text(this->gpsTimeLabel, this->gpsData.getGpsDateTime());
-        lv_label_set_text(this->gpsCoordsLabel, this->gpsData.getGpsLatLng());
-        lv_label_set_text(this->temperatureLabel, this->openWeather->getLastTemperature());
-        lv_label_set_text(this->weatherDescriptionLabel, this->openWeather->getLastWeather());
+        this->render();
     }
 }

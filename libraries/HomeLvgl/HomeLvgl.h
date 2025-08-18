@@ -13,6 +13,8 @@
 #include <GpsData.h>
 #include <NtpTime.h>
 #include <OpenWeather.h>
+#include <WeatherTabLvgl.h>
+#include <ArduinoJson.h>
 
 class HomeLvgl
 {
@@ -21,6 +23,8 @@ private:
     SimpleTimeout renderTimeout;
     SimpleTimeout getGpsTimeout;
     GpsData gpsData;
+
+    WeatherTabLvgl weatherTile[3];
     IWifiClient *wifiClient;
     IHttpClient *gpsHttpClient;
     NtpTime *ntpTime;
@@ -38,15 +42,19 @@ private:
     lv_obj_t *homeContent;
     lv_obj_t *gpsContent;
     lv_obj_t *weatherContent;
+
     // labels
     lv_obj_t *homeTimeLabel;
     lv_obj_t *gpsTimeLabel;
     lv_obj_t *gpsCoordsLabel;
     lv_obj_t *temperatureLabel;
     lv_obj_t *weatherDescriptionLabel;
+
     void createHomeEntities(lv_obj_t *parent);
     void createGpsEntities(lv_obj_t *parent);
     void createWeatherEntities(lv_obj_t *parent);
+    void render();
+    void renderWeatherTiles();
 
     // Button events
     void turnOnLight(lv_event_t *e);
