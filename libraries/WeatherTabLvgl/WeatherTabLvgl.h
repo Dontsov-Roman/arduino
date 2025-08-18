@@ -16,7 +16,6 @@ private:
     lv_obj_t *max_temp;
     lv_obj_t *weather_desc;
     lv_obj_t *wind_speed;
-    // lv_obj_t *wind_gust;
     lv_obj_t *wind_deg;
 
 public:
@@ -26,7 +25,6 @@ public:
     void setMaxTemp(double temp);
     void setWindSpeed(double speed);
     void setWindDeg(double deg);
-    // void setWindGust(const char *gust);
     void setDate(const char *date);
     void setWeatherDesc(const char *desc);
 };

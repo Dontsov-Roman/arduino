@@ -85,11 +85,6 @@ void WeatherTabLvgl::setWindDeg(double value)
     lv_label_set_text(this->wind_deg, buffer);
 }
 
-// void WeatherTabLvgl::setWindGust(const char *value)
-// {
-//     lv_label_set_text(this->wind_gust, value);
-// }
-
 void WeatherTabLvgl::setDate(const char *value)
 {
     lv_label_set_text(this->date, value);
