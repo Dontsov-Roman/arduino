@@ -6,7 +6,7 @@
 
 #include <WifiClientEsp32.h>
 #include <HttpClientEsp32.h>
-#include <LvglEsp32.h>
+#include <HomeLvgl.h>
 
 using namespace esp_panel::drivers;
 using namespace esp_panel::board;
@@ -48,17 +48,21 @@ char *openWeatherLat = OPEN_WEATHER_LAT;
 char *openWeatherLng = OPEN_WEATHER_LNG;
 
 SimpleTimeout ntpTimer(30000);
+SimpleTimeout openWeatherTimer(15 * 60 * 1000);
 
 WifiClientEsp32 wifiClient(wifiSsid, wifiPassword);
 HttpClientEsp32 httpClient(host, url, port);
-NtpTime ntpTime(&ntpTimer, ntpServer, gmtOffset, dayLightOffset);
+HttpClientEsp32 httpClientOW(openWeatherHost, openWeatherUrl, openWeatherPort);
 
-LvglEsp32 mylvgl(&wifiClient, &httpClient, &ntpTime);
+OpenWeather openWeather(&httpClientOW, &openWeatherTimer, openWeatherApiKey);
+NtpTime ntpTime(&ntpTimer, ntpServer, gmtOffset, dayLightOffset);
+HomeLvgl mylvgl(&wifiClient, &httpClient, &ntpTime, &openWeather);
 void setup()
 {
     Serial.begin(115200);
+    openWeather.setCoords(openWeatherLat, openWeatherLng);
     wifiClient.begin();
-
+    Serial.println("");
     Serial.println("Initializing board");
     Board *board = new Board();
     board->init();

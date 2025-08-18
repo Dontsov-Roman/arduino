@@ -64,29 +64,28 @@ void OpenWeather::serializeToSerial()
     Serial.println(this->getLastTemperature());
     Serial.println(this->getLastWeather());
 }
-String OpenWeather::getLastTemperature()
+char *OpenWeather::getLastTemperature()
 {
-    String weather;
-    weather += "Temp: ";
-    weather += this->temp_min;
-    weather += "-";
-    weather += this->temp_max;
-    weather += " C";
-    return weather;
+
+    String result;
+    result += "Temp: ";
+    result += this->temp_min;
+    result += "-";
+    result += this->temp_max;
+    result += " C";
+
+    char *out = strdup(result.c_str());
+    return out;
 }
 void OpenWeather::findMinMaxTemp()
 {
     this->temp_min = this->doc["list"][0]["main"]["temp_min"];
     this->temp_max = this->doc["list"][0]["main"]["temp_max"];
     int count = this->doc["cnt"];
-    Serial.println("count:");
-    Serial.println(count);
     for (int i = 1; i < count; ++i)
     {
         double t_min = this->doc["list"][i]["main"]["temp_min"];
         double t_max = this->doc["list"][i]["main"]["temp_max"];
-        Serial.println("Temp min:");
-        Serial.println(t_min);
         if (this->temp_min > t_min && t_min != 0)
         {
             this->temp_min = t_min;
@@ -97,19 +96,27 @@ void OpenWeather::findMinMaxTemp()
         }
     }
 }
-String OpenWeather::getLastWeather()
+char *OpenWeather::getLastWeather()
 {
-    String weather = this->doc["list"][0]["weather"][0]["description"];
     int count = this->doc["cnt"];
-    for (int i = 1; i < count; ++i)
+    String result;
+    for (int i = 0; i < count; ++i)
     {
         String weatherDescription = this->doc["list"][i]["weather"][0]["description"];
-        weather += weatherDescription;
-        weather += ";";
+        if (i > 0)
+        {
+            result += ";";
+        }
+        result += weatherDescription;
     }
-    return weather;
-}
 
+    char *out = strdup(result.c_str());
+    return out;
+}
+int OpenWeather::getCount()
+{
+    return this->cnt;
+}
 JsonDocument *OpenWeather::getLastJsonDoc()
 {
     return &this->doc;

@@ -14,7 +14,7 @@
 #include <NtpTime.h>
 #include <OpenWeather.h>
 
-class LvglEsp32
+class HomeLvgl
 {
 private:
     SimpleTimeout reconnectionTimeout;
@@ -24,6 +24,7 @@ private:
     IWifiClient *wifiClient;
     IHttpClient *gpsHttpClient;
     NtpTime *ntpTime;
+    OpenWeather *openWeather;
 
     String turnOnLightUrl = "/led/1";
     String turnOffLightUrl = "/led/0";
@@ -40,17 +41,21 @@ private:
     // labels
     lv_obj_t *homeTimeLabel;
     lv_obj_t *gpsTimeLabel;
+    lv_obj_t *gpsCoordsLabel;
+    lv_obj_t *temperatureLabel;
+    lv_obj_t *weatherDescriptionLabel;
     void createHomeEntities(lv_obj_t *parent);
     void createGpsEntities(lv_obj_t *parent);
+    void createWeatherEntities(lv_obj_t *parent);
 
     // Button events
     void turnOnLight(lv_event_t *e);
     void turnOffLight(lv_event_t *e);
 
-    template <void (LvglEsp32::*Method)(lv_event_t *)>
+    template <void (HomeLvgl::*Method)(lv_event_t *)>
     static void eventThunk(lv_event_t *e)
     {
-        auto self = static_cast<LvglEsp32 *>(lv_event_get_user_data(e));
+        auto self = static_cast<HomeLvgl *>(lv_event_get_user_data(e));
         if (self)
         {
             (self->*Method)(e);
@@ -58,10 +63,11 @@ private:
     }
 
 public:
-    LvglEsp32(
+    HomeLvgl(
         IWifiClient *wifiClient,
         IHttpClient *gpsHttpClient,
-        NtpTime *ntpTime);
+        NtpTime *ntpTime,
+        OpenWeather *openWeather);
     void begin();
     void loop();
 };

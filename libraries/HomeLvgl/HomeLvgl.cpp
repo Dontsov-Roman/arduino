@@ -1,9 +1,10 @@
-#include <LvglEsp32.h>
+#include <HomeLvgl.h>
 
-LvglEsp32::LvglEsp32(
+HomeLvgl::HomeLvgl(
     IWifiClient *wifiClient,
     IHttpClient *gpsHttpClient,
-    NtpTime *ntpTime)
+    NtpTime *ntpTime,
+    OpenWeather *openWeather)
 {
     this->reconnectionTimeout = SimpleTimeout(10000);
     this->renderTimeout = SimpleTimeout(5000);
@@ -13,12 +14,14 @@ LvglEsp32::LvglEsp32(
     this->wifiClient = wifiClient;
     this->gpsHttpClient = gpsHttpClient;
     this->ntpTime = ntpTime;
+    this->openWeather = openWeather;
 }
 
-void LvglEsp32::begin()
+void HomeLvgl::begin()
 {
     this->gpsHttpClient->begin();
     this->ntpTime->begin();
+    this->openWeather->begin();
     // Create tabs
     this->tabs = lv_tabview_create(lv_scr_act(), LV_DIR_TOP, 70);
     this->homeTab = lv_tabview_add_tab(this->tabs, "Home");
@@ -31,17 +34,21 @@ void LvglEsp32::begin()
 
     this->createHomeEntities(this->homeContent);
     this->createGpsEntities(this->gpsContent);
+    this->createWeatherEntities(this->weatherContent);
+
     lv_obj_align_to(this->gpsContent, this->homeContent, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
+
+    this->openWeather->getWeather();
 }
 
-lv_obj_t *LvglEsp32::createTabContent(lv_obj_t *parent)
+lv_obj_t *HomeLvgl::createTabContent(lv_obj_t *parent)
 {
     lv_obj_t *tabContent = lv_obj_create(parent);
     lv_obj_set_size(tabContent, lv_pct(100), LV_SIZE_CONTENT);
     return tabContent;
 }
 
-void LvglEsp32::createHomeEntities(lv_obj_t *parent)
+void HomeLvgl::createHomeEntities(lv_obj_t *parent)
 {
     this->homeTimeLabel = lv_label_create(parent);
     lv_obj_set_height(this->homeTimeLabel, LV_SIZE_CONTENT);
@@ -56,17 +63,17 @@ void LvglEsp32::createHomeEntities(lv_obj_t *parent)
     lv_obj_t *turnOnLabel = lv_label_create(turnOnBtn);
     lv_label_set_text(turnOnLabel, "Turn on light");
     lv_obj_align_to(turnOnBtn, title, LV_ALIGN_OUT_BOTTOM_MID, 10, 50);
-    lv_obj_add_event_cb(turnOnBtn, eventThunk<&LvglEsp32::turnOnLight>, LV_EVENT_CLICKED, this);
+    lv_obj_add_event_cb(turnOnBtn, eventThunk<&HomeLvgl::turnOnLight>, LV_EVENT_CLICKED, this);
 
     lv_obj_t *turnOffBtn = lv_btn_create(parent);
     lv_obj_set_height(turnOffBtn, LV_SIZE_CONTENT);
     lv_obj_t *turnOffLabel = lv_label_create(turnOffBtn);
     lv_label_set_text(turnOffLabel, "Turn off light");
     lv_obj_align_to(turnOffBtn, turnOnBtn, LV_ALIGN_RIGHT_MID, 180, 0);
-    lv_obj_add_event_cb(turnOffBtn, eventThunk<&LvglEsp32::turnOffLight>, LV_EVENT_CLICKED, this);
+    lv_obj_add_event_cb(turnOffBtn, eventThunk<&HomeLvgl::turnOffLight>, LV_EVENT_CLICKED, this);
 }
 
-void LvglEsp32::createGpsEntities(lv_obj_t *parent)
+void HomeLvgl::createGpsEntities(lv_obj_t *parent)
 {
     this->gpsTimeLabel = lv_label_create(parent);
     lv_obj_set_height(this->gpsTimeLabel, LV_SIZE_CONTENT);
@@ -75,9 +82,32 @@ void LvglEsp32::createGpsEntities(lv_obj_t *parent)
     lv_obj_set_height(title, LV_SIZE_CONTENT);
     lv_label_set_text(title, "Last GPS time:");
     lv_obj_align_to(this->gpsTimeLabel, title, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
+
+    lv_obj_t *coordsLabel = lv_label_create(parent);
+    lv_obj_set_height(coordsLabel, LV_SIZE_CONTENT);
+    lv_label_set_text(coordsLabel, "Last Coordinates:");
+    lv_obj_align_to(coordsLabel, this->gpsTimeLabel, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
+
+    this->gpsCoordsLabel = lv_label_create(parent);
+    lv_obj_set_height(this->gpsCoordsLabel, LV_SIZE_CONTENT);
+    lv_label_set_text(this->gpsCoordsLabel, "Last Coordinates:");
+    lv_obj_align_to(this->gpsCoordsLabel, coordsLabel, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
 }
 
-void LvglEsp32::turnOnLight(lv_event_t *e)
+void HomeLvgl::createWeatherEntities(lv_obj_t *parent)
+{
+    this->temperatureLabel = lv_label_create(parent);
+    lv_obj_set_height(this->temperatureLabel, LV_SIZE_CONTENT);
+    lv_label_set_text(this->temperatureLabel, "Min-max temperature");
+
+    this->weatherDescriptionLabel = lv_label_create(parent);
+    lv_obj_set_height(this->weatherDescriptionLabel, LV_SIZE_CONTENT);
+    lv_label_set_text(this->weatherDescriptionLabel, "Weather description placeholder");
+
+    lv_obj_align_to(this->weatherDescriptionLabel, this->temperatureLabel, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
+}
+
+void HomeLvgl::turnOnLight(lv_event_t *e)
 {
     if (lv_event_get_code(e) == LV_EVENT_CLICKED)
     {
@@ -86,7 +116,7 @@ void LvglEsp32::turnOnLight(lv_event_t *e)
     }
 }
 
-void LvglEsp32::turnOffLight(lv_event_t *e)
+void HomeLvgl::turnOffLight(lv_event_t *e)
 {
     if (lv_event_get_code(e) == LV_EVENT_CLICKED)
     {
@@ -95,11 +125,12 @@ void LvglEsp32::turnOffLight(lv_event_t *e)
     }
 }
 
-void LvglEsp32::loop()
+void HomeLvgl::loop()
 {
     if (this->wifiClient->isConnected())
     {
         this->ntpTime->loop();
+        this->openWeather->loop();
         if (this->getGpsTimeout.checkTimeout())
         {
             this->gpsData.parse(this->gpsHttpClient->get()->response);
@@ -114,5 +145,8 @@ void LvglEsp32::loop()
     {
         lv_label_set_text(this->homeTimeLabel, this->ntpTime->getDayTime());
         lv_label_set_text(this->gpsTimeLabel, this->gpsData.getGpsDateTime());
+        lv_label_set_text(this->gpsCoordsLabel, this->gpsData.getGpsLatLng());
+        lv_label_set_text(this->temperatureLabel, this->openWeather->getLastTemperature());
+        lv_label_set_text(this->weatherDescriptionLabel, this->openWeather->getLastWeather());
     }
 }

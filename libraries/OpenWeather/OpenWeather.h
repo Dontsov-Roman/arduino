@@ -40,8 +40,9 @@ public:
     void loop();
     JsonDocument *getLastJsonDoc();
     void serializeToSerial();
-    String getLastWeather();
-    String getLastTemperature();
+    char *getLastWeather();
+    char *getLastTemperature();
     void begin();
+    int getCount();
 };
 #endif
