@@ -15,12 +15,18 @@ private:
     lv_obj_t *min_temp;
     lv_obj_t *max_temp;
     lv_obj_t *weather_desc;
+    lv_obj_t *wind_speed;
+    // lv_obj_t *wind_gust;
+    lv_obj_t *wind_deg;
 
 public:
     void begin(lv_obj_t *parent);
     lv_obj_t *getContainer();
     void setMinTemp(double temp);
     void setMaxTemp(double temp);
+    void setWindSpeed(double speed);
+    void setWindDeg(double deg);
+    // void setWindGust(const char *gust);
     void setDate(const char *date);
     void setWeatherDesc(const char *desc);
 };

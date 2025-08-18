@@ -31,6 +31,25 @@ void WeatherTabLvgl::begin(lv_obj_t *parent)
     lv_obj_set_height(this->weather_desc, LV_SIZE_CONTENT);
     lv_label_set_text(this->weather_desc, "Weather");
     lv_obj_align_to(this->weather_desc, max_temp_label, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
+
+    lv_obj_t *wind_label = lv_label_create(this->container);
+    lv_obj_t *wind_units = lv_label_create(this->container);
+    this->wind_speed = lv_label_create(this->container);
+    this->wind_deg = lv_label_create(this->container);
+    lv_obj_set_height(this->wind_speed, LV_SIZE_CONTENT);
+    lv_obj_set_height(wind_units, LV_SIZE_CONTENT);
+    lv_obj_set_height(this->wind_deg, LV_SIZE_CONTENT);
+    lv_obj_set_height(wind_label, LV_SIZE_CONTENT);
+    lv_label_set_recolor(wind_label, true);
+    lv_label_set_text(wind_label, "#0000ff Wind:");
+
+    lv_label_set_recolor(wind_units, true);
+    lv_label_set_text(wind_units, "#0000ff m/sec");
+
+    lv_obj_align_to(wind_label, this->weather_desc, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
+    lv_obj_align_to(this->wind_speed, wind_label, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
+    lv_obj_align_to(wind_units, this->wind_speed, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
+    lv_obj_align_to(this->wind_deg, wind_units, LV_ALIGN_OUT_RIGHT_MID, 10, 0);
 }
 
 lv_obj_t *WeatherTabLvgl::getContainer()
@@ -52,12 +71,31 @@ void WeatherTabLvgl::setMaxTemp(double value)
     lv_label_set_text(this->max_temp, buffer);
 }
 
-void WeatherTabLvgl::setDate(const char *date)
+void WeatherTabLvgl::setWindSpeed(double value)
 {
-    lv_label_set_text(this->date, date);
+    char buffer[16];
+    dtostrf(value, 6, 2, buffer);
+    lv_label_set_text(this->wind_speed, buffer);
 }
 
-void WeatherTabLvgl::setWeatherDesc(const char *desc)
+void WeatherTabLvgl::setWindDeg(double value)
 {
-    lv_label_set_text(this->weather_desc, desc);
+    char buffer[16];
+    dtostrf(value, 6, 2, buffer);
+    lv_label_set_text(this->wind_deg, buffer);
+}
+
+// void WeatherTabLvgl::setWindGust(const char *value)
+// {
+//     lv_label_set_text(this->wind_gust, value);
+// }
+
+void WeatherTabLvgl::setDate(const char *value)
+{
+    lv_label_set_text(this->date, value);
+}
+
+void WeatherTabLvgl::setWeatherDesc(const char *value)
+{
+    lv_label_set_text(this->weather_desc, value);
 }

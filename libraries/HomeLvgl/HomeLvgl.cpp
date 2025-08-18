@@ -150,12 +150,16 @@ void HomeLvgl::renderWeatherTiles()
     {
         double temp_min = (*doc)["list"][i]["main"]["temp_min"];
         double temp_max = (*doc)["list"][i]["main"]["temp_max"];
+        double wind_speed = (*doc)["list"][i]["wind"]["speed"];
+        double wind_deg = (*doc)["list"][i]["wind"]["deg"];
         const char *date = (*doc)["list"][i]["dt_txt"].as<const char *>();
         const char *desc = (*doc)["list"][i]["weather"][0]["description"].as<const char *>();
         this->weatherTile[i].setDate(date);
         this->weatherTile[i].setMinTemp(temp_min);
         this->weatherTile[i].setMaxTemp(temp_max);
         this->weatherTile[i].setWeatherDesc(desc);
+        this->weatherTile[i].setWindSpeed(wind_speed);
+        this->weatherTile[i].setWindDeg(wind_deg);
     }
 }
 void HomeLvgl::loop()
