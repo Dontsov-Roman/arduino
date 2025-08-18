@@ -22,15 +22,16 @@ void LvglEsp32::begin()
     // Create tabs
     this->tabs = lv_tabview_create(lv_scr_act(), LV_DIR_TOP, 70);
     this->homeTab = lv_tabview_add_tab(this->tabs, "Home");
-    this->gpsTab = lv_tabview_add_tab(this->tabs, "GPS");
+    // this->gpsTab = lv_tabview_add_tab(this->tabs, "GPS");
     this->weatherTab = lv_tabview_add_tab(this->tabs, "Weather");
     // Create Tab Content
+    this->gpsContent = this->createTabContent(this->homeTab);
     this->homeContent = this->createTabContent(this->homeTab);
-    this->gpsContent = this->createTabContent(this->gpsTab);
     this->weatherContent = this->createTabContent(this->weatherTab);
 
     this->createHomeEntities(this->homeContent);
     this->createGpsEntities(this->gpsContent);
+    lv_obj_align_to(this->gpsContent, this->homeContent, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
 }
 
 lv_obj_t *LvglEsp32::createTabContent(lv_obj_t *parent)
@@ -61,7 +62,7 @@ void LvglEsp32::createHomeEntities(lv_obj_t *parent)
     lv_obj_set_height(turnOffBtn, LV_SIZE_CONTENT);
     lv_obj_t *turnOffLabel = lv_label_create(turnOffBtn);
     lv_label_set_text(turnOffLabel, "Turn off light");
-    lv_obj_align_to(turnOffBtn, turnOnBtn, LV_ALIGN_RIGHT_MID, 200, 0);
+    lv_obj_align_to(turnOffBtn, turnOnBtn, LV_ALIGN_RIGHT_MID, 180, 0);
     lv_obj_add_event_cb(turnOffBtn, eventThunk<&LvglEsp32::turnOffLight>, LV_EVENT_CLICKED, this);
 }
 
@@ -73,7 +74,7 @@ void LvglEsp32::createGpsEntities(lv_obj_t *parent)
     lv_obj_t *title = lv_label_create(parent);
     lv_obj_set_height(title, LV_SIZE_CONTENT);
     lv_label_set_text(title, "Last GPS time:");
-    lv_obj_align_to(this->gpsTimeLabel, title, LV_ALIGN_OUT_BOTTOM_MID, 15, 10);
+    lv_obj_align_to(this->gpsTimeLabel, title, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
 }
 
 void LvglEsp32::turnOnLight(lv_event_t *e)
@@ -106,7 +107,7 @@ void LvglEsp32::loop()
     }
     else if (this->reconnectionTimeout.checkTimeout())
     {
-        this->reconnect();
+        this->wifiClient->begin();
     }
 
     if (this->renderTimeout.checkTimeout())
@@ -114,8 +115,4 @@ void LvglEsp32::loop()
         lv_label_set_text(this->homeTimeLabel, this->ntpTime->getDayTime());
         lv_label_set_text(this->gpsTimeLabel, this->gpsData.getGpsDateTime());
     }
-}
-void LvglEsp32::reconnect()
-{
-    this->wifiClient->begin();
 }

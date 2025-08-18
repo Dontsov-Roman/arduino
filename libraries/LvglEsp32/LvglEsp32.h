@@ -30,7 +30,7 @@ private:
     // Tabs
     lv_obj_t *tabs;
     lv_obj_t *homeTab;
-    lv_obj_t *gpsTab;
+    // lv_obj_t *gpsTab;
     lv_obj_t *weatherTab;
     // Tabs content
     lv_obj_t *createTabContent(lv_obj_t *parent);
@@ -46,7 +46,6 @@ private:
     // Button events
     void turnOnLight(lv_event_t *e);
     void turnOffLight(lv_event_t *e);
-    void reconnect();
 
     template <void (LvglEsp32::*Method)(lv_event_t *)>
     static void eventThunk(lv_event_t *e)
