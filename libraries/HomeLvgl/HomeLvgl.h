@@ -24,7 +24,8 @@ private:
     SimpleTimeout getGpsTimeout;
     GpsData gpsData;
 
-    WeatherTabLvgl weatherTile[3];
+    int weatherTileCount = 6;
+    WeatherTabLvgl weatherTile[6];
     IWifiClient *wifiClient;
     IHttpClient *gpsHttpClient;
     NtpTime *ntpTime;
@@ -32,6 +33,8 @@ private:
 
     String turnOnLightUrl = "/led/1";
     String turnOffLightUrl = "/led/0";
+    // Flex style
+    lv_style_t style;
     // Tabs
     lv_obj_t *tabs;
     lv_obj_t *homeTab;
@@ -47,8 +50,8 @@ private:
     lv_obj_t *homeTimeLabel;
     lv_obj_t *gpsTimeLabel;
     lv_obj_t *gpsCoordsLabel;
-    lv_obj_t *temperatureLabel;
-    lv_obj_t *weatherDescriptionLabel;
+    // lv_obj_t *temperatureLabel;
+    // lv_obj_t *weatherDescriptionLabel;
 
     void createHomeEntities(lv_obj_t *parent);
     void createGpsEntities(lv_obj_t *parent);
@@ -78,5 +81,6 @@ public:
         OpenWeather *openWeather);
     void begin();
     void loop();
+    int getWeatherTileCount();
 };
 #endif

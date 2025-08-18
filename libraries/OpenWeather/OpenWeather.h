@@ -44,5 +44,6 @@ public:
     char *getLastTemperature();
     void begin();
     int getCount();
+    void setCount(int count);
 };
 #endif

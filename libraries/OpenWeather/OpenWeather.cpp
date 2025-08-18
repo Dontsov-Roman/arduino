@@ -117,6 +117,11 @@ int OpenWeather::getCount()
 {
     return this->cnt;
 }
+
+void OpenWeather::setCount(int count)
+{
+    this->cnt = count;
+}
 JsonDocument *OpenWeather::getLastJsonDoc()
 {
     return &this->doc;

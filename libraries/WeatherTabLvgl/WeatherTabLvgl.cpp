@@ -3,7 +3,7 @@
 void WeatherTabLvgl::begin(lv_obj_t *parent)
 {
     this->container = lv_obj_create(parent);
-    lv_obj_set_size(this->container, lv_pct(32.5), LV_SIZE_CONTENT);
+    lv_obj_set_size(this->container, lv_pct(30), LV_SIZE_CONTENT);
 
     this->date = lv_label_create(this->container);
     lv_obj_set_height(this->date, LV_SIZE_CONTENT);

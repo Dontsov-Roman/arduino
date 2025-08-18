@@ -23,6 +23,11 @@ void HomeLvgl::begin()
     this->ntpTime->begin();
     this->openWeather->begin();
     this->openWeather->getWeather();
+    // LVGL flex style
+    lv_style_init(&this->style);
+    lv_style_set_flex_flow(&this->style, LV_FLEX_FLOW_ROW_WRAP);
+    lv_style_set_flex_main_place(&this->style, LV_FLEX_ALIGN_SPACE_EVENLY);
+    lv_style_set_layout(&this->style, LV_LAYOUT_FLEX);
     // Create tabs
     this->tabs = lv_tabview_create(lv_scr_act(), LV_DIR_TOP, 70);
     this->homeTab = lv_tabview_add_tab(this->tabs, "Home");
@@ -95,23 +100,14 @@ void HomeLvgl::createGpsEntities(lv_obj_t *parent)
 
 void HomeLvgl::createWeatherEntities()
 {
-    this->weatherContent = this->createTabContent(this->weatherTab);
-    this->temperatureLabel = lv_label_create(this->weatherContent);
-    lv_obj_set_height(this->temperatureLabel, LV_SIZE_CONTENT);
-    lv_label_set_text(this->temperatureLabel, "Min-max temperature");
-
-    this->weatherDescriptionLabel = lv_label_create(this->weatherContent);
-    lv_obj_set_height(this->weatherDescriptionLabel, LV_SIZE_CONTENT);
-    lv_label_set_text(this->weatherDescriptionLabel, "Weather description placeholder");
-
-    lv_obj_align_to(this->weatherDescriptionLabel, this->temperatureLabel, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
-
     this->weatherTile[0].begin(this->weatherTab);
-    lv_obj_align_to(this->weatherTile[0].getContainer(), this->weatherContent, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
-    for (int i = 1; i < 3; ++i)
+
+    lv_obj_add_style(this->weatherTab, &this->style, 0);
+    for (int i = 1; i < this->weatherTileCount; ++i)
     {
         this->weatherTile[i].begin(this->weatherTab);
-        lv_obj_align_to(this->weatherTile[i].getContainer(), this->weatherTile[i - 1].getContainer(), LV_ALIGN_OUT_RIGHT_MID, 10, 0);
+        // lv_obj_add_style(this->weatherTile[i].getContainer(), &style, 0);
+        // lv_obj_align_to(this->weatherTile[i].getContainer(), this->weatherTile[i - 1].getContainer(), LV_ALIGN_OUT_RIGHT_MID, 10, 0);
     }
 }
 
@@ -137,10 +133,14 @@ void HomeLvgl::render()
     lv_label_set_text(this->homeTimeLabel, this->ntpTime->getDayTime());
     lv_label_set_text(this->gpsTimeLabel, this->gpsData.getGpsDateTime());
     lv_label_set_text(this->gpsCoordsLabel, this->gpsData.getGpsLatLng());
-    lv_label_set_text(this->temperatureLabel, this->openWeather->getLastTemperature());
-    lv_label_set_text(this->weatherDescriptionLabel, this->openWeather->getLastWeather());
+    // lv_label_set_text(this->temperatureLabel, this->openWeather->getLastTemperature());
+    // lv_label_set_text(this->weatherDescriptionLabel, this->openWeather->getLastWeather());
 
     this->renderWeatherTiles();
+}
+int HomeLvgl::getWeatherTileCount()
+{
+    return this->weatherTileCount;
 }
 void HomeLvgl::renderWeatherTiles()
 {
