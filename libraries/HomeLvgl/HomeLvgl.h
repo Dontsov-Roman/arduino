@@ -50,8 +50,6 @@ private:
     lv_obj_t *homeTimeLabel;
     lv_obj_t *gpsTimeLabel;
     lv_obj_t *gpsCoordsLabel;
-    // lv_obj_t *temperatureLabel;
-    // lv_obj_t *weatherDescriptionLabel;
 
     void createHomeEntities(lv_obj_t *parent);
     void createGpsEntities(lv_obj_t *parent);

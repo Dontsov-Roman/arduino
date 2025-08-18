@@ -126,8 +126,6 @@ void HomeLvgl::render()
     lv_label_set_text(this->homeTimeLabel, this->ntpTime->getDayTime());
     lv_label_set_text(this->gpsTimeLabel, this->gpsData.getGpsDateTime());
     lv_label_set_text(this->gpsCoordsLabel, this->gpsData.getGpsLatLng());
-    // lv_label_set_text(this->temperatureLabel, this->openWeather->getLastTemperature());
-    // lv_label_set_text(this->weatherDescriptionLabel, this->openWeather->getLastWeather());
 
     this->renderWeatherTiles();
 }
