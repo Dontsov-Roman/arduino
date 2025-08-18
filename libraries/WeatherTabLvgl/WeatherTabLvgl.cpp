@@ -3,7 +3,7 @@
 void WeatherTabLvgl::begin(lv_obj_t *parent)
 {
     this->container = lv_obj_create(parent);
-    lv_obj_set_size(this->container, lv_pct(32), LV_SIZE_CONTENT);
+    lv_obj_set_size(this->container, lv_pct(32.5), LV_SIZE_CONTENT);
 
     this->date = lv_label_create(this->container);
     lv_obj_set_height(this->date, LV_SIZE_CONTENT);
@@ -13,7 +13,8 @@ void WeatherTabLvgl::begin(lv_obj_t *parent)
     lv_obj_t *min_temp_label = lv_label_create(this->container);
     lv_obj_set_height(this->min_temp, LV_SIZE_CONTENT);
     lv_obj_set_height(min_temp_label, LV_SIZE_CONTENT);
-    lv_label_set_text(min_temp_label, "Min temperature:");
+    lv_label_set_recolor(min_temp_label, true);
+    lv_label_set_text(min_temp_label, "#0000ff Min temperature:");
     lv_obj_align_to(min_temp_label, this->date, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
     lv_obj_align_to(this->min_temp, min_temp_label, LV_ALIGN_OUT_RIGHT_MID, 10, 0);
 
@@ -21,7 +22,8 @@ void WeatherTabLvgl::begin(lv_obj_t *parent)
     lv_obj_t *max_temp_label = lv_label_create(this->container);
     lv_obj_set_height(this->max_temp, LV_SIZE_CONTENT);
     lv_obj_set_height(max_temp_label, LV_SIZE_CONTENT);
-    lv_label_set_text(max_temp_label, "Max temperature:");
+    lv_label_set_recolor(max_temp_label, true);
+    lv_label_set_text(max_temp_label, "#0000ff Max temperature:");
     lv_obj_align_to(max_temp_label, min_temp_label, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
     lv_obj_align_to(this->max_temp, max_temp_label, LV_ALIGN_OUT_RIGHT_MID, 10, 0);
 

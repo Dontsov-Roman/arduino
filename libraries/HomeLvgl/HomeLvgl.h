@@ -52,7 +52,7 @@ private:
 
     void createHomeEntities(lv_obj_t *parent);
     void createGpsEntities(lv_obj_t *parent);
-    void createWeatherEntities(lv_obj_t *parent);
+    void createWeatherEntities();
     void render();
     void renderWeatherTiles();
 
