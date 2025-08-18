@@ -38,14 +38,6 @@ void HomeLvgl::begin()
     this->createWeatherEntities(this->weatherContent);
 
     lv_obj_align_to(this->gpsContent, this->homeContent, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
-
-    this->weatherTile[0].begin(this->weatherTab);
-    lv_obj_align_to(this->weatherTile[0].getContainer(), this->weatherContent, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
-    for (int i = 1; i < 3; ++i)
-    {
-        this->weatherTile[i].begin(this->weatherTab);
-        lv_obj_align_to(this->weatherTile[i].getContainer(), this->weatherTile[i - 1].getContainer(), LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
-    }
 }
 
 lv_obj_t *HomeLvgl::createTabContent(lv_obj_t *parent)
@@ -112,6 +104,14 @@ void HomeLvgl::createWeatherEntities(lv_obj_t *parent)
     lv_label_set_text(this->weatherDescriptionLabel, "Weather description placeholder");
 
     lv_obj_align_to(this->weatherDescriptionLabel, this->temperatureLabel, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
+
+    this->weatherTile[0].begin(this->weatherTab);
+    lv_obj_align_to(this->weatherTile[0].getContainer(), this->weatherContent, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
+    for (int i = 1; i < 3; ++i)
+    {
+        this->weatherTile[i].begin(this->weatherTab);
+        lv_obj_align_to(this->weatherTile[i].getContainer(), this->weatherTile[i - 1].getContainer(), LV_ALIGN_OUT_RIGHT_MID, 10, 0);
+    }
 }
 
 void HomeLvgl::turnOnLight(lv_event_t *e)
@@ -138,7 +138,7 @@ void HomeLvgl::render()
     lv_label_set_text(this->gpsCoordsLabel, this->gpsData.getGpsLatLng());
     lv_label_set_text(this->temperatureLabel, this->openWeather->getLastTemperature());
     lv_label_set_text(this->weatherDescriptionLabel, this->openWeather->getLastWeather());
-    // render by hours
+
     this->renderWeatherTiles();
 }
 void HomeLvgl::renderWeatherTiles()
