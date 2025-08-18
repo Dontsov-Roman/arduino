@@ -6,11 +6,6 @@ HomeLvgl::HomeLvgl(
     NtpTime *ntpTime,
     OpenWeather *openWeather)
 {
-    this->reconnectionTimeout = SimpleTimeout(10000);
-    this->renderTimeout = SimpleTimeout(5000);
-    this->getGpsTimeout = SimpleTimeout(15000);
-    this->gpsData = GpsData();
-
     this->wifiClient = wifiClient;
     this->gpsHttpClient = gpsHttpClient;
     this->ntpTime = ntpTime;
@@ -55,16 +50,16 @@ void HomeLvgl::createHomeEntities(lv_obj_t *parent)
     lv_obj_t *title = lv_label_create(parent);
     this->homeTimeLabel = lv_label_create(parent);
     lv_obj_set_height(title, LV_SIZE_CONTENT);
-    lv_label_set_recolor(title, true);
     lv_obj_set_height(this->homeTimeLabel, LV_SIZE_CONTENT);
+    lv_label_set_recolor(title, true);
     lv_label_set_text(title, "#0000ff Light Controll");
-    lv_obj_align_to(this->homeTimeLabel, title, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
+    lv_obj_align_to(title, this->homeTimeLabel, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
 
     lv_obj_t *turnOnBtn = lv_btn_create(parent);
     lv_obj_set_height(turnOnBtn, LV_SIZE_CONTENT);
     lv_obj_t *turnOnLabel = lv_label_create(turnOnBtn);
     lv_label_set_text(turnOnLabel, "Turn on light");
-    lv_obj_align_to(turnOnBtn, this->homeTimeLabel, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
+    lv_obj_align_to(turnOnBtn, title, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
     lv_obj_add_event_cb(turnOnBtn, eventThunk<&HomeLvgl::turnOnLight>, LV_EVENT_CLICKED, this);
 
     lv_obj_t *turnOffBtn = lv_btn_create(parent);
@@ -106,8 +101,6 @@ void HomeLvgl::createWeatherEntities()
     for (int i = 1; i < this->weatherTileCount; ++i)
     {
         this->weatherTile[i].begin(this->weatherTab);
-        // lv_obj_add_style(this->weatherTile[i].getContainer(), &style, 0);
-        // lv_obj_align_to(this->weatherTile[i].getContainer(), this->weatherTile[i - 1].getContainer(), LV_ALIGN_OUT_RIGHT_MID, 10, 0);
     }
 }
 

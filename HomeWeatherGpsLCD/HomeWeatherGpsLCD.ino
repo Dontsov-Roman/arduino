@@ -63,7 +63,6 @@ void setup()
     openWeather.setCoords(openWeatherLat, openWeatherLng);
     openWeather.setCount(mylvgl.getWeatherTileCount());
     wifiClient.begin();
-    Serial.println("");
     Serial.println("Initializing board");
     Board *board = new Board();
     board->init();

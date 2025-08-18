@@ -15,13 +15,14 @@ void WifiClientEsp32::begin()
 {
     WiFi.mode(WIFI_STA);
     this->wifiMulti.addAP(this->wifiSsid, this->wifiPassword);
-    Serial.println("Connecting to WiFi");
+    Serial.print("Connecting to WiFi.");
     while (!this->isConnected())
     {
         delay(500);
         Serial.print(".");
     }
     Serial.print("Connected");
+    Serial.println("");
 }
 bool WifiClientEsp32::isConnected()
 {

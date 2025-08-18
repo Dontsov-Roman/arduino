@@ -47,9 +47,9 @@ void WeatherTabLvgl::begin(lv_obj_t *parent)
     lv_label_set_text(wind_units, "#0000ff m/sec");
 
     lv_obj_align_to(wind_label, this->weather_desc, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
-    lv_obj_align_to(this->wind_speed, wind_label, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
-    lv_obj_align_to(wind_units, this->wind_speed, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
-    lv_obj_align_to(this->wind_deg, wind_units, LV_ALIGN_OUT_RIGHT_MID, 10, 0);
+    lv_obj_align_to(this->wind_speed, wind_label, LV_ALIGN_OUT_RIGHT_MID, 0, 0);
+    lv_obj_align_to(wind_units, this->wind_speed, LV_ALIGN_OUT_RIGHT_MID, 15, 0);
+    lv_obj_align_to(this->wind_deg, wind_units, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
 }
 
 lv_obj_t *WeatherTabLvgl::getContainer()
