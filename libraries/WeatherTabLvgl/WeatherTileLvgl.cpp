@@ -1,6 +1,6 @@
-#include <WeatherTabLvgl.h>
+#include <WeatherTileLvgl.h>
 
-void WeatherTabLvgl::begin(lv_obj_t *parent)
+void WeatherTileLvgl::begin(lv_obj_t *parent)
 {
     this->container = lv_obj_create(parent);
     lv_obj_set_size(this->container, lv_pct(30), LV_SIZE_CONTENT);
@@ -52,45 +52,41 @@ void WeatherTabLvgl::begin(lv_obj_t *parent)
     lv_obj_align_to(this->wind_deg, wind_units, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
 }
 
-lv_obj_t *WeatherTabLvgl::getContainer()
+lv_obj_t *WeatherTileLvgl::getContainer()
 {
     return this->container;
 }
 
-void WeatherTabLvgl::setMinTemp(double value)
+void WeatherTileLvgl::setMinTemp(double value)
 {
-    char buffer[16];
-    dtostrf(value, 6, 2, buffer);
-    lv_label_set_text(this->min_temp, buffer);
+    dtostrf(value, 6, 2, this->min_temp_buf);
+    lv_label_set_text(this->min_temp, this->min_temp_buf);
 }
 
-void WeatherTabLvgl::setMaxTemp(double value)
+void WeatherTileLvgl::setMaxTemp(double value)
 {
-    char buffer[16];
-    dtostrf(value, 6, 2, buffer);
-    lv_label_set_text(this->max_temp, buffer);
+    dtostrf(value, 6, 2, this->max_temp_buf);
+    lv_label_set_text(this->max_temp, this->max_temp_buf);
 }
 
-void WeatherTabLvgl::setWindSpeed(double value)
+void WeatherTileLvgl::setWindSpeed(double value)
 {
-    char buffer[16];
-    dtostrf(value, 6, 2, buffer);
-    lv_label_set_text(this->wind_speed, buffer);
+    dtostrf(value, 6, 2, this->wind_speed_buf);
+    lv_label_set_text(this->wind_speed, this->wind_speed_buf);
 }
 
-void WeatherTabLvgl::setWindDeg(double value)
+void WeatherTileLvgl::setWindDeg(double value)
 {
-    char buffer[16];
-    dtostrf(value, 6, 2, buffer);
-    lv_label_set_text(this->wind_deg, buffer);
+    dtostrf(value, 6, 2, this->wind_deg_buf);
+    lv_label_set_text(this->wind_deg, this->wind_deg_buf);
 }
 
-void WeatherTabLvgl::setDate(const char *value)
+void WeatherTileLvgl::setDate(const char *value)
 {
     lv_label_set_text(this->date, value);
 }
 
-void WeatherTabLvgl::setWeatherDesc(const char *value)
+void WeatherTileLvgl::setWeatherDesc(const char *value)
 {
     lv_label_set_text(this->weather_desc, value);
 }

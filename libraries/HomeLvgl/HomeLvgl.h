@@ -13,7 +13,7 @@
 #include <GpsData.h>
 #include <NtpTime.h>
 #include <OpenWeather.h>
-#include <WeatherTabLvgl.h>
+#include <WeatherTileLvgl.h>
 #include <ArduinoJson.h>
 
 class HomeLvgl
@@ -25,7 +25,7 @@ private:
     GpsData gpsData;
 
     int weatherTileCount = 6;
-    WeatherTabLvgl weatherTile[6];
+    WeatherTileLvgl weatherTile[6];
     IWifiClient *wifiClient;
     IHttpClient *gpsHttpClient;
     NtpTime *ntpTime;

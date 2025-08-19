@@ -6,17 +6,22 @@
 #include <WProgram.h>
 #endif
 #include <lvgl.h>
-class WeatherTabLvgl
+class WeatherTileLvgl
 {
 private:
     lv_obj_t *container;
 
     lv_obj_t *date;
+    lv_obj_t *weather_desc;
     lv_obj_t *min_temp;
     lv_obj_t *max_temp;
-    lv_obj_t *weather_desc;
     lv_obj_t *wind_speed;
     lv_obj_t *wind_deg;
+
+    char min_temp_buf[16];
+    char max_temp_buf[16];
+    char wind_speed_buf[16];
+    char wind_deg_buf[16];
 
 public:
     void begin(lv_obj_t *parent);

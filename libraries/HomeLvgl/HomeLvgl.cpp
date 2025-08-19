@@ -74,8 +74,6 @@ void HomeLvgl::createGpsEntities(lv_obj_t *parent)
 {
     this->gpsTimeLabel = lv_label_create(parent);
     lv_obj_set_height(this->gpsTimeLabel, LV_SIZE_CONTENT);
-    lv_label_set_recolor(this->gpsTimeLabel, true);
-    lv_label_set_text(this->gpsTimeLabel, "#ff0000 No GPS Data");
     lv_obj_t *title = lv_label_create(parent);
     lv_obj_set_height(title, LV_SIZE_CONTENT);
     lv_label_set_recolor(title, true);
@@ -108,7 +106,6 @@ void HomeLvgl::turnOnLight(lv_event_t *e)
 {
     if (lv_event_get_code(e) == LV_EVENT_CLICKED)
     {
-        Serial.println("Light should be turned on");
         this->gpsHttpClient->get(this->turnOnLightUrl);
     }
 }
@@ -117,10 +114,10 @@ void HomeLvgl::turnOffLight(lv_event_t *e)
 {
     if (lv_event_get_code(e) == LV_EVENT_CLICKED)
     {
-        Serial.println("Light should be turned off");
         this->gpsHttpClient->get(this->turnOffLightUrl);
     }
 }
+
 void HomeLvgl::render()
 {
     lv_label_set_text(this->homeTimeLabel, this->ntpTime->getDayTime());
@@ -129,10 +126,12 @@ void HomeLvgl::render()
 
     this->renderWeatherTiles();
 }
+
 int HomeLvgl::getWeatherTileCount()
 {
     return this->weatherTileCount;
 }
+
 void HomeLvgl::renderWeatherTiles()
 {
     JsonDocument *doc = this->openWeather->getLastJsonDoc();
@@ -153,6 +152,7 @@ void HomeLvgl::renderWeatherTiles()
         this->weatherTile[i].setWindDeg(wind_deg);
     }
 }
+
 void HomeLvgl::loop()
 {
     if (this->wifiClient->isConnected())
