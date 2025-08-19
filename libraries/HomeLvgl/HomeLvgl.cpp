@@ -104,7 +104,7 @@ void HomeLvgl::createWeatherEntities()
 
 void HomeLvgl::turnOnLight(lv_event_t *e)
 {
-    if (lv_event_get_code(e) == LV_EVENT_CLICKED)
+    if (lv_event_get_code(e) == LV_EVENT_CLICKED && this->buttonTimeout.checkTimeout())
     {
         this->gpsHttpClient->get(this->turnOnLightUrl);
     }
@@ -112,7 +112,7 @@ void HomeLvgl::turnOnLight(lv_event_t *e)
 
 void HomeLvgl::turnOffLight(lv_event_t *e)
 {
-    if (lv_event_get_code(e) == LV_EVENT_CLICKED)
+    if (lv_event_get_code(e) == LV_EVENT_CLICKED && this->buttonTimeout.checkTimeout())
     {
         this->gpsHttpClient->get(this->turnOffLightUrl);
     }
@@ -161,7 +161,11 @@ void HomeLvgl::loop()
         this->openWeather->loop();
         if (this->getGpsTimeout.checkTimeout())
         {
-            this->gpsData.parse(this->gpsHttpClient->get()->response);
+            ResponseStruct *response = this->gpsHttpClient->get();
+            if (response->code == 200)
+            {
+                this->gpsData.parse(response->response);
+            }
         }
     }
     else if (this->reconnectionTimeout.checkTimeout())

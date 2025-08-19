@@ -22,6 +22,7 @@ private:
     SimpleTimeout reconnectionTimeout = SimpleTimeout(10000);
     SimpleTimeout renderTimeout = SimpleTimeout(5000);
     SimpleTimeout getGpsTimeout = SimpleTimeout(15000);
+    SimpleTimeout buttonTimeout = SimpleTimeout(500);
     GpsData gpsData;
 
     int weatherTileCount = 6;

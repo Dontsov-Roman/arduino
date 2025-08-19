@@ -45,7 +45,11 @@ void GpsHomeDisplay::loop()
     {
         if (this->getGpsTimeout->checkTimeout())
         {
-            this->gpsData.parse(this->gpsHttpClient->get()->response);
+            ResponseStruct *response = this->gpsHttpClient->get();
+            if (response->code == 200)
+            {
+                this->gpsData.parse(response->response);
+            }
         }
         if (this->displaySwitchTimeout->checkTimeout())
         {
