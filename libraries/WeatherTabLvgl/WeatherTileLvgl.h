@@ -16,12 +16,12 @@ private:
     lv_obj_t *min_temp;
     lv_obj_t *max_temp;
     lv_obj_t *wind_speed;
-    lv_obj_t *wind_deg;
+    lv_obj_t *wind_arrow;
 
     char min_temp_buf[16];
     char max_temp_buf[16];
     char wind_speed_buf[16];
-    char wind_deg_buf[16];
+    lv_coord_t wind_angle;
 
 public:
     void begin(lv_obj_t *parent);

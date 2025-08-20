@@ -29,7 +29,7 @@ void HomeLvgl::begin()
     this->weatherTab = lv_tabview_add_tab(this->tabs, "Weather");
     // Time
     lv_obj_t *timeContent = lv_obj_create(lv_scr_act());
-    lv_obj_set_size(timeContent, lv_pct(100), LV_SIZE_CONTENT);
+    lv_obj_set_size(timeContent, lv_pct(100), 30);
     this->timeLabel = lv_label_create(timeContent);
     lv_obj_align(timeContent, LV_ALIGN_BOTTOM_MID, 0, 0);
     lv_obj_align(this->timeLabel, LV_ALIGN_CENTER, 0, 0);

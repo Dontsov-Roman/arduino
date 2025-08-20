@@ -35,21 +35,25 @@ void WeatherTileLvgl::begin(lv_obj_t *parent)
     lv_obj_t *wind_label = lv_label_create(this->container);
     lv_obj_t *wind_units = lv_label_create(this->container);
     this->wind_speed = lv_label_create(this->container);
-    this->wind_deg = lv_label_create(this->container);
+    this->wind_arrow = lv_label_create(this->container);
+    lv_obj_set_size(this->wind_arrow, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
     lv_obj_set_height(this->wind_speed, LV_SIZE_CONTENT);
     lv_obj_set_height(wind_units, LV_SIZE_CONTENT);
-    lv_obj_set_height(this->wind_deg, LV_SIZE_CONTENT);
     lv_obj_set_height(wind_label, LV_SIZE_CONTENT);
+    lv_obj_set_height(this->wind_arrow, LV_SIZE_CONTENT);
     lv_label_set_recolor(wind_label, true);
     lv_label_set_text(wind_label, "#0000ff Wind:");
 
     lv_label_set_recolor(wind_units, true);
     lv_label_set_text(wind_units, "#0000ff m/sec");
 
+    lv_label_set_recolor(this->wind_arrow, true);
+    lv_label_set_text(this->wind_arrow, "#0000ff >>>");
+
     lv_obj_align_to(wind_label, this->weather_desc, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
     lv_obj_align_to(this->wind_speed, wind_label, LV_ALIGN_OUT_RIGHT_MID, 0, 0);
     lv_obj_align_to(wind_units, this->wind_speed, LV_ALIGN_OUT_RIGHT_MID, 15, 0);
-    lv_obj_align_to(this->wind_deg, wind_units, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
+    lv_obj_align_to(this->wind_arrow, wind_units, LV_ALIGN_OUT_RIGHT_MID, 20, 0);
 }
 
 lv_obj_t *WeatherTileLvgl::getContainer()
@@ -77,8 +81,12 @@ void WeatherTileLvgl::setWindSpeed(double value)
 
 void WeatherTileLvgl::setWindDeg(double value)
 {
-    dtostrf(value, 6, 2, this->wind_deg_buf);
-    lv_label_set_text(this->wind_deg, this->wind_deg_buf);
+    this->wind_angle = (value + 90) * 10;
+    if (this->wind_angle > 3600)
+    {
+        this->wind_angle = this->wind_angle - 3600;
+    }
+    lv_obj_set_style_transform_angle(this->wind_arrow, this->wind_angle, 0);
 }
 
 void WeatherTileLvgl::setDate(const char *value)
