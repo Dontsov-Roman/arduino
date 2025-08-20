@@ -15,6 +15,7 @@ void HttpClientEsp8266::begin()
 {
     sprintf(this->fullUrl, "http://%s:%s%s", this->host, this->port, this->url);
     this->http.setReuse(true);
+    this->setTimeout(5000);
 }
 ResponseStruct *HttpClientEsp8266::get()
 {
@@ -105,4 +106,8 @@ String HttpClientEsp8266::generateQueryUrl(String url, String key, String value)
 void HttpClientEsp8266::setSecure(bool isSecure)
 {
     this->isSecure = isSecure;
+}
+void HttpClientEsp8266::setTimeout(int timeout)
+{
+    http.setTimeout(timeout);
 }

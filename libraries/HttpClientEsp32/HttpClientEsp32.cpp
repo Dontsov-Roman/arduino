@@ -30,6 +30,7 @@ void HttpClientEsp32::begin()
         sprintf(this->fullUrl, "http://%s:%s%s", this->host, this->port, this->url);
     }
     this->http.setReuse(true);
+    this->setTimeout(5000);
 }
 ResponseStruct *HttpClientEsp32::get()
 {
@@ -124,4 +125,8 @@ String HttpClientEsp32::generateQueryUrl(String url, String key, String value)
 void HttpClientEsp32::setSecure(bool isSecure)
 {
     this->isSecure = isSecure;
+}
+void HttpClientEsp32::setTimeout(int timeout)
+{
+    http.setTimeout(timeout);
 }

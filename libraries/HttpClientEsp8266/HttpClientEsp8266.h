@@ -30,6 +30,7 @@ public:
     ResponseStruct *post(char *body, String key, String value);
     void setHost(const char *host);
     bool setSecure(bool isSecure);
+    void setTimeout(int timeout);
 
 protected:
     WifiClientEsp8266 *wifiClient;

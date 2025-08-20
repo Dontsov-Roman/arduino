@@ -31,6 +31,7 @@ public:
     ResponseStruct *post(char *body, String key, String value);
     void setHost(const char *host);
     void setSecure(bool isSecure);
+    void setTimeout(int timeout);
 
 protected:
     HTTPClient http;

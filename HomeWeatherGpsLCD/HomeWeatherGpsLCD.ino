@@ -49,6 +49,7 @@ char *openWeatherLng = OPEN_WEATHER_LNG;
 
 SimpleTimeout ntpTimer(30000);
 SimpleTimeout openWeatherTimer(15 * 60 * 1000);
+SimpleTimeout sleepTimer(60 * 1000);
 
 WifiClientEsp32 wifiClient(wifiSsid, wifiPassword);
 HttpClientEsp32 httpClient(host, url, port);

@@ -31,5 +31,6 @@ public:
     virtual ResponseStruct *post(char *body, String key, String value);
     virtual void setHost(const char *host);
     virtual void setSecure(bool isSecure);
+    virtual void setTimeout(int timeout);
 };
 #endif
