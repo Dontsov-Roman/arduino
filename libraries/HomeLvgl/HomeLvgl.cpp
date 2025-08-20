@@ -27,6 +27,12 @@ void HomeLvgl::begin()
     this->tabs = lv_tabview_create(lv_scr_act(), LV_DIR_TOP, 70);
     this->homeTab = lv_tabview_add_tab(this->tabs, "Home");
     this->weatherTab = lv_tabview_add_tab(this->tabs, "Weather");
+    // Time
+    lv_obj_t *timeContent = lv_obj_create(lv_scr_act());
+    lv_obj_set_size(timeContent, lv_pct(100), LV_SIZE_CONTENT);
+    this->timeLabel = lv_label_create(timeContent);
+    lv_obj_align(timeContent, LV_ALIGN_BOTTOM_MID, 0, 0);
+    lv_obj_align(this->timeLabel, LV_ALIGN_CENTER, 0, 0);
     // Create Tab Content
     this->gpsContent = this->createTabContent(this->homeTab);
     this->homeContent = this->createTabContent(this->homeTab);
@@ -48,12 +54,9 @@ lv_obj_t *HomeLvgl::createTabContent(lv_obj_t *parent)
 void HomeLvgl::createHomeEntities(lv_obj_t *parent)
 {
     lv_obj_t *title = lv_label_create(parent);
-    this->homeTimeLabel = lv_label_create(parent);
     lv_obj_set_height(title, LV_SIZE_CONTENT);
-    lv_obj_set_height(this->homeTimeLabel, LV_SIZE_CONTENT);
     lv_label_set_recolor(title, true);
     lv_label_set_text(title, "#0000ff Light Controll");
-    lv_obj_align_to(title, this->homeTimeLabel, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
 
     lv_obj_t *turnOnBtn = lv_btn_create(parent);
     lv_obj_set_height(turnOnBtn, LV_SIZE_CONTENT);
@@ -120,7 +123,7 @@ void HomeLvgl::turnOffLight(lv_event_t *e)
 
 void HomeLvgl::render()
 {
-    lv_label_set_text(this->homeTimeLabel, this->ntpTime->getDayTime());
+    lv_label_set_text(this->timeLabel, this->ntpTime->getDayTime());
     lv_label_set_text(this->gpsTimeLabel, this->gpsData.getGpsDateTime());
     lv_label_set_text(this->gpsCoordsLabel, this->gpsData.getGpsLatLng());
 

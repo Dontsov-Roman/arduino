@@ -39,7 +39,6 @@ private:
     // Tabs
     lv_obj_t *tabs;
     lv_obj_t *homeTab;
-    // lv_obj_t *gpsTab;
     lv_obj_t *weatherTab;
     // Tabs content
     lv_obj_t *createTabContent(lv_obj_t *parent);
@@ -48,9 +47,9 @@ private:
     lv_obj_t *weatherContent;
 
     // labels
-    lv_obj_t *homeTimeLabel;
     lv_obj_t *gpsTimeLabel;
     lv_obj_t *gpsCoordsLabel;
+    lv_obj_t *timeLabel;
 
     void createHomeEntities(lv_obj_t *parent);
     void createGpsEntities(lv_obj_t *parent);
