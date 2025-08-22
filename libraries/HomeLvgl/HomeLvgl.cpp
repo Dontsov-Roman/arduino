@@ -123,7 +123,6 @@ void HomeLvgl::turnOffLight(lv_event_t *e)
 
 void HomeLvgl::render()
 {
-    lv_label_set_text(this->timeLabel, this->ntpTime->getDayTime());
     lv_label_set_text(this->gpsTimeLabel, this->gpsData.getGpsDateTime());
     lv_label_set_text(this->gpsCoordsLabel, this->gpsData.getGpsLatLng());
 
@@ -179,5 +178,9 @@ void HomeLvgl::loop()
     if (this->renderTimeout.checkTimeout())
     {
         this->render();
+    }
+    if (this->renderTimeTimeout.checkTimeout())
+    {
+        lv_label_set_text(this->timeLabel, this->ntpTime->getDayTime());
     }
 }

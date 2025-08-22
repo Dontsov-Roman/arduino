@@ -29,7 +29,7 @@ void NtpTime::fetchTime()
     strftime(this->time, 9, "%H:%M:%S", &this->timeStruct);
     strftime(this->date, 9, "%D", &this->timeStruct);
     strftime(this->day, 12, "%b %d, %a", &this->timeStruct);
-    strftime(this->dayTime, 18, "%d %b, %a %H:%M", &this->timeStruct);
+    strftime(this->dayTime, sizeof(this->dayTime), "%d %b, %a %H:%M:%S", &this->timeStruct);
 }
 tm *NtpTime::getTimeStruct()
 {

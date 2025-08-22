@@ -47,7 +47,7 @@ const char *openWeatherApiKey = OPEN_WEATHER_API_KEY;
 char *openWeatherLat = OPEN_WEATHER_LAT;
 char *openWeatherLng = OPEN_WEATHER_LNG;
 
-SimpleTimeout ntpTimer(30000);
+SimpleTimeout ntpTimer(1000);
 SimpleTimeout openWeatherTimer(15 * 60 * 1000);
 SimpleTimeout sleepTimer(60 * 1000);
 

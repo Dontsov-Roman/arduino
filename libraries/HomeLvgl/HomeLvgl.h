@@ -21,6 +21,7 @@ class HomeLvgl
 private:
     SimpleTimeout reconnectionTimeout = SimpleTimeout(10000);
     SimpleTimeout renderTimeout = SimpleTimeout(15000);
+    SimpleTimeout renderTimeTimeout = SimpleTimeout(1000);
     SimpleTimeout getGpsTimeout = SimpleTimeout(30000);
     SimpleTimeout buttonTimeout = SimpleTimeout(500);
     GpsData gpsData;
