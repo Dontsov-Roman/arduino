@@ -55,26 +55,33 @@ lv_obj_t *HomeLvgl::createTabContent(lv_obj_t *parent)
 }
 void HomeLvgl::createTechEntities(lv_obj_t *parent)
 {
+
     lv_obj_t *title = lv_label_create(parent);
+    lv_obj_t *launchLabel = lv_label_create(parent);
+    lv_obj_set_height(launchLabel, LV_SIZE_CONTENT);
+    lv_label_set_recolor(launchLabel, true);
+    lv_label_set_text(launchLabel, "#0000ff Launch Time:");
     lv_obj_set_height(title, LV_SIZE_CONTENT);
     lv_label_set_recolor(title, true);
-    lv_label_set_text(title, "#0000ff Launch time:");
+    lv_label_set_text(title, "#0000ff Tech Information");
+    lv_obj_align(title, LV_ALIGN_TOP_MID, 0, 0);
+    lv_obj_align(launchLabel, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
 
     this->launchTimeLabel = lv_label_create(parent);
-    lv_obj_align_to(this->launchTimeLabel, title, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
+    lv_obj_align_to(this->launchTimeLabel, launchLabel, LV_ALIGN_OUT_RIGHT_MID, 10, 0);
 }
 void HomeLvgl::createHomeEntities(lv_obj_t *parent)
 {
     lv_obj_t *title = lv_label_create(parent);
     lv_obj_set_height(title, LV_SIZE_CONTENT);
     lv_label_set_recolor(title, true);
-    lv_label_set_text(title, "#0000ff Light Controll");
+    lv_label_set_text(title, "#0000ff Light Control:");
 
     lv_obj_t *turnOnBtn = lv_btn_create(parent);
     lv_obj_set_height(turnOnBtn, LV_SIZE_CONTENT);
     lv_obj_t *turnOnLabel = lv_label_create(turnOnBtn);
     lv_label_set_text(turnOnLabel, "Turn on light");
-    lv_obj_align_to(turnOnBtn, title, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
+    lv_obj_align_to(turnOnBtn, title, LV_ALIGN_OUT_RIGHT_MID, 10, 0);
     lv_obj_add_event_cb(turnOnBtn, eventThunk<&HomeLvgl::turnOnLight>, LV_EVENT_CLICKED, this);
 
     lv_obj_t *turnOffBtn = lv_btn_create(parent);
@@ -99,7 +106,7 @@ void HomeLvgl::createGpsEntities(lv_obj_t *parent)
     lv_obj_set_height(coordsLabel, LV_SIZE_CONTENT);
     lv_label_set_recolor(coordsLabel, true);
     lv_label_set_text(coordsLabel, "#0000ff Last Coordinates:");
-    lv_obj_align_to(coordsLabel, title, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
+    lv_obj_align(coordsLabel, LV_ALIGN_TOP_MID, 0, 0);
 
     this->gpsCoordsLabel = lv_label_create(parent);
     lv_obj_set_height(this->gpsCoordsLabel, LV_SIZE_CONTENT);
