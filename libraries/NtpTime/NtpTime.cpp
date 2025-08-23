@@ -25,11 +25,16 @@ void NtpTime::begin()
 void NtpTime::fetchTime()
 {
     getLocalTime(&this->timeStruct);
-    // sprintf(this->time, "%02d:%02d:%02d", this->timeStruct.tm_hour, this->timeStruct.tm_min, this->timeStruct.tm_sec);
     strftime(this->time, 9, "%H:%M:%S", &this->timeStruct);
     strftime(this->date, 9, "%D", &this->timeStruct);
     strftime(this->day, 12, "%b %d, %a", &this->timeStruct);
     strftime(this->dayTime, sizeof(this->dayTime), "%d %b, %a %H:%M:%S", &this->timeStruct);
+
+    if (!this->launched)
+    {
+        this->launched = true;
+        strftime(this->launchTime, sizeof(this->launchTime), "%d %b, %a %H:%M:%S", &this->timeStruct);
+    }
 }
 tm *NtpTime::getTimeStruct()
 {
@@ -58,4 +63,8 @@ char *NtpTime::getDayTime()
 char *NtpTime::getDate()
 {
     return this->date;
+}
+char *NtpTime::getLaunchTime()
+{
+    return this->launchTime;
 }

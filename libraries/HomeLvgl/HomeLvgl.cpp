@@ -35,13 +35,16 @@ void HomeLvgl::begin()
     lv_obj_align(this->timeLabel, LV_ALIGN_CENTER, 0, 0);
     // Create Tab Content
     this->gpsContent = this->createTabContent(this->homeTab);
-    this->homeContent = this->createTabContent(this->homeTab);
+    this->lightContent = this->createTabContent(this->homeTab);
+    this->techInfoContent = this->createTabContent(this->homeTab);
 
-    this->createHomeEntities(this->homeContent);
+    this->createHomeEntities(this->lightContent);
     this->createGpsEntities(this->gpsContent);
-    this->createWeatherEntities();
+    this->createTechEntities(this->techInfoContent);
+    this->createWeatherTab();
 
-    lv_obj_align_to(this->gpsContent, this->homeContent, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
+    lv_obj_align_to(this->gpsContent, this->lightContent, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
+    lv_obj_align_to(this->techInfoContent, this->gpsContent, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
 }
 
 lv_obj_t *HomeLvgl::createTabContent(lv_obj_t *parent)
@@ -50,7 +53,16 @@ lv_obj_t *HomeLvgl::createTabContent(lv_obj_t *parent)
     lv_obj_set_size(tabContent, lv_pct(100), LV_SIZE_CONTENT);
     return tabContent;
 }
+void HomeLvgl::createTechEntities(lv_obj_t *parent)
+{
+    lv_obj_t *title = lv_label_create(parent);
+    lv_obj_set_height(title, LV_SIZE_CONTENT);
+    lv_label_set_recolor(title, true);
+    lv_label_set_text(title, "#0000ff Launch time:");
 
+    this->launchTimeLabel = lv_label_create(parent);
+    lv_obj_align_to(this->launchTimeLabel, title, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
+}
 void HomeLvgl::createHomeEntities(lv_obj_t *parent)
 {
     lv_obj_t *title = lv_label_create(parent);
@@ -94,7 +106,7 @@ void HomeLvgl::createGpsEntities(lv_obj_t *parent)
     lv_obj_align_to(this->gpsCoordsLabel, coordsLabel, LV_ALIGN_OUT_RIGHT_MID, 10, 0);
 }
 
-void HomeLvgl::createWeatherEntities()
+void HomeLvgl::createWeatherTab()
 {
     this->weatherTile[0].begin(this->weatherTab);
 
@@ -125,6 +137,7 @@ void HomeLvgl::render()
 {
     lv_label_set_text(this->gpsTimeLabel, this->gpsData.getGpsDateTime());
     lv_label_set_text(this->gpsCoordsLabel, this->gpsData.getGpsLatLng());
+    lv_label_set_text(this->launchTimeLabel, this->ntpTime->getLaunchTime());
 
     this->renderWeatherTiles();
 }

@@ -21,6 +21,7 @@ public:
     char *getDate();
     char *getDay();
     char *getDayTime();
+    char *getLaunchTime();
 
 private:
     tm timeStruct;
@@ -32,5 +33,8 @@ private:
     char date[9];
     char day[12];
     char dayTime[24];
+
+    bool launched = false;
+    char launchTime[24] = "No time";
 };
 #endif

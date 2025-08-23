@@ -43,7 +43,8 @@ private:
     lv_obj_t *weatherTab;
     // Tabs content
     lv_obj_t *createTabContent(lv_obj_t *parent);
-    lv_obj_t *homeContent;
+    lv_obj_t *lightContent;
+    lv_obj_t *techInfoContent;
     lv_obj_t *gpsContent;
     lv_obj_t *weatherContent;
 
@@ -51,10 +52,12 @@ private:
     lv_obj_t *gpsTimeLabel;
     lv_obj_t *gpsCoordsLabel;
     lv_obj_t *timeLabel;
+    lv_obj_t *launchTimeLabel;
 
     void createHomeEntities(lv_obj_t *parent);
     void createGpsEntities(lv_obj_t *parent);
-    void createWeatherEntities();
+    void createTechEntities(lv_obj_t *parent);
+    void createWeatherTab();
     void render();
     void renderWeatherTiles();
 
