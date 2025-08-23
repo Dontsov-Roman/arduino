@@ -55,7 +55,6 @@ lv_obj_t *HomeLvgl::createTabContent(lv_obj_t *parent)
 }
 void HomeLvgl::createTechEntities(lv_obj_t *parent)
 {
-
     lv_obj_t *title = lv_label_create(parent);
     lv_obj_t *launchLabel = lv_label_create(parent);
     lv_obj_set_height(launchLabel, LV_SIZE_CONTENT);
