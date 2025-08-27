@@ -3,7 +3,9 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
+#if defined(ESP_PLATFORM)
 #include "esp_err.h"
+#endif
 #include "esp_utils_conf_internal.h"
 #include "log/esp_utils_log.h"
 
@@ -91,6 +93,7 @@
             }                                     \
         } while(0)
 
+#if defined(ESP_PLATFORM)
 /**
  * @brief Check if the value is not `ESP_OK`; if not, return the specified value.
  *
@@ -100,8 +103,7 @@
  * @param ... Additional arguments for the format string
  */
 #define ESP_UTILS_CHECK_ERROR_RETURN(x, ret, fmt, ...) do { \
-            esp_err_t err = (x);                        \
-            if (unlikely(err != ESP_OK)) {                          \
+            if (unlikely((x) != ESP_OK)) {                          \
                 return ret;                              \
             }                                            \
         } while(0)
@@ -132,6 +134,7 @@
                 return;                           \
             }                                     \
         } while(0)
+#endif // ESP_PLATFORM
 
 /**
  * The `try {} catch {}` block is only available in C++ and `CONFIG_COMPILER_CXX_EXCEPTIONS = 1`
@@ -184,6 +187,21 @@
         } \
     } while (0)
 #endif // __cplusplus && CONFIG_COMPILER_CXX_EXCEPTIONS
+
+/**
+ * @brief Check if the value is within the range [min, max];
+ *
+ * @param x Value to check
+ * @param min Minimum acceptable value
+ * @param max Maximum acceptable value
+ */
+#define ESP_UTILS_CHECK_VALUE(x, min, max) do { \
+            __typeof__(x) _x = (x); \
+            __typeof__(min) _min = (min); \
+            __typeof__(max) _max = (max); \
+            if ((_x < _min) || (_x > _max)) { \
+            } \
+        } while(0)
 
 #else
 
@@ -281,6 +299,7 @@
             }                                     \
         } while(0)
 
+#if defined(ESP_PLATFORM)
 /**
  * @brief Check if the value is not `ESP_OK`; if not, log an error and return the specified value.
  *
@@ -290,9 +309,9 @@
  * @param ... Additional arguments for the format string
  */
 #define ESP_UTILS_CHECK_ERROR_RETURN(x, ret, fmt, ...) do { \
-            esp_err_t err = (x);                        \
-            if (unlikely(err != ESP_OK)) {                          \
-                ESP_UTILS_LOGE(fmt " [%s]", ##__VA_ARGS__, esp_err_to_name(err)); \
+            esp_err_t _err_ = (x);                        \
+            if (unlikely(_err_ != ESP_OK)) {                          \
+                ESP_UTILS_LOGE(fmt " [%s]", ##__VA_ARGS__, esp_err_to_name(_err_)); \
                 return ret;                              \
             }                                            \
         } while(0)
@@ -306,9 +325,9 @@
  * @param ... Additional arguments for the format string
  */
 #define ESP_UTILS_CHECK_ERROR_GOTO(x, goto_tag, fmt, ...) do { \
-            esp_err_t err = (x);                        \
-            if (unlikely((err) != ESP_OK)) {                   \
-                ESP_UTILS_LOGE(fmt " [%s]", ##__VA_ARGS__, esp_err_to_name(err)); \
+            esp_err_t _err_ = (x);                        \
+            if (unlikely(_err_ != ESP_OK)) {                   \
+                ESP_UTILS_LOGE(fmt " [%s]", ##__VA_ARGS__, esp_err_to_name(_err_)); \
                 goto goto_tag;                              \
             }                                               \
         } while(0)
@@ -321,12 +340,13 @@
  * @param ... Additional arguments for the format string
  */
 #define ESP_UTILS_CHECK_ERROR_EXIT(x, fmt, ...) do { \
-            esp_err_t err = (x);                        \
-            if (unlikely((err) != ESP_OK)) {                   \
-                ESP_UTILS_LOGE(fmt " [%s]", ##__VA_ARGS__, esp_err_to_name(err)); \
+            esp_err_t _err_ = (x);                        \
+            if (unlikely(_err_ != ESP_OK)) {                   \
+                ESP_UTILS_LOGE(fmt " [%s]", ##__VA_ARGS__, esp_err_to_name(_err_)); \
                 return;                           \
             }                                     \
         } while(0)
+#endif // ESP_PLATFORM
 
 /**
  * The `try {} catch {}` block is only available in C++ and `CONFIG_COMPILER_CXX_EXCEPTIONS = 1`
@@ -386,6 +406,22 @@
     } while (0)
 #endif // __cplusplus && CONFIG_COMPILER_CXX_EXCEPTIONS
 
+/**
+ * @brief Check if the value is within the range [min, max]; if not, log an error
+ *
+ * @param x Value to check
+ * @param min Minimum acceptable value
+ * @param max Maximum acceptable value
+ */
+#define ESP_UTILS_CHECK_VALUE(x, min, max) do { \
+            __typeof__(x) _x = (x);                                \
+            __typeof__(min) _min = (min);                          \
+            __typeof__(max) _max = (max);                          \
+            if ((_x < _min) || (_x > _max)) { \
+                ESP_UTILS_LOGE("Invalid value: %d, should be in range [%d, %d]", _x, _min, _max); \
+            }                                                      \
+        } while(0)
+
 #elif ESP_UTILS_CONF_CHECK_HANDLE_METHOD == ESP_UTILS_CHECK_HANDLE_WITH_ASSERT
 
 #define ESP_UTILS_CHECK_NULL_RETURN(x, ...)             assert((x) != NULL)
@@ -408,6 +444,7 @@
     } while (0)
 #define ESP_UTILS_CHECK_FALSE_EXIT(x, ...)              assert(x)
 
+#if defined(ESP_PLATFORM)
 #define ESP_UTILS_CHECK_ERROR_RETURN(x, ...)            assert((x) == ESP_OK)
 #define ESP_UTILS_CHECK_ERROR_GOTO(x, goto_tag, ...)    do { \
             assert((x) == ESP_OK); \
@@ -417,6 +454,7 @@
             } \
     } while (0)
 #define ESP_UTILS_CHECK_ERROR_EXIT(x, ...)              assert((x) == ESP_OK)
+#endif // ESP_PLATFORM
 
 /**
  * The `try {} catch {}` block is only available in C++ and `CONFIG_COMPILER_CXX_EXCEPTIONS = 1`
@@ -448,8 +486,68 @@
     } while (0)
 #endif // __cplusplus && CONFIG_COMPILER_CXX_EXCEPTIONS
 
+#define ESP_UTILS_CHECK_VALUE(x, min, max) do { \
+            __typeof__(x) _x = (x);                                \
+            __typeof__(min) _min = (min);                          \
+            __typeof__(max) _max = (max);                          \
+            assert((_x >= _min) && (_x <= _max)); \
+        } while(0)
+
 #endif // ESP_UTILS_CONF_CHECK_HANDLE_METHOD
 #endif // ESP_UTILS_CONF_CHECK_HANDLE_METHOD
+
+/**
+ * @brief Check if the value is within the range [min, max]; if not, log an error and return the specified value.
+ *
+ * @param x Value to check
+ * @param min Minimum acceptable value
+ * @param max Maximum acceptable value
+ * @param ret Value to return if the value is out of range
+ * @param fmt Format string for the error message
+ * @param ... Additional arguments for the format string
+ */
+#define ESP_UTILS_CHECK_VALUE_RETURN(x, min, max, ret, fmt, ...) do { \
+            __typeof__(x) __x = (x);                                \
+            __typeof__(min) __min = (min);                          \
+            __typeof__(max) __max = (max);                          \
+            ESP_UTILS_CHECK_VALUE(__x, __min, __max); \
+            ESP_UTILS_CHECK_FALSE_RETURN((__x >= __min) && (__x <= __max), ret, fmt, ##__VA_ARGS__); \
+        } while(0)
+
+/**
+ * @brief Check if the value is within the range [min, max]; if not, log an error and goto the specified label.
+ *
+ * @param x Value to check
+ * @param min Minimum acceptable value
+ * @param max Maximum acceptable value
+ * @param goto_tag Label to jump to if the value is out of range
+ * @param fmt Format string for the error message
+ * @param ... Additional arguments for the format string
+ */
+#define ESP_UTILS_CHECK_VALUE_GOTO(x, min, max, goto_tag, fmt, ...) do { \
+            __typeof__(x) __x = (x);                                   \
+            __typeof__(min) __min = (min);                          \
+            __typeof__(max) __max = (max);                          \
+            ESP_UTILS_CHECK_VALUE(__x, __min, __max); \
+            ESP_UTILS_CHECK_FALSE_GOTO((__x >= __min) && (__x <= __max), goto_tag, fmt, ##__VA_ARGS__); \
+        } while(0)
+
+/**
+ * @brief Check if the value is within the range [min, max]; if not, log an error and return without a value.
+ *
+ * @param x Value to check
+ * @param min Minimum acceptable value
+ * @param max Maximum acceptable value
+ * @param fmt Format string for the error message
+ * @param ... Additional arguments for the format string
+ */
+#define ESP_UTILS_CHECK_VALUE_EXIT(x, min, max, fmt, ...) do { \
+            __typeof__(x) __x = (x);                         \
+            __typeof__(min) __min = (min);                          \
+            __typeof__(max) __max = (max);                          \
+            ESP_UTILS_CHECK_VALUE(__x, __min, __max); \
+            ESP_UTILS_CHECK_FALSE_EXIT((__x >= __min) && (__x <= __max), fmt, ##__VA_ARGS__); \
+        } while(0)
 
 #ifdef __cplusplus
 #ifndef ESP_UTILS_CHECK_EXCEPTION_RETURN

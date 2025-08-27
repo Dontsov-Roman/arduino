@@ -6,14 +6,18 @@
 
 #pragma once
 
-#include "sdkconfig.h"
-
 /**
  * @brief Macros for check handle method
  */
 #define ESP_UTILS_CHECK_HANDLE_WITH_NONE        (0) /*!< Do nothing when check failed */
 #define ESP_UTILS_CHECK_HANDLE_WITH_ERROR_LOG   (1) /*!< Print error message when check failed */
 #define ESP_UTILS_CHECK_HANDLE_WITH_ASSERT      (2) /*!< Assert when check failed */
+
+/**
+ * @brief Macros for log implementation
+ */
+#define ESP_UTILS_LOG_IMPL_STDLIB              (0) /*!< Standard (printf) */
+#define ESP_UTILS_LOG_IMPL_ESP                 (1) /*!< ESP (esp_log) */
 
 /**
  * @brief Macros for log level
@@ -28,7 +32,14 @@
 /**
  * @brief Macros for memory type
  */
-#define ESP_UTILS_MEM_ALLOC_TYPE_STDLIB        (0)
-#define ESP_UTILS_MEM_ALLOC_TYPE_ESP           (1)
-#define ESP_UTILS_MEM_ALLOC_TYPE_MICROPYTHON   (2)
-#define ESP_UTILS_MEM_ALLOC_TYPE_CUSTOM        (3)
+#define ESP_UTILS_MEM_ALLOC_TYPE_STDLIB         (0)
+#define ESP_UTILS_MEM_ALLOC_TYPE_ESP            (1)
+#define ESP_UTILS_MEM_ALLOC_TYPE_MICROPYTHON    (2)
+#define ESP_UTILS_MEM_ALLOC_TYPE_CUSTOM         (3)
+
+/**
+ * @brief Macros for ESP memory caps
+ */
+#define ESP_UTILS_MEM_ALLOC_ESP_CAPS_DEFAULT    (0)
+#define ESP_UTILS_MEM_ALLOC_ESP_CAPS_SRAM       (1)
+#define ESP_UTILS_MEM_ALLOC_ESP_CAPS_PSRAM      (2)
