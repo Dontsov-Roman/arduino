@@ -94,7 +94,7 @@ ResponseStruct *HttpClientEsp32::request(String url, const char *method, char *b
         }
         else
         {
-            Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(this->lastResponse.code).c_str());
+            Serial.printf("[HTTP] GET...%s failed, error: %s\n", url, http.errorToString(this->lastResponse.code).c_str());
         }
         this->http.end();
         return &this->lastResponse;
