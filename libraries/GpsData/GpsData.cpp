@@ -41,20 +41,20 @@ double GpsData::toRadians(double degree)
     return degree * M_PI / 180.0;
 }
 
-double GpsData::getDistanceTo(double lat2, double lon2)
+double GpsData::getDistanceTo(double lat, double lon)
 {
     if (!this->latitude || !this->longitude)
     {
         return 0;
     }
-    double dLat = this->toRadians(lat2 - this->latitude);
-    double dLon = this->toRadians(lon2 - this->longitude);
+    double dLat = this->toRadians(lat - this->latitude);
+    double dLon = this->toRadians(lon - this->longitude);
 
     double lat1 = toRadians(this->latitude);
-    lat2 = toRadians(lat2);
+    lat = toRadians(lat);
 
     double a = sin(dLat / 2) * sin(dLat / 2) +
-               cos(lat1) * cos(lat2) *
+               cos(lat1) * cos(lat) *
                    sin(dLon / 2) * sin(dLon / 2);
 
     double c = 2 * atan2(sqrt(a), sqrt(1 - a));
