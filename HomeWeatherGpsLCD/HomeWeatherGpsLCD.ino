@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <stdlib.h>
 // #include <esp_display_panel.hpp>
 
 #include <lvgl.h>
@@ -27,11 +28,8 @@ using namespace esp_panel::board;
 #define OPEN_WEATHER_HOST "api.openweathermap.org"
 #define OPEN_WEATHER_PORT "80"
 #define OPEN_WEATHER_URL "data/2.5/forecast"
-#define OPEN_WEATHER_LAT "46.405733"
-#define OPEN_WEATHER_LNG "30.720841"
-#define HOME_LAT 46.405733
-#define HOME_LNG 30.720841
-
+#define OPEN_WEATHER_LAT "46.405720"
+#define OPEN_WEATHER_LNG "30.720986"
 #endif
 
 const char *wifiSsid = STASSID;
@@ -49,12 +47,12 @@ const char *openWeatherPort = OPEN_WEATHER_PORT;
 const char *openWeatherApiKey = OPEN_WEATHER_API_KEY;
 char *openWeatherLat = OPEN_WEATHER_LAT;
 char *openWeatherLng = OPEN_WEATHER_LNG;
-double homeLatitude = HOME_LAT;
-double homeLongitude = HOME_LNG;
+char* endptr;
+double homeLatitude = strtod(OPEN_WEATHER_LAT, &endptr);
+double homeLongitude = strtod(OPEN_WEATHER_LNG, &endptr);
 
 SimpleTimeout ntpTimer(1000);
 SimpleTimeout openWeatherTimer(15 * 60 * 1000);
-SimpleTimeout sleepTimer(60 * 1000);
 
 WifiClientEsp32 wifiClient(wifiSsid, wifiPassword);
 HttpClientEsp32 httpClient(host, url, port);

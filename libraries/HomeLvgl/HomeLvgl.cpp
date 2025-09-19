@@ -158,7 +158,7 @@ void HomeLvgl::render()
     lv_label_set_text(this->gpsCoordsLabel, this->gpsData.getGpsLatLng());
     lv_label_set_text(this->launchTimeLabel, this->ntpTime->getLaunchTime());
 
-    dtostrf(this->gpsData.getDistanceTo(this->homeLatitude, this->homeLongitude), 4, 4, this->distance);
+    dtostrf(this->gpsData.getDistanceTo(this->homeLatitude, this->homeLongitude), 4, 2, this->distance);
     lv_label_set_text(this->gpsDistanceLabel, this->distance);
 
     this->renderWeatherTiles();
