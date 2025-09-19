@@ -4,12 +4,16 @@ HomeLvgl::HomeLvgl(
     IWifiClient *wifiClient,
     IHttpClient *gpsHttpClient,
     NtpTime *ntpTime,
-    OpenWeather *openWeather)
+    OpenWeather *openWeather,
+    double homeLatitude,
+    double homeLongitude)
 {
     this->wifiClient = wifiClient;
     this->gpsHttpClient = gpsHttpClient;
     this->ntpTime = ntpTime;
     this->openWeather = openWeather;
+    this->homeLatitude = homeLatitude;
+    this->homeLongitude = homeLongitude;
 }
 
 void HomeLvgl::begin()
@@ -101,6 +105,15 @@ void HomeLvgl::createGpsEntities(lv_obj_t *parent)
     lv_label_set_text(title, "#0000ff Last GPS time:");
     lv_obj_align_to(this->gpsTimeLabel, title, LV_ALIGN_OUT_RIGHT_MID, 10, 0);
 
+    this->gpsDistanceLabel = lv_label_create(parent);
+    lv_obj_set_height(this->gpsDistanceLabel, LV_SIZE_CONTENT);
+    lv_obj_t *distanceLabel = lv_label_create(parent);
+    lv_obj_set_height(distanceLabel, LV_SIZE_CONTENT);
+    lv_label_set_recolor(distanceLabel, true);
+    lv_label_set_text(distanceLabel, "#0000ff Distance to Home(m):");
+    lv_obj_align_to(distanceLabel, title, LV_ALIGN_BOTTOM_LEFT, 0, 20);
+    lv_obj_align_to(this->gpsDistanceLabel, distanceLabel, LV_ALIGN_OUT_RIGHT_MID, 10, 0);
+
     lv_obj_t *coordsLabel = lv_label_create(parent);
     lv_obj_set_height(coordsLabel, LV_SIZE_CONTENT);
     lv_label_set_recolor(coordsLabel, true);
@@ -144,6 +157,9 @@ void HomeLvgl::render()
     lv_label_set_text(this->gpsTimeLabel, this->gpsData.getGpsDateTime());
     lv_label_set_text(this->gpsCoordsLabel, this->gpsData.getGpsLatLng());
     lv_label_set_text(this->launchTimeLabel, this->ntpTime->getLaunchTime());
+
+    dtostrf(this->gpsData.getDistanceTo(this->homeLatitude, this->homeLongitude), 4, 4, this->distance);
+    lv_label_set_text(this->gpsDistanceLabel, this->distance);
 
     this->renderWeatherTiles();
 }

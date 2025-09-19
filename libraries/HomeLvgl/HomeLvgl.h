@@ -26,6 +26,9 @@ private:
     SimpleTimeout buttonTimeout = SimpleTimeout(500);
     GpsData gpsData;
 
+    double homeLatitude;
+    double homeLongitude;
+    char distance[64];
     int weatherTileCount = 6;
     WeatherTileLvgl weatherTile[6];
     IWifiClient *wifiClient;
@@ -50,6 +53,7 @@ private:
 
     // labels
     lv_obj_t *gpsTimeLabel;
+    lv_obj_t *gpsDistanceLabel;
     lv_obj_t *gpsCoordsLabel;
     lv_obj_t *timeLabel;
     lv_obj_t *launchTimeLabel;
@@ -80,7 +84,9 @@ public:
         IWifiClient *wifiClient,
         IHttpClient *gpsHttpClient,
         NtpTime *ntpTime,
-        OpenWeather *openWeather);
+        OpenWeather *openWeather,
+        double homeLatitude,
+        double homeLongitude);
     void begin();
     void loop();
     int getWeatherTileCount();

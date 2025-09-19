@@ -3,13 +3,16 @@
 
 GpsData::GpsData() {}
 
-char* GpsData::getGpsData() {
-    if(this->isDateTimeReady && this->isLocationReady)
+char *GpsData::getGpsData()
+{
+    if (this->isDateTimeReady && this->isLocationReady)
         sprintf(this->allData, "%s,%s", this->getGpsDateTime(), this->getGpsLatLng());
     return this->allData;
 }
-char* GpsData::getGpsDateTime() {
-    if (this->isDateTimeReady) {
+char *GpsData::getGpsDateTime()
+{
+    if (this->isDateTimeReady)
+    {
         sprintf(
             this->dateTime,
             "%02d/%02d/%02d,%02d:%02d:%02d",
@@ -18,13 +21,14 @@ char* GpsData::getGpsDateTime() {
             this->year,
             this->hour,
             this->minute,
-            this->second
-        );
+            this->second);
     }
     return this->dateTime;
 }
-char* GpsData::getGpsLatLng() {
-    if (this->isLocationReady) {
+char *GpsData::getGpsLatLng()
+{
+    if (this->isLocationReady)
+    {
         dtostrf(this->latitude, 4, 10, this->lat);
         dtostrf(this->longitude, 4, 10, this->lng);
         sprintf(this->latLng, "%s,%s", this->lat, this->lng);
@@ -32,12 +36,38 @@ char* GpsData::getGpsLatLng() {
     return this->latLng;
 }
 
-void GpsData::parse(String str) {
+double GpsData::toRadians(double degree)
+{
+    return degree * M_PI / 180.0;
+}
+
+double GpsData::getDistanceTo(double lat2, double lon2)
+{
+    if (!this->latitude || !this->longitude)
+    {
+        return 0;
+    }
+    double dLat = this->toRadians(lat2 - this->latitude);
+    double dLon = this->toRadians(lon2 - this->longitude);
+
+    double lat1 = toRadians(this->latitude);
+    lat2 = toRadians(lat2);
+
+    double a = sin(dLat / 2) * sin(dLat / 2) +
+               cos(lat1) * cos(lat2) *
+                   sin(dLon / 2) * sin(dLon / 2);
+
+    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+
+    return EARTH_RADIUS * c;
+}
+void GpsData::parse(String str)
+{
     this->commandParser.resetIndexes();
     this->dateParser.resetIndexes();
     this->timeParser.resetIndexes();
     this->commandParser.setParseString(str);
-    
+
     this->dateParser.setParseString(commandParser.getNextValue());
     this->timeParser.setParseString(commandParser.getNextValue());
 
@@ -47,11 +77,11 @@ void GpsData::parse(String str) {
     this->month = dateParser.getNextValue().toInt();
     this->day = dateParser.getNextValue().toInt();
     this->year = dateParser.getNextValue().toInt();
-    
+
     this->hour = timeParser.getNextValue().toInt();
     this->minute = timeParser.getNextValue().toInt();
     this->second = timeParser.getNextValue().toInt();
-    
+
     this->isDateTimeReady = true;
     this->isLocationReady = true;
 }
