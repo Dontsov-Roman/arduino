@@ -77,6 +77,23 @@ void WeatherTileLvgl::setWindSpeed(double value)
 {
     dtostrf(value, 6, 2, this->wind_speed_buf);
     lv_label_set_text(this->wind_speed, this->wind_speed_buf);
+
+    if (value < 2)
+    {
+        lv_label_set_text(this->wind_arrow, "#333ba3 >");
+    }
+    else if (value >= 2 && value <= 7)
+    {
+        lv_label_set_text(this->wind_arrow, "#6622ff >>");
+    }
+    else if (value > 7 && value < 10)
+    {
+        lv_label_set_text(this->wind_arrow, "#dd1f1f >>>");
+    }
+    else if (value >= 10)
+    {
+        lv_label_set_text(this->wind_arrow, "#ff0000 >>>");
+    }
 }
 
 void WeatherTileLvgl::setWindDeg(double value)
