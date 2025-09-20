@@ -98,6 +98,7 @@ void setup()
     lvgl_port_lock(-1);
     mylvgl.begin();
     lvgl_port_unlock();
+    mylvgl.setDefaultText();
 }
 
 void loop()

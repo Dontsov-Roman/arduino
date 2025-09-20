@@ -6,6 +6,7 @@
 #include <WProgram.h>
 #endif
 #include <lvgl.h>
+#include <string.h>
 
 #include <SimpleTimeout.h>
 #include <IHttpClient.h>
@@ -90,5 +91,7 @@ public:
     void begin();
     void loop();
     int getWeatherTileCount();
+    void setDefaultText();
+    static constexpr char *noDataText = "No data";
 };
 #endif

@@ -125,6 +125,14 @@ void HomeLvgl::createGpsEntities(lv_obj_t *parent)
     lv_obj_align_to(this->gpsCoordsLabel, coordsLabel, LV_ALIGN_OUT_RIGHT_MID, 10, 0);
 }
 
+void HomeLvgl::setDefaultText()
+{
+    lv_label_set_text(this->gpsTimeLabel, HomeLvgl::noDataText);
+    lv_label_set_text(this->gpsCoordsLabel, HomeLvgl::noDataText);
+    lv_label_set_text(this->gpsDistanceLabel, HomeLvgl::noDataText);
+    lv_label_set_text(this->launchTimeLabel, HomeLvgl::noDataText);
+}
+
 void HomeLvgl::createWeatherTab()
 {
     this->weatherTile[0].begin(this->weatherTab);
@@ -154,12 +162,25 @@ void HomeLvgl::turnOffLight(lv_event_t *e)
 
 void HomeLvgl::render()
 {
-    lv_label_set_text(this->gpsTimeLabel, this->gpsData.getGpsDateTime());
-    lv_label_set_text(this->gpsCoordsLabel, this->gpsData.getGpsLatLng());
-    lv_label_set_text(this->launchTimeLabel, this->ntpTime->getLaunchTime());
+    char *dateTime = this->gpsData.getGpsDateTime();
+    char *gpsLatLng = this->gpsData.getGpsLatLng();
+    char *launchTime = this->ntpTime->getLaunchTime();
+    double distanceToHome = this->gpsData.getDistanceTo(this->homeLatitude, this->homeLongitude);
 
-    dtostrf(this->gpsData.getDistanceTo(this->homeLatitude, this->homeLongitude), 4, 2, this->distance);
-    lv_label_set_text(this->gpsDistanceLabel, this->distance);
+    if (strlen(dateTime) > 0)
+        lv_label_set_text(this->gpsTimeLabel, dateTime);
+
+    if (strlen(gpsLatLng) > 0)
+        lv_label_set_text(this->gpsCoordsLabel, gpsLatLng);
+
+    if (strlen(launchTime) > 0)
+        lv_label_set_text(this->launchTimeLabel, launchTime);
+
+    if (distanceToHome > 0)
+    {
+        dtostrf(distanceToHome, 4, 2, this->distance);
+        lv_label_set_text(this->gpsDistanceLabel, this->distance);
+    }
 
     this->renderWeatherTiles();
 }
